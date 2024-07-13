@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "chiselsandbits",
+	"version": "${version}",
+	"name": "chiselsandbits",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/chiselsandbits/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"mod.chiselsandbits.Chiselsandbits"
+		],
+		"fabric-datagen": [
+			"mod.chiselsandbits.ChiselsandbitsDataGenerator"
+		]
+	},
+	"mixins": [
+		"chiselsandbits.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": "~1.20.4",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
