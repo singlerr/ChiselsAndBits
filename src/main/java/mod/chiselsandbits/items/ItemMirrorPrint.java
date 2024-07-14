@@ -111,7 +111,7 @@ public class ItemMirrorPrint extends Item implements IPatternItem {
             final CompoundTag comp = new CompoundTag();
             te.writeChiselData(comp);
 
-            final TileEntityBlockChiseled tmp = new TileEntityBlockChiseled();
+            final TileEntityBlockChiseled tmp = new TileEntityBlockChiseled(pos, world.getBlockState(pos));
             tmp.readChiselData(comp);
 
             final VoxelBlob bestBlob = tmp.getBlob();

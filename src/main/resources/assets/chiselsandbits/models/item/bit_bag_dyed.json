@@ -1,0 +1,7 @@
+{
+    "parent":"item/generated",
+    "textures": {
+        "layer0":"chiselsandbits:items/bit_bag_string",
+        "layer1":"chiselsandbits:items/bit_bag_dyeable"
+    }
+}

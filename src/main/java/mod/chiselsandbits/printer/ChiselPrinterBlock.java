@@ -20,6 +20,8 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
@@ -30,7 +32,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-public class ChiselPrinterBlock extends BaseEntityBlock {
+public class ChiselPrinterBlock extends Block implements EntityBlock {
 
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
@@ -119,8 +121,8 @@ public class ChiselPrinterBlock extends BaseEntityBlock {
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(final BlockGetter worldIn) {
-        return new ChiselPrinterTileEntity();
+    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return new ChiselPrinterTileEntity(blockPos, blockState);
     }
 
     public InteractionResult use(
@@ -141,5 +143,38 @@ public class ChiselPrinterBlock extends BaseEntityBlock {
             final TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         ChiselsAndBits.getConfig().getCommon().helpText(LocalStrings.ChiselStationHelp, tooltip);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
+            Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
+        return (level1, blockPos, blockState1, e) -> {
+            ChiselPrinterTileEntity blockEntity = (ChiselPrinterTileEntity) e;
+            if (blockEntity.getLevel() == null
+                    || blockEntity.lastTickTime == level1.getGameTime()
+                    || level1.isClientSide()) {
+                return;
+            }
+
+            blockEntity.lastTickTime = level1.getGameTime();
+
+            if (blockEntity.couldWork()) {
+                if (blockEntity.canWork()) {
+                    blockEntity.progress++;
+                    if (blockEntity.progress >= 100) {
+                        blockEntity.result_handler.ifPresent(
+                                h -> h.insertItem(0, blockEntity.realisePattern(true), false));
+                        blockEntity.currentRealisedWorkingStack.setValue(ItemStack.EMPTY);
+                        blockEntity.progress = 0;
+                        blockEntity.damageChisel();
+                    }
+                    blockEntity.setChanged();
+                }
+            } else if (blockEntity.progress != 0) {
+                blockEntity.progress = 0;
+                blockEntity.setChanged();
+            }
+        };
     }
 }

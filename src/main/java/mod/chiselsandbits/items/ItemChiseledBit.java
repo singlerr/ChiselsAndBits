@@ -32,6 +32,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -45,8 +46,10 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -194,13 +197,7 @@ public class ItemChiseledBit extends Item implements IItemScrollWheel, IChiselMo
         if (stateID == 0) {
             // We are running an empty bit, for display purposes.
             // Lets loop:
-            if (alternativeStacks.isEmpty())
-                ModItems.ITEM_BLOCK_BIT
-                        .get()
-                        .fillItemCategory(
-                                Objects.requireNonNull(
-                                        ModItems.ITEM_BLOCK_BIT.get().getItemCategory()),
-                                alternativeStacks);
+            if (alternativeStacks.isEmpty()) ModItems.ITEM_BLOCK_BIT.get().fillItemCategory(alternativeStacks);
 
             stateID = ItemChiseledBit.getStackState(alternativeStacks.get(
                     (int) (TickHandler.getClientTicks() % ((alternativeStacks.size() * 20L)) / 20L)));
@@ -409,6 +406,33 @@ public class ItemChiseledBit extends Item implements IItemScrollWheel, IChiselMo
     //
     //        items.addAll( bits );
     //    }
+
+    public void fillItemCategory(NonNullList<ItemStack> output) {
+        for (Block block : BuiltInRegistries.BLOCK) {
+            if (block instanceof BlockChiseled) continue;
+
+            for (BlockState possibleState : block.getStateDefinition().getPossibleStates()) {
+                if (BlockBitInfo.canChisel(possibleState)) {
+                    ItemStack itemStack = ItemChiseledBit.createStack(ModUtil.getStateId(possibleState), 1, true);
+                    output.add(itemStack);
+                }
+            }
+
+            BlockState blockState = block.defaultBlockState();
+
+            if (block instanceof LiquidBlock liquidBlock) {
+                Fluid fluid = liquidBlock.getFluidState(blockState).getType();
+                if (fluid instanceof FlowingFluid flowingFluid) {
+                    blockState = flowingFluid.getSource().defaultFluidState().createLegacyBlock();
+                }
+            }
+
+            if (BlockBitInfo.canChisel(blockState)) {
+                ItemStack itemStack = ItemChiseledBit.createStack(ModUtil.getStateId(blockState), 1, true);
+                output.add(itemStack);
+            }
+        }
+    }
 
     public static boolean sameBit(final ItemStack output, final int blk) {
         return output.hasTag() ? getStackState(output) == blk : false;

@@ -1,18 +1,15 @@
 package mod.chiselsandbits.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.*;
 import java.util.List;
-import java.util.Random;
 import mod.chiselsandbits.registry.ModBlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.Level;
@@ -22,7 +19,7 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderHelper {
 
-    public static Random RENDER_RANDOM = new Random();
+    public static RandomSource RENDER_RANDOM = RandomSource.create();
 
     public static void drawSelectionBoundingBoxIfExists(
             final PoseStack matrixStack,
@@ -51,7 +48,7 @@ public class RenderHelper {
             RenderSystem.enableBlend();
             RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
             GL11.glLineWidth(2.0F);
-            RenderSystem.disableTexture();
+            //            RenderSystem.disableTexture();
             RenderSystem.depthMask(false);
 
             if (!NormalBoundingBox) {
@@ -77,7 +74,7 @@ public class RenderHelper {
 
             RenderSystem.enableDepthTest();
             RenderSystem.depthMask(true);
-            RenderSystem.enableTexture();
+            //            RenderSystem.enableTexture();
             RenderSystem.disableBlend();
         }
     }
@@ -99,9 +96,9 @@ public class RenderHelper {
             RenderSystem.enableBlend();
             RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
             GL11.glLineWidth(2.0F);
-            RenderSystem.disableTexture();
+            //            RenderSystem.disableTexture();
             RenderSystem.depthMask(false);
-            RenderSystem.shadeModel(GL11.GL_FLAT);
+            //            RenderSystem.shadeModel(GL11.GL_FLAT);
 
             final Vec3 a2 = a.add(blockPos.getX(), blockPos.getY(), blockPos.getZ());
             final Vec3 b2 = b.add(blockPos.getX(), blockPos.getY(), blockPos.getZ());
@@ -113,10 +110,10 @@ public class RenderHelper {
 
             RenderHelper.renderLine(matrixStack, a2, b2, red, green, blue, seeThruAlpha);
 
-            RenderSystem.shadeModel(Minecraft.useAmbientOcclusion() ? GL11.GL_SMOOTH : GL11.GL_FLAT);
+            //            RenderSystem.shadeModel(Minecraft.useAmbientOcclusion() ? GL11.GL_SMOOTH : GL11.GL_FLAT);
             RenderSystem.enableDepthTest();
             RenderSystem.depthMask(true);
-            RenderSystem.enableTexture();
+            //            RenderSystem.enableTexture();
             RenderSystem.disableBlend();
         }
     }
@@ -142,8 +139,16 @@ public class RenderHelper {
             float cr = (color >>> 16) & 0xFF;
             float ca = (color >>> 24) & 0xFF;
 
-            renderer.addVertexData(
-                    matrixStack.last(), bakedquad, cb, cg, cr, ca, combinedLightIn, combinedOverlayIn, false);
+            renderer.putBulkData(
+                    matrixStack.last(),
+                    bakedquad,
+                    new float[] {ca, ca, ca, ca},
+                    cb,
+                    cg,
+                    cr,
+                    new int[] {combinedLightIn, combinedLightIn, combinedLightIn, combinedLightIn},
+                    combinedOverlayIn,
+                    false);
         }
     }
 
@@ -158,8 +163,8 @@ public class RenderHelper {
         GL11.glPushAttrib(8256);
         final Tesselator tess = Tesselator.getInstance();
         final BufferBuilder bufferBuilder = tess.getBuilder();
-        RenderSystem.shadeModel(GL11.GL_FLAT);
-        bufferBuilder.begin(GL11.GL_LINE_STRIP, DefaultVertexFormat.POSITION_COLOR);
+        //        RenderSystem.shadeModel(GL11.GL_FLAT);
+        bufferBuilder.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION_COLOR);
 
         final float minX = (float) boundingBox.minX;
         final float minY = (float) boundingBox.minY;
@@ -263,8 +268,8 @@ public class RenderHelper {
             final int alpha) {
         final Tesselator tess = Tesselator.getInstance();
         final BufferBuilder bufferBuilder = tess.getBuilder();
-        RenderSystem.shadeModel(GL11.GL_FLAT);
-        bufferBuilder.begin(GL11.GL_LINE_STRIP, DefaultVertexFormat.POSITION_COLOR);
+        //        RenderSystem.shadeModel(GL11.GL_FLAT);
+        bufferBuilder.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION_COLOR);
         bufferBuilder
                 .vertex(matrixStack.last().pose(), (float) a.x, (float) a.y, (float) a.z)
                 .color(red, green, blue, alpha)
@@ -293,7 +298,7 @@ public class RenderHelper {
             final int combinedOverlay) {
         final Tesselator tessellator = Tesselator.getInstance();
         final BufferBuilder buffer = tessellator.getBuilder();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormat.BLOCK);
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);
 
         for (final Direction enumfacing : Direction.values()) {
             renderQuads(
@@ -328,11 +333,9 @@ public class RenderHelper {
             final int combinedLightmap,
             final int combinedOverlay) {
         final int alpha = isUnplaceable ? 0x22000000 : 0xaa000000;
-        Minecraft.getInstance().getTextureManager().bind(InventoryMenu.BLOCK_ATLAS);
-        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-
+        Minecraft.getInstance().getTextureManager().bindForSetup(InventoryMenu.BLOCK_ATLAS);
+        //        guiGraphics.setColor(1,1,1,1);
         RenderSystem.enableBlend();
-        RenderSystem.enableTexture();
         RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         RenderSystem.colorMask(false, false, false, false);
 

@@ -9,7 +9,6 @@ import mod.chiselsandbits.printer.ChiselPrinterTileEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public final class ModTileEntityTypes {
 
@@ -39,6 +38,6 @@ public final class ModTileEntityTypes {
                     .build(null));
 
     public static void onModConstruction() {
-        REGISTRAR.register(FMLJavaModLoadingContext.get().getModEventBus());
+        REGISTRAR.register();
     }
 }

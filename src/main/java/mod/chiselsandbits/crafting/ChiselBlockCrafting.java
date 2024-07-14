@@ -1,6 +1,5 @@
 package mod.chiselsandbits.crafting;
 
-import java.util.Random;
 import mod.chiselsandbits.api.*;
 import mod.chiselsandbits.api.APIExceptions.InvalidBitItem;
 import mod.chiselsandbits.chiseledblock.ItemBlockChiseled;
@@ -12,6 +11,7 @@ import mod.chiselsandbits.registry.ModRecipeSerializers;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -44,7 +44,7 @@ public class ChiselBlockCrafting extends CustomRecipe {
         private static class Chiseler implements IBitVisitor {
             private final ItemStack chisel;
             private final IBitBag bbag;
-            private final Random r = new Random();
+            private final RandomSource r = RandomSource.create();
             final IBitBrush airBrush;
             public boolean isAir = true;
             public boolean modified = false;

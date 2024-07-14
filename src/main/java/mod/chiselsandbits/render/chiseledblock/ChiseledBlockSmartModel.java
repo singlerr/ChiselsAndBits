@@ -2,7 +2,6 @@ package mod.chiselsandbits.render.chiseledblock;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import fuzs.forgeconfigapiport.fabric.api.forge.v4.ForgeModConfigEvents;
 import io.github.fabricators_of_create.porting_lib.util.client.ClientHooks;
 import java.io.IOException;
 import java.util.BitSet;

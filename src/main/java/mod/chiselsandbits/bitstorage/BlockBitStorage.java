@@ -55,7 +55,7 @@ public class BlockBitStorage extends Block implements EntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return new TileEntityBitStorage();
+        return new TileEntityBitStorage(blockPos, blockState);
     }
 
     public TileEntityBitStorage getTileEntity(final BlockEntity te) throws ExceptionNoTileEntity {
@@ -83,7 +83,7 @@ public class BlockBitStorage extends Block implements EntityBlock {
             final ItemStack current = ModUtil.nonNull(player.inventory.getSelected());
 
             if (!ModUtil.isEmpty(current)) {
-                final IFluidHandler wrappedTank = tank;
+                final IFluidHandler wrappedTank = tank.getPseudoFluidHandler();
                 if (FluidUtil.interactWithFluidHandler(player, handIn, wrappedTank)) {
                     return InteractionResult.SUCCESS;
                 }

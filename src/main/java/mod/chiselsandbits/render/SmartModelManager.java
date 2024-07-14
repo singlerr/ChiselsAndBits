@@ -1,12 +1,9 @@
 package mod.chiselsandbits.render;
 
-import io.github.fabricators_of_create.porting_lib.event.client.ModelLoadCallback;
-import io.github.fabricators_of_create.porting_lib.models.PortingLibModelLoadingRegistry;
 import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import mod.chiselsandbits.chiseledblock.BlockChiseled;
 import mod.chiselsandbits.core.ChiselsAndBits;
 import mod.chiselsandbits.interfaces.ICacheClearable;
@@ -16,14 +13,13 @@ import mod.chiselsandbits.render.bit.BitItemSmartModel;
 import mod.chiselsandbits.render.chiseledblock.ChiseledBlockSmartModel;
 import mod.chiselsandbits.render.patterns.PrintSmartModel;
 import mod.chiselsandbits.utils.Constants;
-import net.minecraft.client.color.block.BlockColors;
-import net.minecraft.client.renderer.block.model.BlockModel;
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelModifier;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.profiling.ProfilerFiller;
+import org.jetbrains.annotations.Nullable;
 
 public class SmartModelManager {
 
@@ -85,7 +81,6 @@ public class SmartModelManager {
 
         models.put(modelLocation, modelGen);
         models.put(second, modelGen);
-
         models.put(new ModelResourceLocation(modelLocation, "normal"), modelGen);
         models.put(new ModelResourceLocation(second, "normal"), modelGen);
 
@@ -100,19 +95,21 @@ public class SmartModelManager {
         ChiselsAndBits.getInstance().clearCache();
     }
 
-    public void onModelBakeEvent(
-            BlockColors colors,
-            ProfilerFiller profiler,
-            Map<ResourceLocation, BlockModel> modelResources,
-            Map<ResourceLocation, List<ModelBakery.LoadedJson>> blockStateResources) {
+    public void onModelBakeEvent(ModelLoadingPlugin.Context context) {
         setup();
         for (final ICacheClearable c : clearable) {
             c.clearCache();
         }
 
         for (final ModelResourceLocation rl : res) {
-            modelResources.put(rl, getModel(rl));
-
+            context.modifyModelAfterBake().register(new ModelModifier.AfterBake() {
+                @Override
+                public @Nullable BakedModel modifyModelAfterBake(@Nullable BakedModel model, Context context) {
+                    if (context.id().equals(rl)) return getModel(rl);
+                    return model;
+                }
+            });
+            ;
         }
     }
 

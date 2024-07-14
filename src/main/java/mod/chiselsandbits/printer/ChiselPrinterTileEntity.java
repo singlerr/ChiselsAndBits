@@ -23,7 +23,6 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -37,7 +36,7 @@ import org.apache.commons.lang3.mutable.MutableObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ChiselPrinterTileEntity extends BlockEntity implements TickableBlockEntity, MenuProvider {
+public class ChiselPrinterTileEntity extends BlockEntity implements MenuProvider {
     private final LazyOptional<EmptyHandler> empty_handler = LazyOptional.of(NonNullLazy.of(EmptyHandler::new));
     private final LazyOptional<ItemStackHandler> tool_handler =
             LazyOptional.of(NonNullLazy.of(() -> new ItemStackHandler(1) {
@@ -68,7 +67,7 @@ public class ChiselPrinterTileEntity extends BlockEntity implements TickableBloc
                     currentRealisedWorkingStack.setValue(ItemStack.EMPTY);
                 }
             }));
-    private final LazyOptional<ItemStackHandler> result_handler =
+    public final LazyOptional<ItemStackHandler> result_handler =
             LazyOptional.of(NonNullLazy.of(() -> new ItemStackHandler(1) {
                 @Override
                 public boolean isItemValid(final int slot, @NotNull final ItemStack stack) {
@@ -95,9 +94,9 @@ public class ChiselPrinterTileEntity extends BlockEntity implements TickableBloc
         }
     };
 
-    private int progress = 0;
-    private long lastTickTime = 0L;
-    private final MutableObject<ItemStack> currentRealisedWorkingStack = new MutableObject<>(ItemStack.EMPTY);
+    int progress = 0;
+    long lastTickTime = 0L;
+    final MutableObject<ItemStack> currentRealisedWorkingStack = new MutableObject<>(ItemStack.EMPTY);
 
     public ChiselPrinterTileEntity(BlockPos pos, BlockState state) {
         super(ModTileEntityTypes.CHISEL_PRINTER.get(), pos, state);
@@ -125,61 +124,28 @@ public class ChiselPrinterTileEntity extends BlockEntity implements TickableBloc
     }
 
     @Override
-    public void load(final BlockState state, final CompoundTag nbt) {
-        super.load(state, nbt);
+    public void load(CompoundTag compoundTag) {
+        super.load(compoundTag);
+        tool_handler.ifPresent(h -> h.deserializeNBT(compoundTag.getCompound("tool")));
+        pattern_handler.ifPresent(h -> h.deserializeNBT(compoundTag.getCompound("pattern")));
+        result_handler.ifPresent(h -> h.deserializeNBT(compoundTag.getCompound("result")));
 
-        tool_handler.ifPresent(h -> h.deserializeNBT(nbt.getCompound("tool")));
-        pattern_handler.ifPresent(h -> h.deserializeNBT(nbt.getCompound("pattern")));
-        result_handler.ifPresent(h -> h.deserializeNBT(nbt.getCompound("result")));
-
-        progress = nbt.getInt("progress");
+        progress = compoundTag.getInt("progress");
     }
 
     @Override
-    public CompoundTag save(final CompoundTag compound) {
-        super.save(compound);
+    protected void saveAdditional(CompoundTag compoundTag) {
+        super.saveAdditional(compoundTag);
+        tool_handler.ifPresent(h -> compoundTag.put("tool", h.serializeNBT()));
+        pattern_handler.ifPresent(h -> compoundTag.put("pattern", h.serializeNBT()));
+        result_handler.ifPresent(h -> compoundTag.put("result", h.serializeNBT()));
 
-        tool_handler.ifPresent(h -> compound.put("tool", h.serializeNBT()));
-        pattern_handler.ifPresent(h -> compound.put("pattern", h.serializeNBT()));
-        result_handler.ifPresent(h -> compound.put("result", h.serializeNBT()));
-
-        compound.putInt("progress", progress);
-
-        return compound;
+        compoundTag.putInt("progress", progress);
     }
 
     @Override
     public CompoundTag getUpdateTag() {
-        final CompoundTag nbt = new CompoundTag();
-        save(nbt);
-        return nbt;
-    }
-
-    @Override
-    public void tick() {
-        if (getLevel() == null
-                || lastTickTime == getLevel().getGameTime()
-                || getLevel().isClientSide()) {
-            return;
-        }
-
-        this.lastTickTime = getLevel().getGameTime();
-
-        if (couldWork()) {
-            if (canWork()) {
-                progress++;
-                if (progress >= 100) {
-                    result_handler.ifPresent(h -> h.insertItem(0, realisePattern(true), false));
-                    currentRealisedWorkingStack.setValue(ItemStack.EMPTY);
-                    progress = 0;
-                    damageChisel();
-                }
-                setChanged();
-            }
-        } else if (progress != 0) {
-            progress = 0;
-            setChanged();
-        }
+        return saveWithFullMetadata();
     }
 
     public IItemHandlerModifiable getPatternHandler() {
@@ -254,7 +220,7 @@ public class ChiselPrinterTileEntity extends BlockEntity implements TickableBloc
         return result_handler.map(h -> h.getStackInSlot(0)).orElse(ItemStack.EMPTY);
     }
 
-    private ItemStack realisePattern(final boolean consumeResources) {
+    public ItemStack realisePattern(final boolean consumeResources) {
         if (!hasPatternStack()) return ItemStack.EMPTY;
 
         final ItemStack stack = getPatternStack();
@@ -311,7 +277,7 @@ public class ChiselPrinterTileEntity extends BlockEntity implements TickableBloc
         return itemstack;
     }
 
-    private void damageChisel() {
+    void damageChisel() {
         if (getLevel() != null && !getLevel().isClientSide()) {
             getToolStack().hurt(1, getLevel().getRandom(), null);
         }

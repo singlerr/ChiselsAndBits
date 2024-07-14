@@ -44,9 +44,6 @@ public class BagDyeing extends CustomRecipe {
         return ModUtil.getEmptyStack();
     }
 
-    @Override
-    public ItemStack getCraftingResult(CraftingContainer inv) {}
-
     private dyed_output getOutput(CraftingContainer inv) {
         ItemStack bag = null;
         ItemStack dye = null;

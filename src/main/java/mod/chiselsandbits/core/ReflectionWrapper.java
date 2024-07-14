@@ -3,13 +3,13 @@ package mod.chiselsandbits.core;
 import java.lang.reflect.Field;
 import java.util.Map;
 import mod.chiselsandbits.helpers.ModUtil;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.loading.FMLLoader;
 
 public class ReflectionWrapper {
 
@@ -48,7 +48,7 @@ public class ReflectionWrapper {
      * <p>
      * NAME: highlightingItemStack
      */
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void setHighlightStack(final ItemStack is) {
         try {
             final Object o = Minecraft.getInstance().gui;
@@ -65,12 +65,12 @@ public class ReflectionWrapper {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void clearHighlightedStack() {
         setHighlightStack(ModUtil.getEmptyStack());
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void endHighlightedStack() {
         setHighlightStack(Minecraft.getInstance().player.getMainHandItem());
     }
@@ -83,7 +83,7 @@ public class ReflectionWrapper {
      * NAME: mapRegisteredSprites
      */
     @SuppressWarnings("unchecked")
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public Map<String, TextureAtlasSprite> getRegSprite(final TextureAtlas map) {
         try {
             if (mapRegSprites == null) {
@@ -107,6 +107,6 @@ public class ReflectionWrapper {
     }
 
     private boolean deobfuscatedEnvironment() {
-        return !FMLLoader.isProduction();
+        return FabricLoader.getInstance().isDevelopmentEnvironment();
     }
 }

@@ -13,11 +13,9 @@ import mod.chiselsandbits.helpers.ModUtil;
 import mod.chiselsandbits.items.ItemChiseledBit;
 import mod.chiselsandbits.registry.ModItems;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -499,8 +497,8 @@ public abstract class DebugAction {
 
             final VoxelBlob out = new VoxelBlob();
 
-            player.sendMessage(new TextComponent(out.filled() + " blocked"), Util.NIL_UUID);
-            player.sendMessage(new TextComponent(out.air() + " not-blocked"), Util.NIL_UUID);
+            player.sendSystemMessage(Component.literal(out.filled() + " blocked"));
+            player.sendSystemMessage(Component.literal(out.air() + " not-blocked"));
         }
     }
     ;

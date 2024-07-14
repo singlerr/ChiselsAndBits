@@ -2,6 +2,8 @@ package mod.chiselsandbits.utils;
 
 import java.util.function.Supplier;
 import mod.chiselsandbits.core.Log;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.chunk.RenderChunkRegion;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -71,5 +73,15 @@ public class ChuckRenderCacheWrapper implements BlockAndTintGetter {
             Log.logError("Failed to process cached wrapped info for: " + pos, e);
             return invalidSupplier.get();
         }
+    }
+
+    @Override
+    public int getHeight() {
+        return 0;
+    }
+
+    @Override
+    public int getMinBuildHeight() {
+        return 0;
     }
 }

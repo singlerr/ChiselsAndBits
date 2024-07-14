@@ -3,8 +3,7 @@ package mod.chiselsandbits.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,14 +14,14 @@ import mod.chiselsandbits.helpers.DeprecationHelper;
 import mod.chiselsandbits.modes.IToolMode;
 import mod.chiselsandbits.modes.TapeMeasureModes;
 import mod.chiselsandbits.registry.ModItems;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
@@ -172,12 +171,12 @@ public class TapeMeasures {
                     : DeprecationHelper.translateToLocal(
                             "mod.chiselsandbits.tapemeasure.chatmsg", getSize(LenX), getSize(LenY), getSize(LenZ));
 
-            final TextComponent chatMsg = new TextComponent(out);
+            final MutableComponent chatMsg = Component.literal(out);
 
             // NOT 100% Accurate, if anyone wants to try and resolve this, yay
             chatMsg.setStyle(Style.EMPTY.withColor(TextColor.fromRgb(newMeasure.color.getTextColor())));
 
-            player.sendMessage(chatMsg, Util.NIL_UUID);
+            player.sendSystemMessage(chatMsg);
         }
 
         measures.add(newMeasure);
@@ -188,7 +187,7 @@ public class TapeMeasures {
     }
 
     private ResourceLocation getDimension(final Player player) {
-        return player.getCommandSenderWorld().dimension().getRegistryName();
+        return player.getCommandSenderWorld().dimension().registry();
     }
 
     public void render(final PoseStack matrixStack, final float partialTicks) {
@@ -408,7 +407,7 @@ public class TapeMeasures {
                 true,
                 matrixStack.last().pose(),
                 buffer,
-                true,
+                Font.DisplayMode.NORMAL,
                 0,
                 15728880);
         buffer.endBatch();
@@ -434,10 +433,9 @@ public class TapeMeasures {
         final Entity view = Minecraft.getInstance().cameraEntity;
         if (view != null) {
             final float yaw = view.yRotO + (view.yRot - view.yRotO) * partialTicks;
-            matrixStack.mulPose(new Quaternion(Vector3f.YP, 180 + -yaw, true));
-
+            matrixStack.mulPose(Axis.YP.rotationDegrees(180 - yaw));
             final float pitch = view.xRotO + (view.xRot - view.xRotO) * partialTicks;
-            matrixStack.mulPose(new Quaternion(Vector3f.XP, -pitch, true));
+            matrixStack.mulPose(Axis.XP.rotationDegrees(-pitch));
         }
     }
 

@@ -1,9 +1,11 @@
 package mod.chiselsandbits.utils;
 
-import com.mojang.math.Vector3f;
 import java.util.EnumMap;
 import java.util.Map;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.core.Direction;
+import org.joml.Vector3f;
 
 // stolen from slime knights mantle
 @Environment(EnvType.CLIENT)
@@ -62,7 +64,7 @@ public final class FluidCuboid {
      */
     public Vector3f getFromScaled() {
         if (fromScaled == null) {
-            fromScaled = from.copy();
+            fromScaled = new Vector3f(from);
             fromScaled.mul(1 / 16f);
         }
         return fromScaled;
@@ -75,7 +77,7 @@ public final class FluidCuboid {
      */
     public Vector3f getToScaled() {
         if (toScaled == null) {
-            toScaled = to.copy();
+            toScaled = new Vector3f(to);
             toScaled.mul(1 / 16f);
         }
         return toScaled;

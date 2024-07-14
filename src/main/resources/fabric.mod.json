@@ -16,10 +16,13 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"mod.chiselsandbits.Chiselsandbits"
+          "mod.chiselsandbits.ChiselsAndBitsMod"
 		],
 		"fabric-datagen": [
-			"mod.chiselsandbits.ChiselsandbitsDataGenerator"
+			"mod.chiselsandbits.ChiselsAndBitsDataGenerator"
+		],
+		"client": [
+			"mod.chiselsandbits.client.ChiselsAndBitsClientMod"
 		]
 	},
 	"mixins": [

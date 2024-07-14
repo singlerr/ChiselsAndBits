@@ -422,7 +422,7 @@ public class ClientSide {
                             ChiselsAndBits.getApi().getBitAccess(mc.level, rayTraceResult.getBlockPos());
                     final ItemStack is = access.getBitsAsItem(null, ItemType.CHISLED_BLOCK, false);
 
-                    CreativeClipboardTab.addItem(is);
+                    CreativeClipboardTab.getInstance().addItem(is);
                 } catch (final CannotBeChiseled e) {
                     // nope.
                 }
@@ -1476,11 +1476,7 @@ public class ClientSide {
         }
     }
 
-    public boolean addBlockDestroyEffects(
-            @Nonnull final Level world,
-            @Nonnull final BlockPos pos,
-            BlockState state,
-            final ParticleEngine effectRenderer) {
+    public boolean addBlockDestroyEffects(@Nonnull final Level world, @Nonnull final BlockPos pos, BlockState state) {
         if (!state.isAir()) {
             VoxelShape voxelshape = state.getShape(world, pos);
             double d0 = 0.25D;
@@ -1501,16 +1497,19 @@ public class ClientSide {
                             double d7 = d4 * d1 + p_228348_3_;
                             double d8 = d5 * d2 + p_228348_5_;
                             double d9 = d6 * d3 + p_228348_7_;
-                            effectRenderer.add((new TerrainParticle(
-                                    (ClientLevel) world,
-                                    (double) pos.getX() + d7,
-                                    (double) pos.getY() + d8,
-                                    (double) pos.getZ() + d9,
-                                    d4 - 0.5D,
-                                    d5 - 0.5D,
-                                    d6 - 0.5D,
-                                    state,
-                                    pos)));
+
+                            Minecraft.getInstance()
+                                    .particleEngine
+                                    .add((new TerrainParticle(
+                                            (ClientLevel) world,
+                                            (double) pos.getX() + d7,
+                                            (double) pos.getY() + d8,
+                                            (double) pos.getZ() + d9,
+                                            d4 - 0.5D,
+                                            d5 - 0.5D,
+                                            d6 - 0.5D,
+                                            state,
+                                            pos)));
                         }
                     }
                 }

@@ -22,7 +22,6 @@ import mod.chiselsandbits.registry.ModBlocks;
 import mod.chiselsandbits.utils.SingleBlockBlockReader;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -42,7 +41,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -76,7 +74,7 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
 
             try {
                 final TileEntityBlockChiseled tebc = getTileEntity(level, blockPos);
-                CreativeClipboardTab.addItem(tebc.getItemStack(player));
+                CreativeClipboardTab.getInstance().addItem(tebc.getItemStack(player));
 
                 UndoTracker.getInstance()
                         .add(level, blockPos, tebc.getBlobStateReference(), new VoxelBlobStateReference(0, 0));
@@ -267,14 +265,14 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return new TileEntityBlockChiseled();
+        return new TileEntityBlockChiseled(blockPos, blockState);
     }
 
     @Override
     protected void spawnDestroyParticles(Level level, Player player, BlockPos blockPos, BlockState blockState) {
         try {
             final BlockState internalState = getTileEntity(level, blockPos).getBlockState(this);
-            return ClientSide.instance.addBlockDestroyEffects(level, blockPos, internalState);
+            ClientSide.instance.addBlockDestroyEffects(level, blockPos, internalState);
         } catch (final ExceptionNoTileEntity e) {
             Log.noTileError(e);
         }
@@ -426,7 +424,7 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
     @Override
     public int getLightEmission(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos) {
         // is this the right block?
-        final BlockState realState = world.getBlockState(pos);
+        final BlockState realState = blockGetter.getBlockState(blockPos);
         final Block realBlock = realState.getBlock();
         if (realBlock != this) {
             return 0;
@@ -520,10 +518,5 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
 
     public boolean basicHarvestBlockTest(Level world, BlockPos pos, Player player) {
         return canHarvestBlock(world.getBlockState(pos), world, pos, player);
-    }
-
-    @Override
-    public PushReaction getPistonPushReaction(final BlockState state) {
-        return PushReaction.BLOCK;
     }
 }

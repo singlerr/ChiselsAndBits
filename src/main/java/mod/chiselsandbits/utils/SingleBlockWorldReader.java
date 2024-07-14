@@ -61,6 +61,11 @@ public class SingleBlockWorldReader extends SingleBlockBlockReader implements Le
     }
 
     @Override
+    public Holder<Biome> getUncachedNoiseBiome(int i, int j, int k) {
+        return this.reader.getUncachedNoiseBiome(i, j, k);
+    }
+
+    @Override
     public boolean isClientSide() {
         return this.reader.isClientSide();
     }

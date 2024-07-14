@@ -192,7 +192,7 @@ public class ItemNegativePrint extends Item implements IVoxelBlobItem, IItemScro
             te.writeChiselData(comp);
 
             if (convertToStone()) {
-                final TileEntityBlockChiseled tmp = new TileEntityBlockChiseled();
+                final TileEntityBlockChiseled tmp = new TileEntityBlockChiseled(pos, world.getBlockState(pos));
                 tmp.readChiselData(comp);
 
                 final VoxelBlob bestBlob = tmp.getBlob();

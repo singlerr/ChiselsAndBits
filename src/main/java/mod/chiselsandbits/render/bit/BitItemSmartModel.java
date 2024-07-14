@@ -2,7 +2,6 @@ package mod.chiselsandbits.render.bit;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import java.util.HashMap;
-import java.util.Objects;
 import mod.chiselsandbits.chiseledblock.data.VoxelBlob;
 import mod.chiselsandbits.client.model.baked.BaseSmartModel;
 import mod.chiselsandbits.client.model.data.IModelData;
@@ -34,13 +33,7 @@ public class BitItemSmartModel extends BaseSmartModel implements ICacheClearable
         if (stateID == 0) {
             // We are running an empty bit, for display purposes.
             // Lets loop:
-            if (alternativeStacks.isEmpty())
-                ModItems.ITEM_BLOCK_BIT
-                        .get()
-                        .fillItemCategory(
-                                Objects.requireNonNull(
-                                        ModItems.ITEM_BLOCK_BIT.get().getItemCategory()),
-                                alternativeStacks);
+            if (alternativeStacks.isEmpty()) ModItems.ITEM_BLOCK_BIT.get().fillItemCategory(alternativeStacks);
 
             final int alternativeIndex =
                     (int) ((Math.floor(TickHandler.getClientTicks() / 20d)) % alternativeStacks.size());

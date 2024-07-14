@@ -4,6 +4,7 @@ import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
 import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import mod.chiselsandbits.chiseledblock.BlockBitInfo;
 import mod.chiselsandbits.chiseledblock.BlockChiseled;
+import mod.chiselsandbits.client.CreativeClipboardTab;
 import mod.chiselsandbits.core.ChiselsAndBits;
 import mod.chiselsandbits.helpers.ModUtil;
 import mod.chiselsandbits.items.ItemChiseledBit;
@@ -85,6 +86,15 @@ public final class ModItemGroups {
                                 output.accept(itemStack);
                             }
                         }
+                    })
+                    .build());
+
+    public static RegistryObject<CreativeModeTab> CLIPBOARD =
+            CREATIVE_MOD_TAB.register("clipboard", () -> CreativeModeTab.builder(CreativeModeTab.Row.TOP, 1)
+                    .icon(() -> new ItemStack(ModItems.ITEM_POSITIVE_PRINT_WRITTEN.get()))
+                    .title(Component.literal("Clipboard"))
+                    .displayItems((parameters, output) -> {
+                        output.acceptAll(CreativeClipboardTab.getInstance().getClipboard());
                     })
                     .build());
 }

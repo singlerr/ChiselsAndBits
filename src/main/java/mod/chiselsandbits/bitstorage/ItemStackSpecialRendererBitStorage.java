@@ -47,7 +47,7 @@ public class ItemStackSpecialRendererBitStorage extends BlockEntityWithoutLevelR
                         combinedLight,
                         combinedOverlay);
 
-        final TileEntityBitStorage tileEntity = new TileEntityBitStorage();
+        final TileEntityBitStorage tileEntity = new TileEntityBitStorage(null, null);
         tileEntity
                 .getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
                 .ifPresent(t -> t.fill(
