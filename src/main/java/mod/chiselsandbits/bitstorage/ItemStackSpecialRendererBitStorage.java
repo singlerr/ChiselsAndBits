@@ -8,8 +8,10 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -47,7 +49,7 @@ public class ItemStackSpecialRendererBitStorage extends BlockEntityWithoutLevelR
                         combinedLight,
                         combinedOverlay);
 
-        final TileEntityBitStorage tileEntity = new TileEntityBitStorage(null, null);
+        final TileEntityBitStorage tileEntity = new TileEntityBitStorage(BlockPos.ZERO, Blocks.AIR.defaultBlockState());
         tileEntity
                 .getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
                 .ifPresent(t -> t.fill(

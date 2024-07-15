@@ -1,8 +1,6 @@
 package mod.chiselsandbits.core;
 
-import io.github.fabricators_of_create.porting_lib.event.client.TextureStitchCallback;
 import io.github.fabricators_of_create.porting_lib.models.geometry.IGeometryLoader;
-import io.github.fabricators_of_create.porting_lib.util.LogicalSidedProvider;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Map;
@@ -20,13 +18,13 @@ import mod.chiselsandbits.utils.Constants;
 import mod.chiselsandbits.utils.TextureUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.Resource;
-import net.minecraft.world.inventory.InventoryMenu;
 
 public class ChiselsAndBitsClient {
 
@@ -37,23 +35,19 @@ public class ChiselsAndBitsClient {
         // load this after items are created...
         // TODO: Load clipboard
         // CreativeClipboardTab.load( new File( configFile.getParent(), MODID + "_clipboard.cfg" ) );
-        registerIconTextures();
         ClientSide.instance.preinit();
+
         ClientSide.instance.init();
-        ClientSide.instance.postinit(ChiselsAndBits.getInstance());
 
-        LogicalSidedProvider.WORKQUEUE.get(EnvType.CLIENT).submit(() -> {
-            MenuScreens.register(ModContainerTypes.BAG_CONTAINER.get(), BagGui::new);
-            MenuScreens.register(ModContainerTypes.CHISEL_STATION_CONTAINER.get(), ChiselPrinterScreen::new);
-        });
-
-        TextureStitchCallback.POST.register(ChiselsAndBitsClient::retrieveRegisteredIconSprites);
+        ClientLifecycleEvents.CLIENT_STARTED.register(
+                client -> ClientSide.instance.postinit(ChiselsAndBits.getInstance()));
+        MenuScreens.register(ModContainerTypes.BAG_CONTAINER.get(), BagGui::new);
+        MenuScreens.register(ModContainerTypes.CHISEL_STATION_CONTAINER.get(), ChiselPrinterScreen::new);
     }
 
     @Environment(EnvType.CLIENT)
     public static void onModelRegistry(Map<ResourceLocation, IGeometryLoader<?>> loaders) {
-        loaders.put(new ResourceLocation(Constants.MOD_ID), ChiseledBlockModelLoader.getInstance());
-        ;
+        loaders.put(new ResourceLocation(Constants.MOD_ID, "chiseled_block"), ChiseledBlockModelLoader.getInstance());
     }
 
     @Environment(EnvType.CLIENT)
@@ -65,9 +59,8 @@ public class ChiselsAndBitsClient {
     }
 
     @Environment(EnvType.CLIENT)
-    public static void retrieveRegisteredIconSprites(TextureAtlas atlas) {
-        if (!atlas.location().equals(InventoryMenu.BLOCK_ATLAS)) return;
-
+    public static void retrieveRegisteredIconSprites(TextureAtlas map) {
+        if (!map.location().equals(IconSpriteUploader.TEXTURE_MAP_NAME)) return;
         ClientSide.swapIcon = spriteUploader.getSprite(new ResourceLocation("chiselsandbits", "swap"));
         ClientSide.placeIcon = spriteUploader.getSprite(new ResourceLocation("chiselsandbits", "place"));
         ClientSide.undoIcon = spriteUploader.getSprite(new ResourceLocation("chiselsandbits", "undo"));

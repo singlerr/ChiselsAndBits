@@ -1,0 +1,36 @@
+{
+  "parent": "chiselsandbits:chiselsandbits/root",
+  "criteria": {
+    "magnifier_glass": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "chiselsandbits:magnifying_glass"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "mod.chiselsandbits.advancements.find-chiselables.description"
+    },
+    "hidden": true,
+    "icon": {
+      "item": "chiselsandbits:magnifying_glass"
+    },
+    "title": {
+      "translate": "mod.chiselsandbits.advancements.find-chiselables.title"
+    }
+  },
+  "requirements": [
+    [
+      "magnifier_glass"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

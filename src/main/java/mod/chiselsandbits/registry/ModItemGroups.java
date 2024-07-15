@@ -2,6 +2,8 @@ package mod.chiselsandbits.registry;
 
 import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
 import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
+import java.util.HashSet;
+import java.util.Set;
 import mod.chiselsandbits.chiseledblock.BlockBitInfo;
 import mod.chiselsandbits.chiseledblock.BlockChiseled;
 import mod.chiselsandbits.client.CreativeClipboardTab;
@@ -57,13 +59,14 @@ public final class ModItemGroups {
                     .displayItems((params, output) -> {
                         for (Block block : BuiltInRegistries.BLOCK) {
                             if (block instanceof BlockChiseled) continue;
-
+                            Set<Integer> reserved = new HashSet<>();
                             for (BlockState possibleState :
                                     block.getStateDefinition().getPossibleStates()) {
                                 if (BlockBitInfo.canChisel(possibleState)) {
-                                    ItemStack itemStack =
-                                            ItemChiseledBit.createStack(ModUtil.getStateId(possibleState), 1, true);
+                                    int stateId = ModUtil.getStateId(possibleState);
+                                    ItemStack itemStack = ItemChiseledBit.createStack(stateId, 1, true);
                                     output.accept(itemStack);
+                                    reserved.add(stateId);
                                 }
                             }
 
@@ -81,8 +84,10 @@ public final class ModItemGroups {
                             }
 
                             if (BlockBitInfo.canChisel(blockState)) {
-                                ItemStack itemStack =
-                                        ItemChiseledBit.createStack(ModUtil.getStateId(blockState), 1, true);
+                                int stateId = ModUtil.getStateId(blockState);
+                                if (reserved.contains(stateId)) continue;
+                                ItemStack itemStack = ItemChiseledBit.createStack(stateId, 1, true);
+
                                 output.accept(itemStack);
                             }
                         }
@@ -97,4 +102,8 @@ public final class ModItemGroups {
                         output.acceptAll(CreativeClipboardTab.getInstance().getClipboard());
                     })
                     .build());
+
+    public static void onModConstruction() {
+        CREATIVE_MOD_TAB.register();
+    }
 }

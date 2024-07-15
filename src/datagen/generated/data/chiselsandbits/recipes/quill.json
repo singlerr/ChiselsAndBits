@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "tag": "forge:feathers"
+    },
+    {
+      "tag": "forge:dyes/black"
+    },
+    {
+      "tag": "forge:dyes/yellow"
+    }
+  ],
+  "result": {
+    "item": "chiselsandbits:quill"
+  }
+}

@@ -191,7 +191,9 @@ public final class LanguageHandler {
             // Generators!
             String locale = EnvExecutor.callWhenOn(
                     EnvType.CLIENT,
-                    () -> () -> Minecraft.getInstance() == null ? null : Minecraft.getInstance().options.languageCode);
+                    () -> () -> Minecraft.getInstance() == null || Minecraft.getInstance().options == null
+                            ? null
+                            : Minecraft.getInstance().options.languageCode);
 
             if (locale == null) {
                 locale = defaultLocale;

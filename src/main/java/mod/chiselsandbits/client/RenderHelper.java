@@ -47,7 +47,7 @@ public class RenderHelper {
         if (bb != null) {
             RenderSystem.enableBlend();
             RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-            GL11.glLineWidth(2.0F);
+            //            GL11.glLineWidth(2.0F);
             //            RenderSystem.disableTexture();
             RenderSystem.depthMask(false);
 
@@ -95,7 +95,7 @@ public class RenderHelper {
         if (a != null && b != null) {
             RenderSystem.enableBlend();
             RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-            GL11.glLineWidth(2.0F);
+            //            GL11.glLineWidth(2.0F);
             //            RenderSystem.disableTexture();
             RenderSystem.depthMask(false);
             //            RenderSystem.shadeModel(GL11.GL_FLAT);
@@ -160,7 +160,7 @@ public class RenderHelper {
             final int green,
             final int blue,
             final int alpha) {
-        GL11.glPushAttrib(8256);
+        //        GL11.glPushAttrib(8256);
         final Tesselator tess = Tesselator.getInstance();
         final BufferBuilder bufferBuilder = tess.getBuilder();
         //        RenderSystem.shadeModel(GL11.GL_FLAT);
@@ -255,7 +255,6 @@ public class RenderHelper {
                 .endVertex();
 
         tess.end();
-        GL11.glPopAttrib();
     }
 
     public static void renderLine(

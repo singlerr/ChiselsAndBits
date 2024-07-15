@@ -49,7 +49,7 @@ public final class ModBlocks {
     public static final RegistryObject<BlockItem> BIT_STORAGE_BLOCK_ITEM = ITEM_REGISTRAR.register(
             "bit_storage", () -> new ItemBlockBitStorage(BIT_STORAGE_BLOCK.get(), new Item.Properties()));
     public static final RegistryObject<ChiselPrinterBlock> CHISEL_PRINTER_BLOCK = BLOCK_REGISTRAR.register(
-            "chisel_printer",
+            "chiseled_printer",
             () -> new ChiselPrinterBlock(BlockBehaviour.Properties.of()
                     .strength(1.5f, 6f)
                     .noOcclusion()
@@ -67,7 +67,7 @@ public final class ModBlocks {
                             .isRedstoneConductor((p_test_1_, p_test_2_, p_test_3_) -> false)
                             .noOcclusion()));
     public static final RegistryObject<BlockItem> CHISEL_PRINTER_ITEM = ITEM_REGISTRAR.register(
-            "chisel_printer", () -> new BlockItem(ModBlocks.CHISEL_PRINTER_BLOCK.get(), new Item.Properties()));
+            "chiseled_printer", () -> new BlockItem(ModBlocks.CHISEL_PRINTER_BLOCK.get(), new Item.Properties()));
 
     public static final MaterialType[] VALID_CHISEL_MATERIALS = new MaterialType[] {
         new MaterialType("wood", "wood"),
@@ -91,8 +91,6 @@ public final class ModBlocks {
     }
 
     public static void onModConstruction() {
-        BLOCK_REGISTRAR.register();
-        ITEM_REGISTRAR.register();
 
         Arrays.stream(VALID_CHISEL_MATERIALS).forEach(materialType -> {
             MATERIAL_TO_BLOCK_CONVERSIONS.put(
@@ -100,7 +98,7 @@ public final class ModBlocks {
                     BLOCK_REGISTRAR.register(
                             "chiseled" + materialType.getName(),
                             () -> new BlockChiseled(
-                                    "chiseled_" + materialType.getName(),
+                                    "chiseled" + materialType.getName(),
                                     BlockBehaviour.Properties.of()
                                             .pushReaction(PushReaction.BLOCK)
                                             .strength(1.5f, 6f)
@@ -117,6 +115,8 @@ public final class ModBlocks {
                                             .get(),
                                     new Item.Properties())));
         });
+        BLOCK_REGISTRAR.register();
+        ITEM_REGISTRAR.register();
         BuiltinItemRendererRegistry.INSTANCE.register(
                 BIT_STORAGE_BLOCK_ITEM.get(), new ItemStackSpecialRendererBitStorage()::renderByItem);
     }

@@ -25,19 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class ItemWrench extends Item {
 
     public ItemWrench(Item.Properties properties) {
-        super(properties
-                .stacksTo(1)
-                .durability(
-                        ChiselsAndBits.getConfig().getServer().damageTools.get()
-                                ? (int) Math.max(
-                                        0,
-                                        Math.min(
-                                                Short.MAX_VALUE,
-                                                ChiselsAndBits.getConfig()
-                                                        .getServer()
-                                                        .wrenchUses
-                                                        .get()))
-                                : 0));
+        super(properties.stacksTo(1).durability(1));
     }
 
     @Override

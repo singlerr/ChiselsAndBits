@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "i": {
+      "tag": "forge:ingots/iron"
+    },
+    "s": {
+      "tag": "forge:string"
+    },
+    "y": {
+      "tag": "forge:dyes/yellow"
+    }
+  },
+  "pattern": [
+    "  s",
+    "isy",
+    "ii "
+  ],
+  "result": {
+    "item": "chiselsandbits:measuring_tape"
+  }
+}

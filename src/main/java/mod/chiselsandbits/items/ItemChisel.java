@@ -49,7 +49,7 @@ public class ItemChisel extends DiggerItem implements IItemScrollWheel, IChiselM
     private static final float one_16th = 1.0f / 16.0f;
 
     public ItemChisel(final Tier material, final Item.Properties properties) {
-        super(0.1F, -2.8F, material, ModTags.Blocks.CHISELED_BLOCK, setupDamageStack(material, properties));
+        super(0.1F, -2.8F, material, ModTags.Blocks.CHISELED_BLOCK, properties);
     }
 
     private static Item.Properties setupDamageStack(Tier material, Item.Properties properties) {

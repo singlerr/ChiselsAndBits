@@ -1,0 +1,54 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_c": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "chiselsandbits:chisel"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_g": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:glass"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_s": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:rods/wooden"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "chiselsandbits:magnifying_glass"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_c",
+      "has_g",
+      "has_s"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "chiselsandbits:magnifying_glass"
+    ]
+  }
+}

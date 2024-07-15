@@ -36,32 +36,37 @@ public class ChiselsAndBits {
 
     public ChiselsAndBits() {
         instance = this;
-
-        LanguageHandler.loadLangPath(
-                "assets/chiselsandbits/lang/%s.json"); // hotfix config comments, it's ugly bcs it's gonna be replaced
         config = new Configuration();
-
-        EnvExecutor.runWhenOn(
-                EnvType.CLIENT,
-                () -> () -> ClientLifecycleEvents.CLIENT_STARTED.register(ChiselsAndBitsClient::onClientInit));
         EnvExecutor.runWhenOn(
                 EnvType.CLIENT,
                 () -> () -> RegisterGeometryLoadersCallback.EVENT.register(ChiselsAndBitsClient::onModelRegistry));
+        EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> {
+            ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
+                LanguageHandler.loadLangPath(
+                        "assets/chiselsandbits/lang/%s.json"); // hotfix config comments, it's ugly bcs it's gonna be
+                // replaced
+            });
+        });
 
         EnvExecutor.runWhenOn(
                 EnvType.CLIENT, () -> () -> ClientLifecycleEvents.CLIENT_STARTED.register(this::clientSetup));
-        EnvExecutor.runWhenOn(
-                EnvType.CLIENT, () -> () -> ClientLifecycleEvents.CLIENT_STARTED.register(this::handleIdMapping));
+        EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> {
+            ForgeModConfigEvents.loading(Constants.MOD_ID).register(config -> handleIdMapping(Minecraft.getInstance()));
+        });
         VaporizeWater.register();
         EventPlayerInteract.register();
-
+        ModTags.init();
         ModBlocks.onModConstruction();
         ModContainerTypes.onModConstruction();
         ModItems.onModConstruction();
         ModRecipeSerializers.onModConstruction();
         ModTileEntityTypes.onModConstruction();
-
+        ModItemGroups.onModConstruction();
         networkChannel.registerCommonMessages();
+    }
+
+    public void setConfig(Configuration config) {
+        this.config = config;
     }
 
     public static ChiselsAndBits getInstance() {

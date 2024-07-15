@@ -17,7 +17,7 @@ import net.minecraft.world.level.Level;
 public class ItemBitSaw extends Item {
 
     public ItemBitSaw(Tier tier, Item.Properties properties) {
-        super(setupDamageStack(tier, properties.stacksTo(1)));
+        super(properties);
     }
 
     private static Item.Properties setupDamageStack(Tier material, Item.Properties properties) {
