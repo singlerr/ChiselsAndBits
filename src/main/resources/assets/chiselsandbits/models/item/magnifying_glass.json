@@ -1,6 +1,6 @@
 {
     "parent":"chiselsandbits:item/tool",
     "textures": {
-        "layer0":"chiselsandbits:items/magnifying_glass"
+        "layer0":"chiselsandbits:item/magnifying_glass"
     }
 }

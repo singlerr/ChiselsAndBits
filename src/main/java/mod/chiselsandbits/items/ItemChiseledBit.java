@@ -293,6 +293,7 @@ public class ItemChiseledBit extends Item implements IItemScrollWheel, IChiselMo
                     }
                     return InteractionResult.FAIL;
                 } else {
+
                     pc = new PacketChisel(
                             getBitOperation(player, hand, stack),
                             bitLocation,

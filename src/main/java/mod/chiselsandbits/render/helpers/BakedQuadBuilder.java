@@ -61,17 +61,16 @@ public final class BakedQuadBuilder implements IVertexConsumer, IFaceBuilder {
     public void put(int vertexIndex, int element, float... data) {
         for (int i = 0; i < 4; i++) {
             if (i < data.length) {
-                unpackedData[vertices][element][i] = data[i];
+                unpackedData[vertexIndex][element][i] = data[i];
             } else {
-                unpackedData[vertices][element][i] = 0;
+                unpackedData[vertexIndex][element][i] = 0;
             }
         }
         elements++;
         if (elements == SIZE) {
-            vertices++;
             elements = 0;
         }
-        if (vertices == 4) {
+        if (vertexIndex == 4) {
             full = true;
         }
     }
@@ -83,9 +82,6 @@ public final class BakedQuadBuilder implements IVertexConsumer, IFaceBuilder {
     }
 
     public BakedQuad build() {
-        if (!full) {
-            throw new IllegalStateException("not enough data");
-        }
         if (texture == null) {
             throw new IllegalStateException("texture not set");
         }

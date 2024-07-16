@@ -1,6 +1,7 @@
 package mod.chiselsandbits.registry;
 
 import com.google.common.collect.Maps;
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
 import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
 import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import java.util.Arrays;
@@ -13,8 +14,10 @@ import mod.chiselsandbits.bitstorage.ItemStackSpecialRendererBitStorage;
 import mod.chiselsandbits.chiseledblock.BlockChiseled;
 import mod.chiselsandbits.chiseledblock.ItemBlockChiseled;
 import mod.chiselsandbits.chiseledblock.MaterialType;
+import mod.chiselsandbits.chiseledblock.ReflectionHelperBlock;
 import mod.chiselsandbits.core.ChiselsAndBits;
 import mod.chiselsandbits.printer.ChiselPrinterBlock;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
@@ -69,6 +72,8 @@ public final class ModBlocks {
     public static final RegistryObject<BlockItem> CHISEL_PRINTER_ITEM = ITEM_REGISTRAR.register(
             "chiseled_printer", () -> new BlockItem(ModBlocks.CHISEL_PRINTER_BLOCK.get(), new Item.Properties()));
 
+    public static final RegistryObject<ReflectionHelperBlock> REFLECTION_HELPER_BLOCK = BLOCK_REGISTRAR.register("reflection_helper_block", ReflectionHelperBlock::new);
+
     public static final MaterialType[] VALID_CHISEL_MATERIALS = new MaterialType[] {
         new MaterialType("wood", "wood"),
         new MaterialType("rock", "stone"),
@@ -117,8 +122,10 @@ public final class ModBlocks {
         });
         BLOCK_REGISTRAR.register();
         ITEM_REGISTRAR.register();
-        BuiltinItemRendererRegistry.INSTANCE.register(
-                BIT_STORAGE_BLOCK_ITEM.get(), new ItemStackSpecialRendererBitStorage()::renderByItem);
+        EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> {
+            BuiltinItemRendererRegistry.INSTANCE.register(
+                    BIT_STORAGE_BLOCK_ITEM.get(), new ItemStackSpecialRendererBitStorage()::renderByItem);
+        });
     }
 
     public static Map<String, RegistryObject<ItemBlockChiseled>> getMaterialToItemConversions() {

@@ -151,7 +151,6 @@ public class PacketChisel extends ModPacket {
                                 && place.usesBits()) {
                             world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                         }
-
                         ReplaceWithChiseledValue rv = null;
                         if ((rv = BlockChiseled.replaceWithChiseled(world, pos, blkstate, placeStateID, true))
                                 .success) {

@@ -11,6 +11,7 @@ import mod.chiselsandbits.chiseledblock.data.VoxelBlob;
 import mod.chiselsandbits.chiseledblock.data.VoxelBlob.VisibleFace;
 import mod.chiselsandbits.client.culling.ICullTest;
 import mod.chiselsandbits.client.model.baked.BaseBakedBlockModel;
+import mod.chiselsandbits.client.model.data.IModelData;
 import mod.chiselsandbits.core.ChiselsAndBits;
 import mod.chiselsandbits.core.ClientSide;
 import mod.chiselsandbits.helpers.ModUtil;
@@ -22,12 +23,15 @@ import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.BlockModelRotation;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -267,7 +271,6 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
                                         getVertexPos(pos, myFace, vertNum, to, from);
                                         faceBuilder.put(vertNum, elementIndex, pos[0], pos[1], pos[2]);
                                         break;
-
                                     case COLOR:
                                         final int cb = pc.color;
                                         faceBuilder.put(
@@ -670,4 +673,20 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
         out.myLayer = layer;
         return out;
     }
+
+    @Override
+    public List<BakedQuad> getQuads(
+            @Nullable BlockState state,
+            @Nullable Direction side,
+            @NotNull RandomSource rand,
+            @NotNull IModelData extraData) {
+        return getQuads(state, side, rand);
+    }
+
+    @Override
+    public void updateModelData(
+            @NotNull BlockAndTintGetter world,
+            @NotNull BlockPos pos,
+            @NotNull BlockState state,
+            @NotNull IModelData modelData) {}
 }

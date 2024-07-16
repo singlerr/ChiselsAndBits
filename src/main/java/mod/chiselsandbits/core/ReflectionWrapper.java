@@ -56,7 +56,6 @@ public class ReflectionWrapper {
             if (highlightingItemStack == null) {
                 highlightingItemStack = findField(o.getClass(), "highlightingItemStack", "field_92016_l");
             }
-
             highlightingItemStack.setAccessible(true);
             highlightingItemStack.set(o, is);
         } catch (final Throwable t) {

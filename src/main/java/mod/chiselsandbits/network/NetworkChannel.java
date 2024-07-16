@@ -1,5 +1,7 @@
 package mod.chiselsandbits.network;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.function.Function;
 import me.pepperbell.simplenetworking.SimpleChannel;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -47,22 +49,29 @@ public class NetworkChannel {
      */
     public <MSG extends ModPacket> void registerMessage(
             int id, final Class<MSG> msgClazz, final Function<FriendlyByteBuf, MSG> msgCreator) {
-        rawChannel.registerC2SPacket(C2SPacketDelegate.class, id, (buf) -> {
-            return new C2SPacketDelegate(msgCreator.apply(buf));
-        });
-
-        rawChannel.registerS2CPacket(S2CPacketDelegate.class, ++id, buf -> {
-            return new S2CPacketDelegate(msgCreator.apply(buf));
-        });
+        rawChannel.registerC2SPacket(msgClazz, id++, msgCreator);
+        rawChannel.registerS2CPacket(msgClazz, id, msgCreator);
     }
 
+    private <MSG extends ModPacket> MSG createPacket(Class<?> clz, FriendlyByteBuf buf) {
+        try {
+
+            Constructor<?> c = clz.getConstructor(FriendlyByteBuf.class);
+            return (MSG) c.newInstance(buf);
+        } catch (NoSuchMethodException
+                | InvocationTargetException
+                | InstantiationException
+                | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
      * Sends to server.
      *
      * @param msg message to send
      */
     public void sendToServer(final ModPacket msg) {
-        rawChannel.sendToServer(new C2SPacketDelegate(msg));
+        rawChannel.sendToServer(msg);
     }
 
     /**
@@ -72,7 +81,7 @@ public class NetworkChannel {
      * @param player target player
      */
     public void sendToPlayer(final ModPacket msg, final ServerPlayer player) {
-        rawChannel.sendToClient(new S2CPacketDelegate(msg), player);
+        rawChannel.sendToClient(msg, player);
     }
 
     /**
@@ -97,7 +106,7 @@ public class NetworkChannel {
      * @param msg message to send
      */
     public void sendToEveryone(final ModPacket msg) {
-        rawChannel.sendToClientsInCurrentServer(new S2CPacketDelegate(msg));
+        rawChannel.sendToClientsInCurrentServer(msg);
     }
 
     /**
@@ -113,7 +122,7 @@ public class NetworkChannel {
      * @param entity target entity to look at
      */
     public void sendToTrackingEntity(final ModPacket msg, final Entity entity) {
-        rawChannel.sendToClientsTracking(new S2CPacketDelegate(msg), entity);
+        rawChannel.sendToClientsTracking(msg, entity);
     }
 
     /**
@@ -129,7 +138,7 @@ public class NetworkChannel {
      * @param entity target entity to look at
      */
     public void sendToTrackingEntityAndSelf(final ModPacket msg, final Entity entity) {
-        rawChannel.sendToClientsTrackingAndSelf(new S2CPacketDelegate(msg), entity);
+        rawChannel.sendToClientsTrackingAndSelf(msg, entity);
     }
 
     public record Context(@Nullable ServerPlayer serverPlayer, PacketSender packetSender, SimpleChannel channel) {}

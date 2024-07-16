@@ -31,7 +31,7 @@ public final class Constants {
         public static final String BLOCKSTATE_DIR = RESOURCEPACK_DIR + "blockstates/";
         public static final String CONFIG_LANG_DIR = RESOURCEPACK_DIR + "lang/config/";
         public static final ResourceLocation CHISELED_BLOCK_MODEL =
-                new ResourceLocation(ChiselsAndBits.MODID, "block/chiseled");
+                new ResourceLocation(ChiselsAndBits.MODID, "block/chiseled_block");
         public static final ResourceLocation CHISEL_PRINTER_MODEL =
                 new ResourceLocation(ChiselsAndBits.MODID, "block/chisel_printer");
     }

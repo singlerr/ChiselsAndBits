@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.function.Supplier;
 import mod.chiselsandbits.client.model.baked.DataAwareBakedModel;
 import mod.chiselsandbits.client.model.data.IModelData;
+import mod.chiselsandbits.interfaces.ICacheClearable;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
@@ -28,7 +29,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FabricBakedModelDelegate implements BakedModel {
+public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
     private final BakedModel delegate;
 
     public FabricBakedModelDelegate(final BakedModel delegate) {
@@ -165,6 +166,13 @@ public class FabricBakedModelDelegate implements BakedModel {
         }
 
         renderContext.popTransform();
+    }
+
+    @Override
+    public void clearCache() {
+        if (delegate instanceof ICacheClearable cache) {
+            cache.clearCache();
+        }
     }
 
     @FunctionalInterface

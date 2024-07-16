@@ -1,15 +1,15 @@
 {
   "variants": {
+    "facing=south": {
+      "model": "chiselsandbits:block/chiseled_printer",
+      "y": 180
+    },
     "facing=east": {
       "model": "chiselsandbits:block/chiseled_printer",
       "y": 90
     },
     "facing=north": {
       "model": "chiselsandbits:block/chiseled_printer"
-    },
-    "facing=south": {
-      "model": "chiselsandbits:block/chiseled_printer",
-      "y": 180
     },
     "facing=west": {
       "model": "chiselsandbits:block/chiseled_printer",

@@ -297,7 +297,7 @@ public class ClientSide {
     public boolean onRenderGUI(
             GuiGraphics guiGraphics, float partialTicks, Window window, OverlayRenderCallback.Types type) {
         final ChiselToolType tool = getHeldToolType(lastHand);
-        if (type == OverlayRenderCallback.Types.AIR && tool != null && tool.hasMenu()) {
+        if (type == OverlayRenderCallback.Types.CROSSHAIRS && tool != null && tool.hasMenu()) {
             final boolean wasVisible = ChiselsAndBitsMenu.instance.isVisible();
 
             if (!modeMenu.isUnbound() && modeMenu.isDown()) {

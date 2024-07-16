@@ -9,6 +9,7 @@ import mod.chiselsandbits.core.ChiselsAndBits;
 import mod.chiselsandbits.core.Log;
 import mod.chiselsandbits.helpers.LocalStrings;
 import mod.chiselsandbits.helpers.ModUtil;
+import mod.chiselsandbits.registry.ModBlocks;
 import mod.chiselsandbits.registry.ModTags;
 import mod.chiselsandbits.render.helpers.ModelUtil;
 import mod.chiselsandbits.utils.ClassUtils;
@@ -184,7 +185,7 @@ public class BlockBitInfo {
 
         try {
             // require basic hardness behavior...
-            final ReflectionHelperBlock pb = new ReflectionHelperBlock();
+            final ReflectionHelperBlock pb = ModBlocks.REFLECTION_HELPER_BLOCK.get();
             final Class<? extends Block> blkClass = blk.getClass();
 
             // custom dropping behavior?
@@ -357,7 +358,7 @@ public class BlockBitInfo {
 
     public static BlockBitInfo createFromState(final BlockState state) {
         try {
-            final ReflectionHelperBlock reflectBlock = new ReflectionHelperBlock();
+            final ReflectionHelperBlock reflectBlock = ModBlocks.REFLECTION_HELPER_BLOCK.get();
             final Block blk = state.getBlock();
             final Class<? extends Block> blkClass = blk.getClass();
 

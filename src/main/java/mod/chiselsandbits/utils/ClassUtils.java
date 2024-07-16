@@ -33,6 +33,7 @@ public class ClassUtils {
         } catch (final SecurityException e) {
             // nothing here..
         } catch (final Throwable e) {
+            e.printStackTrace();
             return new ClassLookupResult(null, false);
         }
 

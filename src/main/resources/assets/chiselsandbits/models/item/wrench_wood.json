@@ -1,6 +1,6 @@
 {
     "parent":"chiselsandbits:item/tool",
     "textures": {
-        "layer0":"chiselsandbits:items/wrench_wood"
+        "layer0":"chiselsandbits:item/wrench_wood"
     }
 }

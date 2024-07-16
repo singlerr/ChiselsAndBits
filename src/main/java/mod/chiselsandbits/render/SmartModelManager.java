@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import mod.chiselsandbits.chiseledblock.BlockChiseled;
+import mod.chiselsandbits.client.model.loader.FabricBakedModelDelegate;
 import mod.chiselsandbits.core.ChiselsAndBits;
 import mod.chiselsandbits.interfaces.ICacheClearable;
 import mod.chiselsandbits.registry.ModBlocks;
@@ -40,7 +41,7 @@ public class SmartModelManager {
         if (setup) return;
 
         setup = true;
-        ChiseledBlockSmartModel smartModel = new ChiseledBlockSmartModel();
+        FabricBakedModelDelegate smartModel = new FabricBakedModelDelegate(new ChiseledBlockSmartModel());
         add(Constants.DataGenerator.CHISELED_BLOCK_MODEL, smartModel);
 
         for (RegistryObject<BlockChiseled> bc :
@@ -49,7 +50,7 @@ public class SmartModelManager {
         }
         ChiselsAndBits.getInstance().addClearable(smartModel);
 
-        add(new ResourceLocation(ChiselsAndBits.MODID, "bit"), new BitItemSmartModel());
+        add(new ResourceLocation(ChiselsAndBits.MODID, "block_bit"), new BitItemSmartModel());
         add(
                 new ResourceLocation(ChiselsAndBits.MODID, "positiveprint_written_preview"),
                 new PrintSmartModel("positiveprint", ModItems.ITEM_POSITIVE_PRINT_WRITTEN.get()));
@@ -91,7 +92,7 @@ public class SmartModelManager {
         models.put(new ModelResourceLocation(second, "multipart"), modelGen);
     }
 
-    public void textureStichEvent(final TextureAtlas stitch) {
+    public void textureStitchEvent(final TextureAtlas stitch) {
         ChiselsAndBits.getInstance().clearCache();
     }
 
@@ -105,7 +106,9 @@ public class SmartModelManager {
             context.modifyModelAfterBake().register(new ModelModifier.AfterBake() {
                 @Override
                 public @Nullable BakedModel modifyModelAfterBake(@Nullable BakedModel model, Context context) {
-                    if (context.id().equals(rl)) return getModel(rl);
+                    if (context.id().equals(rl)) {
+                        return getModel(rl);
+                    }
                     return model;
                 }
             });

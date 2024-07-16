@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "chiselsandbits:items/bitsaw_stone"
+		"layer0": "chiselsandbits:item/bitsaw_stone"
 	},
 	"display": {
 		"thirdperson_righthand": {

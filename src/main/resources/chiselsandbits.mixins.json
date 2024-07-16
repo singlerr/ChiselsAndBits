@@ -3,9 +3,12 @@
 	"package": "mod.chiselsandbits.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
+		"ItemEntityMixin"
+	],
+	"client": [
 		"GameRendererMixin",
-		"ItemEntityMixin",
-		"PaintingTextureManagerMixin"
+		"PaintingTextureManagerMixin",
+		"SectionRenderDispatcherMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

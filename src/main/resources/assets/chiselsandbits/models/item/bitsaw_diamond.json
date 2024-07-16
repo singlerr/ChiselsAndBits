@@ -1,7 +1,7 @@
 {
     "parent":"item/generated",
 	"textures": {
-		"layer0":"chiselsandbits:items/bitsaw_diamond"
+		"layer0":"chiselsandbits:item/bitsaw_diamond"
 	},
 	"display": {
 		"thirdperson_righthand": {

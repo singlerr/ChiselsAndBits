@@ -1,7 +1,10 @@
 {
   "variants": {
-    "": {
-      "model": "chiselsandbits:block/chiseled"
+    "full_block=false": {
+      "model": "chiselsandbits:block/chiseled_block"
+    },
+    "full_block=true": {
+      "model": "chiselsandbits:block/chiseled_block"
     }
   }
 }

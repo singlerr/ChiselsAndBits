@@ -66,6 +66,7 @@ public final class ModItemGroups {
                                     int stateId = ModUtil.getStateId(possibleState);
                                     ItemStack itemStack = ItemChiseledBit.createStack(stateId, 1, true);
                                     output.accept(itemStack);
+
                                     reserved.add(stateId);
                                 }
                             }
@@ -87,7 +88,6 @@ public final class ModItemGroups {
                                 int stateId = ModUtil.getStateId(blockState);
                                 if (reserved.contains(stateId)) continue;
                                 ItemStack itemStack = ItemChiseledBit.createStack(stateId, 1, true);
-
                                 output.accept(itemStack);
                             }
                         }
