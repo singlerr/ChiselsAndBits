@@ -590,8 +590,7 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
         uvs[7] = 16.0f * v(quadsUV, to_u, from_v); // 1
     }
 
-
-    //Interpolate u
+    // Interpolate u
     float u(final float[] src, final float inU, final float inV) {
         final float inv = 1.0f - inU;
         final float u1 = src[0] * inU + inv * src[2];
@@ -599,7 +598,7 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
         return u1 * inV + (1.0f - inV) * u2;
     }
 
-    //Interpolate v
+    // Interpolate v
     float v(final float[] src, final float inU, final float inV) {
         final float inv = 1.0f - inU;
         final float v1 = src[1] * inU + inv * src[3];

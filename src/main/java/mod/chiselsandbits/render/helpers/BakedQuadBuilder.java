@@ -2,7 +2,6 @@ package mod.chiselsandbits.render.helpers;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import mod.chiselsandbits.render.cache.FormatInfo;
 import mod.chiselsandbits.render.chiseledblock.IFaceBuilder;
 import mod.chiselsandbits.utils.LightUtil;
 import mod.chiselsandbits.utils.forge.IVertexConsumer;

@@ -397,7 +397,9 @@ public class ChiselsAndBitsMenu extends Screen {
             final double y2 = y + scaley;
 
             final TextureAtlasSprite sprite = sip.sprite;
-            RenderSystem.setShaderTexture(0, sip.sprite.contents().name().withPrefix("textures/icons/").withSuffix(".png"));
+            RenderSystem.setShaderTexture(
+                    0,
+                    sip.sprite.contents().name().withPrefix("textures/icons/").withSuffix(".png"));
 
             final float f = 1.0f;
             final float a = 1.0f;
@@ -435,7 +437,8 @@ public class ChiselsAndBitsMenu extends Screen {
             final float v2 = 16;
 
             final TextureAtlasSprite sprite = btn.icon == null ? ClientSide.white : btn.icon;
-            RenderSystem.setShaderTexture(0, sprite.contents().name().withPrefix("textures/icons/").withSuffix(".png"));
+            RenderSystem.setShaderTexture(
+                    0, sprite.contents().name().withPrefix("textures/icons/").withSuffix(".png"));
             final double btnx1 = btn.x1 + 1;
             final double btnx2 = btn.x2 - 1;
             final double btny1 = btn.y1 + 1;

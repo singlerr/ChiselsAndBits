@@ -24,7 +24,7 @@ public class ModelQuadLayer {
             uvr = new ModelUVReader(sprite, uCoord, vCoord);
         }
 
-        public void setSourceQuad(BakedQuad bakedQuad){
+        public void setSourceQuad(BakedQuad bakedQuad) {
             cache.sourceQuad = bakedQuad;
         }
 
