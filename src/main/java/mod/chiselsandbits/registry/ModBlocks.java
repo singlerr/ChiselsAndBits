@@ -72,7 +72,8 @@ public final class ModBlocks {
     public static final RegistryObject<BlockItem> CHISEL_PRINTER_ITEM = ITEM_REGISTRAR.register(
             "chiseled_printer", () -> new BlockItem(ModBlocks.CHISEL_PRINTER_BLOCK.get(), new Item.Properties()));
 
-    public static final RegistryObject<ReflectionHelperBlock> REFLECTION_HELPER_BLOCK = BLOCK_REGISTRAR.register("reflection_helper_block", ReflectionHelperBlock::new);
+    public static final RegistryObject<ReflectionHelperBlock> REFLECTION_HELPER_BLOCK =
+            BLOCK_REGISTRAR.register("reflection_helper_block", ReflectionHelperBlock::new);
 
     public static final MaterialType[] VALID_CHISEL_MATERIALS = new MaterialType[] {
         new MaterialType("wood", "wood"),

@@ -2,7 +2,6 @@ package mod.chiselsandbits.render.chiseledblock;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import io.github.fabricators_of_create.porting_lib.util.client.ClientHooks;
 import java.io.IOException;
 import java.util.BitSet;
 import java.util.List;
@@ -21,6 +20,7 @@ import mod.chiselsandbits.interfaces.ICacheClearable;
 import mod.chiselsandbits.render.ModelCombined;
 import mod.chiselsandbits.render.NullBakedModel;
 import mod.chiselsandbits.render.cache.CacheMap;
+import mod.chiselsandbits.utils.ModClientHooks;
 import mod.chiselsandbits.utils.RenderTypeUtils;
 import mod.chiselsandbits.utils.SimpleMaxSizedCache;
 import net.minecraft.client.renderer.RenderType;
@@ -140,7 +140,7 @@ public class ChiseledBlockSmartModel extends BaseSmartModel implements ICacheCle
         Integer blockP = modelData.getData(TileEntityBlockChiseled.MP_PBSI);
         blockP = blockP == null ? 0 : blockP;
 
-        final RenderType layer = ClientHooks.RENDER_TYPE;
+        final RenderType layer = ModClientHooks.getRenderType();
 
         if (layer == null) {
             final ChiseledBlockBakedModel[] models = new ChiseledBlockBakedModel[ChiselRenderType.values().length];
@@ -268,21 +268,20 @@ public class ChiseledBlockSmartModel extends BaseSmartModel implements ICacheCle
         Integer blockP = modelData.getData(TileEntityBlockChiseled.MP_PBSI);
         blockP = blockP == null ? 0 : blockP;
 
-        final RenderType layer = ClientHooks.RENDER_TYPE;
+        final RenderType layer = ModClientHooks.getRenderType();
 
-                if (layer == null) {
-                    final ChiseledBlockBakedModel[] models = new
-         ChiseledBlockBakedModel[ChiselRenderType.values().length];
-                    int o = 0;
+        if (layer == null) {
+            final ChiseledBlockBakedModel[] models = new ChiseledBlockBakedModel[ChiselRenderType.values().length];
+            int o = 0;
 
-                    for (final ChiselRenderType l : ChiselRenderType.values()) {
-                        models[o++] = ChiseledBlockSmartModel.getCachedModel(
-                                (TileEntityBlockChiseled) Objects.requireNonNull(world.getBlockEntity(pos)), l);
-                    }
+            for (final ChiselRenderType l : ChiselRenderType.values()) {
+                models[o++] = ChiseledBlockSmartModel.getCachedModel(
+                        (TileEntityBlockChiseled) Objects.requireNonNull(world.getBlockEntity(pos)), l);
+            }
 
-                    modelData.setData(DataAwareChiseledBlockBakedModel.MODEL_PROP, new ModelCombined(models));
-                    return;
-                }
+            modelData.setData(DataAwareChiseledBlockBakedModel.MODEL_PROP, new ModelCombined(models));
+            return;
+        }
 
         BakedModel baked;
         if (RenderType.chunkBufferLayers().contains(layer)

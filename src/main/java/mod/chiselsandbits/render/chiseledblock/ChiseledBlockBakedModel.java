@@ -18,6 +18,7 @@ import mod.chiselsandbits.helpers.ModUtil;
 import mod.chiselsandbits.render.helpers.BakedQuadBuilder;
 import mod.chiselsandbits.render.helpers.ModelQuadLayer;
 import mod.chiselsandbits.render.helpers.ModelUtil;
+import mod.chiselsandbits.utils.LightUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -96,8 +97,8 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
 
             final int p = vertData.length / 4;
             for (int vertNum = 0; vertNum < 4; vertNum++) {
-                final float A = Float.intBitsToFloat(vertData[vertNum * p + a]);
-                final float B = Float.intBitsToFloat(vertData[vertNum * p + b]);
+                final float A = Float.intBitsToFloat(vertData[vertNum * p + a]); // Current material
+                final float B = Float.intBitsToFloat(vertData[vertNum * p + b]); // Neighbor material
 
                 for (int o = 0; o < 3; o++) {
                     final float v = Float.intBitsToFloat(vertData[vertNum * p + o]);
@@ -105,7 +106,6 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
                     quadMapping[myFace.ordinal()][vertNum][o * 2] = v * scaler;
                     quadMapping[myFace.ordinal()][vertNum][o * 2 + 1] = (1.0f - v) * scaler;
                 }
-
                 if (ModelUtil.isZero(A) && ModelUtil.isZero(B)) {
                     faceVertMap[myFace.get3DDataValue()][vertNum] = 0;
                 } else if (ModelUtil.isZero(A) && ModelUtil.isOne(B)) {
@@ -209,7 +209,7 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
         return trulyEmpty;
     }
 
-    BakedQuadBuilder getBuilder(VertexFormat format) {
+    IFaceBuilder getBuilder(VertexFormat format) {
         if (ChiseledBlockSmartModel.ForgePipelineDisabled()) {
             format = DefaultVertexFormat.BLOCK;
         }
@@ -232,8 +232,8 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
         final float[] pos = new float[3];
 
         // single reusable face builder.
-        final BakedQuadBuilder darkBuilder = getBuilder(DefaultVertexFormat.BLOCK);
-        final BakedQuadBuilder litBuilder = darkBuilder;
+        final IFaceBuilder darkBuilder = getBuilder(DefaultVertexFormat.BLOCK);
+        final IFaceBuilder litBuilder = darkBuilder;
 
         for (final ArrayList<FaceRegion> src : rset) {
             mergeFaces(src);
@@ -251,9 +251,10 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
 
                 if (mpc != null) {
                     for (final ModelQuadLayer pc : mpc) {
-                        final BakedQuadBuilder faceBuilder = pc.light > 0 ? litBuilder : darkBuilder;
-                        VertexFormat builderFormat = faceBuilder.getVertexFormat();
+                        final IFaceBuilder faceBuilder = pc.light > 0 ? litBuilder : darkBuilder;
+                        VertexFormat builderFormat = faceBuilder.getFormat();
 
+                        faceBuilder.begin();
                         faceBuilder.setFace(myFace, pc.tint);
 
                         final float maxLightmap = 32.0f / 0xffff;
@@ -285,38 +286,45 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
                                     case NORMAL:
                                         // this fixes a bug with Forge AO?? and
                                         // solid blocks.. I have no idea why...
-                                        final float normalShift = 0.999f;
                                         faceBuilder.put(
                                                 vertNum,
                                                 elementIndex,
-                                                normalShift * myFace.getStepX(),
-                                                normalShift * myFace.getStepY(),
-                                                normalShift * myFace.getStepZ());
+                                                myFace.getStepX(),
+                                                myFace.getStepY(),
+                                                myFace.getStepZ());
                                         break;
 
                                     case UV:
-                                        if (element.getIndex() == 2) {
-                                            final float v = maxLightmap * Math.max(0, Math.min(15, pc.light));
-                                            faceBuilder.put(vertNum, elementIndex, v, v);
-                                        } else {
-                                            final float u = uvs[faceVertMap[myFace.get3DDataValue()][vertNum] * 2 + 0];
-                                            final float v = uvs[faceVertMap[myFace.get3DDataValue()][vertNum] * 2 + 1];
+                                        if (element.getIndex() == 0) {
+                                            int uIndex = faceVertMap[myFace.get3DDataValue()][vertNum] * 2 + 0;
+                                            int vIndex = faceVertMap[myFace.get3DDataValue()][vertNum] * 2 + 1;
+                                            final float u = uvs[uIndex];
+                                            final float v = uvs[vIndex];
                                             faceBuilder.put(
                                                     vertNum, elementIndex, pc.sprite.getU(u), pc.sprite.getV(v));
+                                        } else if (element.getIndex() == 1) {
+                                            faceBuilder.put(vertNum, elementIndex, 0, 0);
+                                        } else {
+                                            faceBuilder.put(vertNum, elementIndex, 1, 1);
                                         }
                                         break;
-
                                     default:
                                         faceBuilder.put(vertNum, elementIndex);
                                         break;
                                 }
                             }
                         }
-                        faceBuilder.setTexture(pc.sprite);
+
+                        BakedQuadBuilder consumer = (BakedQuadBuilder) faceBuilder;
+                        LightUtil.put(consumer, pc.sourceQuad);
+                        consumer.setQuadTint(pc.tint);
+                        consumer.setTexture(pc.sprite);
+                        consumer.setQuadOrientation(myFace);
+
                         if (region.isEdge) {
-                            builder.getList(myFace).add(faceBuilder.build());
+                            builder.getList(myFace).add(consumer.create(pc.sprite));
                         } else {
-                            builder.getList(null).add(faceBuilder.build());
+                            builder.getList(null).add(consumer.create(pc.sprite));
                         }
                     }
                 }
@@ -582,6 +590,8 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
         uvs[7] = 16.0f * v(quadsUV, to_u, from_v); // 1
     }
 
+
+    //Interpolate u
     float u(final float[] src, final float inU, final float inV) {
         final float inv = 1.0f - inU;
         final float u1 = src[0] * inU + inv * src[2];
@@ -589,6 +599,7 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
         return u1 * inV + (1.0f - inV) * u2;
     }
 
+    //Interpolate v
     float v(final float[] src, final float inU, final float inV) {
         final float inv = 1.0f - inU;
         final float v1 = src[1] * inU + inv * src[3];
@@ -654,7 +665,7 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
 
     @Override
     public TextureAtlasSprite getParticleIcon() {
-        return sprite != null ? sprite : ClientSide.instance.getMissingIcon();
+        return ClientSide.instance.getMissingIcon();
     }
 
     public int faceCount() {

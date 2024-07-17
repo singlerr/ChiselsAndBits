@@ -14,6 +14,7 @@ import mod.chiselsandbits.modes.IToolMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -371,6 +372,7 @@ public class ChiselsAndBitsMenu extends Screen {
 
         // matrixStack.translate( 0.0F, 0.0F, 5.0F );
         //        RenderSystem.enableTexture();
+        RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
         graphics.setColor(1, 1, 1, 1);
         RenderSystem.disableBlend();
         //        RenderSystem.enableAlphaTest();
@@ -395,6 +397,7 @@ public class ChiselsAndBitsMenu extends Screen {
             final double y2 = y + scaley;
 
             final TextureAtlasSprite sprite = sip.sprite;
+            RenderSystem.setShaderTexture(0, sip.sprite.contents().name().withPrefix("textures/icons/").withSuffix(".png"));
 
             final float f = 1.0f;
             final float a = 1.0f;
@@ -432,7 +435,7 @@ public class ChiselsAndBitsMenu extends Screen {
             final float v2 = 16;
 
             final TextureAtlasSprite sprite = btn.icon == null ? ClientSide.white : btn.icon;
-
+            RenderSystem.setShaderTexture(0, sprite.contents().name().withPrefix("textures/icons/").withSuffix(".png"));
             final double btnx1 = btn.x1 + 1;
             final double btnx2 = btn.x2 - 1;
             final double btny1 = btn.y1 + 1;

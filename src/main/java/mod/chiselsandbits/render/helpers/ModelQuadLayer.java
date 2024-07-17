@@ -1,5 +1,6 @@
 package mod.chiselsandbits.render.helpers;
 
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 public class ModelQuadLayer {
@@ -10,6 +11,8 @@ public class ModelQuadLayer {
     public int color;
     public int tint;
 
+    public BakedQuad sourceQuad;
+
     public static class ModelQuadLayerBuilder {
         public final ModelQuadLayer cache = new ModelQuadLayer();
         public final ModelLightMapReader lv;
@@ -19,6 +22,10 @@ public class ModelQuadLayer {
             cache.sprite = sprite;
             lv = new ModelLightMapReader();
             uvr = new ModelUVReader(sprite, uCoord, vCoord);
+        }
+
+        public void setSourceQuad(BakedQuad bakedQuad){
+            cache.sourceQuad = bakedQuad;
         }
 
         public ModelQuadLayer build(final int stateid, final int color, final int lightValue) {

@@ -1,12 +1,12 @@
 package mod.chiselsandbits.client.model.loader;
 
-import io.github.fabricators_of_create.porting_lib.util.client.ClientHooks;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 import mod.chiselsandbits.client.model.baked.DataAwareBakedModel;
 import mod.chiselsandbits.client.model.data.IModelData;
 import mod.chiselsandbits.interfaces.ICacheClearable;
+import mod.chiselsandbits.utils.ModClientHooks;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
@@ -135,7 +135,7 @@ public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
 
         final RenderMaterial material = Objects.requireNonNull(RendererAccess.INSTANCE.getRenderer())
                 .materialFinder()
-                .blendMode(0, BlendMode.fromRenderLayer(ClientHooks.RENDER_TYPE))
+                .blendMode(0, BlendMode.fromRenderLayer(ModClientHooks.getRenderType()))
                 .find();
 
         quads.forEach(quad -> {

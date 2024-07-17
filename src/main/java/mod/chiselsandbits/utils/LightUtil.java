@@ -42,6 +42,8 @@ public final class LightUtil {
         }
     }
 
+    public static void pipe(IVertexConsumer consumer) {}
+
     public static void put(IVertexConsumer consumer, BakedQuad quad) {
         consumer.setTexture(quad.getSprite());
         consumer.setQuadOrientation(quad.getDirection());
@@ -51,7 +53,7 @@ public final class LightUtil {
         consumer.setApplyDiffuseLighting(quad.isShade());
         float[] data = new float[4];
         VertexFormat format = DefaultVertexFormat.BLOCK;
-        int elementCount = format.getElements().size();
+        int elementCount = consumer.getVertexFormat().getElements().size();
         for (int v = 0; v < 4; v++) {
             for (int e = 0; e < elementCount; e++) {
                 unpack(quad.getVertices(), data, format, v, e);

@@ -2,6 +2,7 @@ package mod.chiselsandbits.render.helpers;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import mod.chiselsandbits.render.cache.FormatInfo;
 import mod.chiselsandbits.render.chiseledblock.IFaceBuilder;
 import mod.chiselsandbits.utils.LightUtil;
 import mod.chiselsandbits.utils.forge.IVertexConsumer;
@@ -12,7 +13,7 @@ import net.minecraft.core.Direction;
 public final class BakedQuadBuilder implements IVertexConsumer, IFaceBuilder {
     private static final int SIZE = DefaultVertexFormat.BLOCK.getElements().size();
 
-    private final float[][][] unpackedData = new float[4][SIZE][4];
+    private float[][][] unpackedData = new float[4][SIZE][4];
     private int tint = -1;
     private Direction orientation;
     private TextureAtlasSprite texture;
@@ -52,6 +53,10 @@ public final class BakedQuadBuilder implements IVertexConsumer, IFaceBuilder {
         this.texture = texture;
     }
 
+    public void setVertexFormat(VertexFormat vertexFormat) {
+        this.vertexFormat = vertexFormat;
+    }
+
     @Override
     public void setApplyDiffuseLighting(boolean diffuse) {
         this.applyDiffuseLighting = diffuse;
@@ -73,6 +78,7 @@ public final class BakedQuadBuilder implements IVertexConsumer, IFaceBuilder {
         if (vertexIndex == 4) {
             full = true;
         }
+        //        put(element, data);
     }
 
     @Override
@@ -81,10 +87,50 @@ public final class BakedQuadBuilder implements IVertexConsumer, IFaceBuilder {
         setQuadTint(tintIndex);
     }
 
+    @Override
+    public void put(final int element, final float... data) {
+        for (int i = 0; i < 4; i++) {
+            if (i < data.length) {
+                unpackedData[vertices][element][i] = data[i];
+            } else {
+                unpackedData[vertices][element][i] = 0;
+            }
+        }
+
+        elements++;
+
+        if (elements == getVertexFormat().getElements().size()) {
+            vertices++;
+            elements = 0;
+        }
+    }
+
+    @Override
+    public void begin() {
+        unpackedData = new float[4][getVertexFormat().getElements().size()][4];
+        tint = -1;
+        orientation = null;
+        texture = null;
+        vertices = 0;
+        elements = 0;
+    }
+
+    @Override
+    public BakedQuad create(TextureAtlasSprite sprite) {
+        setTexture(sprite);
+        return build();
+    }
+
+    @Override
+    public VertexFormat getFormat() {
+        return vertexFormat;
+    }
+
     public BakedQuad build() {
         if (texture == null) {
             throw new IllegalStateException("texture not set");
         }
+
         int[] packed = new int[DefaultVertexFormat.BLOCK.getIntegerSize() * 4];
         for (int v = 0; v < 4; v++) {
             for (int e = 0; e < SIZE; e++) {

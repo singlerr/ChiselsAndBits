@@ -100,6 +100,7 @@ public class SimpleGeneratedModel implements BakedModel {
         final int wrapAt = vertData.length / 4;
 
         final BakedQuadBuilder b = new BakedQuadBuilder(g.getSprite());
+        b.setVertexFormat(format);
         b.setQuadOrientation(myFace);
         b.setQuadTint(1);
 

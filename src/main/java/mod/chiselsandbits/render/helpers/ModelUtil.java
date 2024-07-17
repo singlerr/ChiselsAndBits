@@ -1,7 +1,6 @@
 package mod.chiselsandbits.render.helpers;
 
 import com.google.common.collect.Maps;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import io.github.fabricators_of_create.porting_lib.util.client.ClientHooks;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,6 +16,7 @@ import mod.chiselsandbits.render.chiseledblock.ChiseledBlockBakedModel;
 import mod.chiselsandbits.render.helpers.ModelQuadLayer.ModelQuadLayerBuilder;
 import mod.chiselsandbits.utils.FluidUtil;
 import mod.chiselsandbits.utils.LightUtil;
+import mod.chiselsandbits.utils.ModClientHooks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -68,10 +68,9 @@ public class ModelUtil implements ICacheClearable {
             return mpc;
         }
 
-        final RenderType original = ClientHooks.RENDER_TYPE;
+        final RenderType original = ModClientHooks.getRenderType();
         try {
             ClientHooks.setRenderType(layer);
-
             return getInnerCachedFace(cacheVal, stateID, weight, face, layer);
         } finally {
             // restore previous layer.
@@ -109,17 +108,17 @@ public class ModelUtil implements ICacheClearable {
 
                 if (xf.getAxis() == Axis.Y) {
                     mp[0].sprite = Minecraft.getInstance()
-                            .getTextureAtlas(TextureAtlas.LOCATION_BLOCKS)
+                            .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
                             .apply(FluidUtil.getStillTexture(fluid).contents().name());
                     mp[0].uvs = new float[] {Uf, Vf, 0, Vf, Uf, 0, 0, 0};
                 } else if (xf.getAxis() == Axis.X) {
                     mp[0].sprite = Minecraft.getInstance()
-                            .getTextureAtlas(TextureAtlas.LOCATION_BLOCKS)
+                            .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
                             .apply(FluidUtil.getFlowingTexture(fluid).contents().name());
                     mp[0].uvs = new float[] {U, 0, U, V, 0, 0, 0, V};
                 } else {
                     mp[0].sprite = Minecraft.getInstance()
-                            .getTextureAtlas(TextureAtlas.LOCATION_BLOCKS)
+                            .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
                             .apply(FluidUtil.getFlowingTexture(fluid).contents().name());
                     mp[0].uvs = new float[] {U, 0, 0, 0, U, V, 0, V};
                 }
@@ -250,19 +249,20 @@ public class ModelUtil implements ICacheClearable {
                     }
 
                     b = new ModelQuadLayerBuilder(sprite, uCoord, vCoord);
+                    b.setSourceQuad(q);
                     b.cache.tint = q.getTintIndex();
                     l.add(b);
+                    LightUtil.put(b.uvr, q);
                 }
-                LightUtil.put(b.uvr, q);
 
-                if (ChiselsAndBits.getConfig()
-                        .getClient()
-                        .enableFaceLightmapExtraction
-                        .get()) {
-                    // TODO: Check if this works.
-                    b.lv.setVertexFormat(DefaultVertexFormat.BLOCK);
-                    LightUtil.put(b.lv, q);
-                }
+                //                if (ChiselsAndBits.getConfig()
+                //                        .getClient()
+                //                        .enableFaceLightmapExtraction
+                //                        .get()) {
+                //                    // TODO: Check if this works.
+                //                    b.lv.setVertexFormat(DefaultVertexFormat.BLOCK);
+                //                    LightUtil.put(b.lv, q);
+                //                }
             } catch (final Exception e) {
 
             }

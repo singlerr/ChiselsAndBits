@@ -15,6 +15,7 @@ import mod.chiselsandbits.modes.TapeMeasureModes;
 import mod.chiselsandbits.printer.ChiselPrinterScreen;
 import mod.chiselsandbits.registry.ModContainerTypes;
 import mod.chiselsandbits.utils.Constants;
+import mod.chiselsandbits.utils.IconSet;
 import mod.chiselsandbits.utils.TextureUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

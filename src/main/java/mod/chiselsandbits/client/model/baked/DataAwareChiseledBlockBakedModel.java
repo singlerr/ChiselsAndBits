@@ -1,6 +1,5 @@
 package mod.chiselsandbits.client.model.baked;
 
-import io.github.fabricators_of_create.porting_lib.util.client.ClientHooks;
 import java.util.Objects;
 import mod.chiselsandbits.chiseledblock.TileEntityBlockChiseled;
 import mod.chiselsandbits.chiseledblock.data.VoxelBlobStateReference;
@@ -11,6 +10,7 @@ import mod.chiselsandbits.render.NullBakedModel;
 import mod.chiselsandbits.render.chiseledblock.ChiselRenderType;
 import mod.chiselsandbits.render.chiseledblock.ChiseledBlockBakedModel;
 import mod.chiselsandbits.render.chiseledblock.ChiseledBlockSmartModel;
+import mod.chiselsandbits.utils.ModClientHooks;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
@@ -51,7 +51,7 @@ public class DataAwareChiseledBlockBakedModel extends BaseSmartModel {
         Integer blockP = modelData.getData(TileEntityBlockChiseled.MP_PBSI);
         blockP = blockP == null ? 0 : blockP;
 
-        final RenderType layer = ClientHooks.RENDER_TYPE;
+        final RenderType layer = ModClientHooks.getRenderType();
 
         if (layer == null) {
             final ChiseledBlockBakedModel[] models = new ChiseledBlockBakedModel[ChiselRenderType.values().length];
@@ -95,10 +95,11 @@ public class DataAwareChiseledBlockBakedModel extends BaseSmartModel {
 
     @Override
     public BakedModel resolve(BakedModel originalModel, ItemStack stack, Level world, LivingEntity entity) {
-        final ChiseledBlockBakedModel a = ChiseledBlockSmartModel.getCachedModel(
-                stack, ChiselRenderType.fromLayer(ClientHooks.RENDER_TYPE, false));
-        final ChiseledBlockBakedModel b = ChiseledBlockSmartModel.getCachedModel(
-                stack, ChiselRenderType.fromLayer(ClientHooks.RENDER_TYPE, true));
+        RenderType renderType = ModClientHooks.getRenderType();
+        final ChiseledBlockBakedModel a =
+                ChiseledBlockSmartModel.getCachedModel(stack, ChiselRenderType.fromLayer(renderType, false));
+        final ChiseledBlockBakedModel b =
+                ChiseledBlockSmartModel.getCachedModel(stack, ChiselRenderType.fromLayer(renderType, true));
 
         if (a.isEmpty()) {
             return b;

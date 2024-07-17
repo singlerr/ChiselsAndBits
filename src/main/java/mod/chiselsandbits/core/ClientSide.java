@@ -1403,7 +1403,7 @@ public class ClientSide {
         final ItemStack is = player.getMainHandItem();
 
         if (dwheel != 0 && is != null && is.getItem() instanceof IItemScrollWheel && player.isShiftKeyDown()) {
-            ((IItemScrollWheel) is.getItem()).scroll(player, is, dwheel);
+            //            ((IItemScrollWheel) is.getItem()).scroll(player, is, dwheel);
             return true;
         }
         return false;
