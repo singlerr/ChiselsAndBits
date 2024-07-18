@@ -144,7 +144,7 @@ public class ClientSide {
         UseBlockCallback.EVENT.register(this::drawingInteractionPrevention);
         ClientTickEvents.START_CLIENT_TICK.register(this::applyChiselDelay);
         ClientTickEvents.END_CLIENT_TICK.register(this::interaction);
-        RenderWorldLastEvent.EVENT.register(this::drawHighlight);
+        //        RenderWorldLastEvent.EVENT.register(this::drawHighlight);
         RenderWorldLastEvent.EVENT.register(this::drawLast);
         DrawSelectionEvents.BLOCK.register(this::drawHighlight);
         MouseInputEvents.BEFORE_SCROLL.register(this::wheelEvent);
@@ -912,7 +912,7 @@ public class ClientSide {
                     }
 
                     if (!showBox) {
-                        return true;
+                        return false;
                     }
                 }
             }

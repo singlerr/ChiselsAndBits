@@ -206,8 +206,10 @@ public class TileEntityBlockChiseled extends BlockEntity
             }
         }
 
-        if (level.isClientSide()) {
-            UndoTracker.getInstance().onNetworkUpdate(current, getBlobStateReference());
+        if (level != null) {
+            if (level.isClientSide()) {
+                UndoTracker.getInstance().onNetworkUpdate(current, getBlobStateReference());
+            }
         }
     }
 

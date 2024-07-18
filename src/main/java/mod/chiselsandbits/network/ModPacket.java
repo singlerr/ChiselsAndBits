@@ -50,7 +50,7 @@ public abstract class ModPacket implements C2SPacket, S2CPacket {
             ServerGamePacketListenerImpl listener,
             PacketSender responseSender,
             SimpleChannel channel) {
-        processPacket(new NetworkChannel.Context(serverEntity, responseSender, channel), true);
+        processPacket(new NetworkChannel.Context(player, responseSender, channel), true);
     }
 
     @Override

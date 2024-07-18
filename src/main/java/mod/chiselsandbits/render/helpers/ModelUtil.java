@@ -131,8 +131,7 @@ public class ModelUtil implements ICacheClearable {
             return cache.get(cacheVal);
         }
 
-        final HashMap<Direction, ArrayList<ModelQuadLayerBuilder>> tmp =
-                new HashMap<Direction, ArrayList<ModelQuadLayerBuilder>>();
+        final HashMap<Direction, ArrayList<ModelQuadLayerBuilder>> tmp = new HashMap<>();
         final int color = BlockBitInfo.getColorFor(state, 0);
 
         for (final Direction f : Direction.values()) {
@@ -209,6 +208,7 @@ public class ModelUtil implements ICacheClearable {
             final HashMap<Direction, ArrayList<ModelQuadLayerBuilder>> tmp,
             final List<BakedQuad> quads,
             final BlockState state) {
+
         for (final BakedQuad q : quads) {
             final Direction face = q.getDirection();
 
@@ -248,6 +248,7 @@ public class ModelUtil implements ICacheClearable {
                     }
 
                     b = new ModelQuadLayerBuilder(sprite, uCoord, vCoord);
+                    b.setFace(face);
                     b.setSourceQuad(q);
                     b.cache.tint = q.getTintIndex();
                     l.add(b);

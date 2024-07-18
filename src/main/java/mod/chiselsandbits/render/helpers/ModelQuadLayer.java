@@ -2,6 +2,7 @@ package mod.chiselsandbits.render.helpers;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.Direction;
 
 public class ModelQuadLayer {
 
@@ -12,6 +13,8 @@ public class ModelQuadLayer {
     public int tint;
 
     public BakedQuad sourceQuad;
+
+    public Direction face;
 
     public static class ModelQuadLayerBuilder {
         public final ModelQuadLayer cache = new ModelQuadLayer();
@@ -26,6 +29,10 @@ public class ModelQuadLayer {
 
         public void setSourceQuad(BakedQuad bakedQuad) {
             cache.sourceQuad = bakedQuad;
+        }
+
+        public void setFace(Direction face) {
+            cache.face = face;
         }
 
         public ModelQuadLayer build(final int stateid, final int color, final int lightValue) {

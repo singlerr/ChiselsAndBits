@@ -269,16 +269,6 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
     }
 
     @Override
-    protected void spawnDestroyParticles(Level level, Player player, BlockPos blockPos, BlockState blockState) {
-        try {
-            final BlockState internalState = getTileEntity(level, blockPos).getBlockState(this);
-            ClientSide.instance.addBlockDestroyEffects(level, blockPos, internalState);
-        } catch (final ExceptionNoTileEntity e) {
-            Log.noTileError(e);
-        }
-    }
-
-    @Override
     public VoxelShape getShape(
             final BlockState state, final BlockGetter reader, final BlockPos pos, final CollisionContext context) {
         try {

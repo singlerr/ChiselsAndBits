@@ -47,6 +47,7 @@ public class RenderHelper {
         if (bb != null) {
             RenderSystem.enableBlend();
             RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+            RenderSystem.lineWidth(2.0F);
             //            GL11.glLineWidth(2.0F);
             //            RenderSystem.disableTexture();
             RenderSystem.depthMask(false);
@@ -95,6 +96,7 @@ public class RenderHelper {
         if (a != null && b != null) {
             RenderSystem.enableBlend();
             RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+            RenderSystem.lineWidth(2.0F);
             //            GL11.glLineWidth(2.0F);
             //            RenderSystem.disableTexture();
             RenderSystem.depthMask(false);
@@ -255,6 +257,8 @@ public class RenderHelper {
                 .endVertex();
 
         tess.end();
+
+        Minecraft.getInstance().renderBuffers().bufferSource().endBatch();
     }
 
     public static void renderLine(

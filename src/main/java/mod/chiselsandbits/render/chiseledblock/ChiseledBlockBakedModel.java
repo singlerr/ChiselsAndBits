@@ -18,7 +18,6 @@ import mod.chiselsandbits.helpers.ModUtil;
 import mod.chiselsandbits.render.helpers.BakedQuadBuilder;
 import mod.chiselsandbits.render.helpers.ModelQuadLayer;
 import mod.chiselsandbits.render.helpers.ModelUtil;
-import mod.chiselsandbits.utils.LightUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -210,10 +209,6 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
     }
 
     IFaceBuilder getBuilder(VertexFormat format) {
-        if (ChiseledBlockSmartModel.ForgePipelineDisabled()) {
-            format = DefaultVertexFormat.BLOCK;
-        }
-
         return new BakedQuadBuilder(format);
     }
 
@@ -257,7 +252,6 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
                         faceBuilder.begin();
                         faceBuilder.setFace(myFace, pc.tint);
 
-                        final float maxLightmap = 32.0f / 0xffff;
                         getFaceUvs(uvs, myFace, from, to, pc.uvs);
 
                         // build it.
@@ -274,13 +268,12 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
                                         break;
                                     case COLOR:
                                         final int cb = pc.color;
-                                        faceBuilder.put(
-                                                vertNum,
-                                                elementIndex,
-                                                byteToFloat(cb >> 16),
-                                                byteToFloat(cb >> 8),
-                                                byteToFloat(cb),
-                                                NotZero(byteToFloat(cb >> 24)));
+                                        final float[] colorData = new float[4];
+                                        colorData[0] = ((cb >> 16) & 0xFF) / 255.0F;
+                                        colorData[1] = ((cb >> 8) & 0xFF) / 255.0F;
+                                        colorData[2] = (cb & 0xFF) / 255.0F;
+                                        colorData[3] = ((cb >> 24) & 0xFF) / 255.0F;
+                                        faceBuilder.put(vertNum, elementIndex, colorData);
                                         break;
 
                                     case NORMAL:
@@ -295,18 +288,11 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
                                         break;
 
                                     case UV:
-                                        if (element.getIndex() == 0) {
-                                            int uIndex = faceVertMap[myFace.get3DDataValue()][vertNum] * 2 + 0;
-                                            int vIndex = faceVertMap[myFace.get3DDataValue()][vertNum] * 2 + 1;
-                                            final float u = uvs[uIndex];
-                                            final float v = uvs[vIndex];
-                                            faceBuilder.put(
-                                                    vertNum, elementIndex, pc.sprite.getU(u), pc.sprite.getV(v));
-                                        } else if (element.getIndex() == 1) {
-                                            faceBuilder.put(vertNum, elementIndex, 0, 0);
-                                        } else {
-                                            faceBuilder.put(vertNum, elementIndex, 1, 1);
-                                        }
+                                        int uIndex = faceVertMap[myFace.get3DDataValue()][vertNum] * 2 + 0;
+                                        int vIndex = faceVertMap[myFace.get3DDataValue()][vertNum] * 2 + 1;
+                                        float u = pc.sprite.getU(uvs[uIndex] / 16f);
+                                        float v = pc.sprite.getV(uvs[vIndex] / 16f);
+                                        faceBuilder.put(vertNum, elementIndex, u, v);
                                         break;
                                     default:
                                         faceBuilder.put(vertNum, elementIndex);
@@ -315,16 +301,10 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
                             }
                         }
 
-                        BakedQuadBuilder consumer = (BakedQuadBuilder) faceBuilder;
-                        LightUtil.put(consumer, pc.sourceQuad);
-                        consumer.setQuadTint(pc.tint);
-                        consumer.setTexture(pc.sprite);
-                        consumer.setQuadOrientation(myFace);
-
                         if (region.isEdge) {
-                            builder.getList(myFace).add(consumer.create(pc.sprite));
+                            builder.getList(myFace).add(faceBuilder.create(pc.sprite));
                         } else {
-                            builder.getList(null).add(consumer.create(pc.sprite));
+                            builder.getList(null).add(faceBuilder.create(pc.sprite));
                         }
                     }
                 }

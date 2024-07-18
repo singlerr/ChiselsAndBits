@@ -63,21 +63,21 @@ public final class BakedQuadBuilder implements IVertexConsumer, IFaceBuilder {
 
     @Override
     public void put(int vertexIndex, int element, float... data) {
-        for (int i = 0; i < 4; i++) {
-            if (i < data.length) {
-                unpackedData[vertexIndex][element][i] = data[i];
-            } else {
-                unpackedData[vertexIndex][element][i] = 0;
-            }
-        }
-        elements++;
-        if (elements == SIZE) {
-            elements = 0;
-        }
-        if (vertexIndex == 4) {
-            full = true;
-        }
-        //        put(element, data);
+        //        for (int i = 0; i < 4; i++) {
+        //            if (i < data.length) {
+        //                unpackedData[vertexIndex][element][i] = data[i];
+        //            } else {
+        //                unpackedData[vertexIndex][element][i] = 0;
+        //            }
+        //        }
+        //        elements++;
+        //        if (elements == SIZE) {
+        //            elements = 0;
+        //        }
+        //        if (vertexIndex == 4) {
+        //            full = true;
+        //        }
+        put(element, data);
     }
 
     @Override
@@ -136,6 +136,7 @@ public final class BakedQuadBuilder implements IVertexConsumer, IFaceBuilder {
                 LightUtil.pack(unpackedData[v][e], packed, DefaultVertexFormat.BLOCK, v, e);
             }
         }
+
         return new BakedQuad(packed, tint, orientation, texture, applyDiffuseLighting);
     }
 }

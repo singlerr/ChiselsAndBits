@@ -30,6 +30,8 @@ public class NetworkChannel {
      */
     public NetworkChannel(final String channelName) {
         rawChannel = new SimpleChannel(new ResourceLocation("chiselsandbits", channelName));
+        rawChannel.initClientListener();
+        rawChannel.initServerListener();
     }
 
     /**

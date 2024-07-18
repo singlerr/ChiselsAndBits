@@ -54,7 +54,7 @@ public class ReflectionWrapper {
             final Object o = Minecraft.getInstance().gui;
 
             if (highlightingItemStack == null) {
-                highlightingItemStack = findField(o.getClass(), "highlightingItemStack", "field_92016_l");
+                highlightingItemStack = findField(o.getClass(), "lastToolHighlight", "f_92994_");
             }
             highlightingItemStack.setAccessible(true);
             highlightingItemStack.set(o, is);

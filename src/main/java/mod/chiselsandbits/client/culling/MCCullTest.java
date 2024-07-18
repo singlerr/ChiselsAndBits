@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.fluids.IFluidBlock;
 
 /**
  * Determine Culling using Block's Native Check.
@@ -43,7 +42,38 @@ public class MCCullTest implements ICullTest, BlockGetter {
             return false;
         }
 
-        if (a.getBlock() instanceof IFluidBlock || a.getBlock() instanceof LiquidBlock) {
+        if (a.getBlock() instanceof LiquidBlock) {
+            return true;
+        }
+
+        try {
+            return !a.skipRendering(b, Direction.NORTH);
+        } catch (final Throwable t) {
+            // revert to older logic in the event of some sort of issue.
+            return BlockBitInfo.getTypeFromStateID(mySpot).shouldShow(BlockBitInfo.getTypeFromStateID(secondSpot));
+        }
+    }
+
+    public boolean isVisible(final int mySpot, final int secondSpot, Direction face) {
+        if (mySpot == 0 || mySpot == secondSpot) {
+            return false;
+        }
+
+        a = ModUtil.getStateById(mySpot);
+        if (a == null) {
+            a = Blocks.AIR.defaultBlockState();
+        }
+        b = ModUtil.getStateById(secondSpot);
+        if (b == null) {
+            b = Blocks.AIR.defaultBlockState();
+        }
+        if (!a.skipRendering(b, face)) return false;
+
+        if (a.getBlock().getClass() == StainedGlassBlock.class && a.getBlock() == b.getBlock()) {
+            return false;
+        }
+
+        if (a.getBlock() instanceof LiquidBlock) {
             return true;
         }
 

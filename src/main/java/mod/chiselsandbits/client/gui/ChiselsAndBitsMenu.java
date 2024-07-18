@@ -168,7 +168,7 @@ public class ChiselsAndBitsMenu extends Screen {
         RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
         //        RenderSystem.shadeModel(GL11.GL_SMOOTH);
         final Tesselator tessellator = Tesselator.getInstance();
-        final BufferBuilder buffer = tessellator.getBuilder();
+        BufferBuilder buffer = tessellator.getBuilder();
 
         buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
@@ -372,7 +372,6 @@ public class ChiselsAndBitsMenu extends Screen {
 
         // matrixStack.translate( 0.0F, 0.0F, 5.0F );
         //        RenderSystem.enableTexture();
-        RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
         graphics.setColor(1, 1, 1, 1);
         RenderSystem.disableBlend();
         //        RenderSystem.enableAlphaTest();
@@ -381,9 +380,8 @@ public class ChiselsAndBitsMenu extends Screen {
                 .getTexture(InventoryMenu.BLOCK_ATLAS)
                 .getId());
 
-        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-
         for (final MenuRegion mnuRgn : modes) {
+
             final double x = (mnuRgn.x1 + mnuRgn.x2) * 0.5 * (ring_outer_edge * 0.6 + 0.4 * ring_inner_edge);
             final double y = (mnuRgn.y1 + mnuRgn.y2) * 0.5 * (ring_outer_edge * 0.6 + 0.4 * ring_inner_edge);
 
@@ -400,6 +398,9 @@ public class ChiselsAndBitsMenu extends Screen {
             RenderSystem.setShaderTexture(
                     0,
                     sip.sprite.contents().name().withPrefix("textures/icons/").withSuffix(".png"));
+            RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
+            buffer = Tesselator.getInstance().getBuilder();
+            buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
 
             final float f = 1.0f;
             final float a = 1.0f;
@@ -425,6 +426,8 @@ public class ChiselsAndBitsMenu extends Screen {
                     .uv(sprite.getU(u2), sprite.getV(v1))
                     .color(f, f, f, a)
                     .endVertex();
+
+            BufferUploader.drawWithShader(buffer.end());
         }
 
         for (final MenuButton btn : btns) {
@@ -439,6 +442,9 @@ public class ChiselsAndBitsMenu extends Screen {
             final TextureAtlasSprite sprite = btn.icon == null ? ClientSide.white : btn.icon;
             RenderSystem.setShaderTexture(
                     0, sprite.contents().name().withPrefix("textures/icons/").withSuffix(".png"));
+            RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
+            buffer = Tesselator.getInstance().getBuilder();
+            buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
             final double btnx1 = btn.x1 + 1;
             final double btnx2 = btn.x2 - 1;
             final double btny1 = btn.y1 + 1;
@@ -464,9 +470,9 @@ public class ChiselsAndBitsMenu extends Screen {
                     .uv(sprite.getU(u2), sprite.getV(v1))
                     .color(red, green, blue, a)
                     .endVertex();
-        }
 
-        tessellator.end();
+            BufferUploader.drawWithShader(buffer.end());
+        }
 
         for (final MenuRegion mnuRgn : modes) {
             if (mnuRgn.highlighted) {

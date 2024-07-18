@@ -15,8 +15,6 @@ public class BitBakedQuad extends BakedQuad {
     public static final ConcurrentHashMap<VertexFormat, FormatInfo> formatData =
             new ConcurrentHashMap<VertexFormat, FormatInfo>();
 
-    private final int[] processedVertexData;
-
     private static int[] packData(VertexFormat format, float[][][] unpackedData) {
         FormatInfo fi = formatData.get(format);
 
@@ -26,6 +24,17 @@ public class BitBakedQuad extends BakedQuad {
         }
 
         return fi.pack(unpackedData);
+    }
+
+    private static int[] packData(float[][][] unpackedData) {
+        int[] packed = new int[DefaultVertexFormat.BLOCK.getIntegerSize() * 4];
+        for (int v = 0; v < 4; v++) {
+            for (int e = 0; e < DefaultVertexFormat.BLOCK.getElements().size(); e++) {
+                LightUtil.pack(unpackedData[v][e], packed, DefaultVertexFormat.BLOCK, v, e);
+            }
+        }
+
+        return packed;
     }
 
     //    @Override
@@ -60,14 +69,8 @@ public class BitBakedQuad extends BakedQuad {
         return formatData.get(DefaultVertexFormat.BLOCK).unpack(vertices, v, i);
     }
 
-    @Override
-    public int[] getVertices() {
-        return processedVertexData;
-    }
-
     private int[] buildProcessedVertexData() {
         int[] packed = new int[DefaultVertexFormat.BLOCK.getIntegerSize() * 4];
-
         for (int v = 0; v < 4; v++) {
             for (int e = 0; e < DefaultVertexFormat.BLOCK.getElements().size(); e++) {
                 LightUtil.pack(getRawPart(v, e), packed, DefaultVertexFormat.BLOCK, v, e);
@@ -82,8 +85,7 @@ public class BitBakedQuad extends BakedQuad {
             final int tint,
             final Direction orientation,
             final TextureAtlasSprite sprite) {
-        super(packData(DefaultVertexFormat.BLOCK, unpackedData), tint, orientation, sprite, true);
-        processedVertexData = buildProcessedVertexData();
+        super(packData(unpackedData), tint, orientation, sprite, true);
     }
 
     public static class Builder implements IVertexConsumer, IFaceBuilder {

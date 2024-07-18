@@ -89,7 +89,7 @@ public class ChiselsAndBitsClient {
         final SpriteIconPositioning sip = new SpriteIconPositioning();
 
         final ResourceLocation sprite =
-                new ResourceLocation("chiselsandbits", "icons/" + mode.name().toLowerCase());
+                new ResourceLocation("chiselsandbits", mode.name().toLowerCase());
         final ResourceLocation png = new ResourceLocation(
                 "chiselsandbits", "textures/icons/" + mode.name().toLowerCase() + ".png");
 
