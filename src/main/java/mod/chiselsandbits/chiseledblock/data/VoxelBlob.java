@@ -770,6 +770,27 @@ public final class VoxelBlob implements IVoxelSrc {
         return hasValues;
     }
 
+    public boolean simulateFilter(final RenderType layer) {
+        final BitSet layerFilterState = layerFilters.get(layer);
+        boolean hasValues = false;
+
+        for (int x = 0; x < array_size; x++) {
+            final int ref = values[x];
+            if (ref == 0) {
+                continue;
+            }
+
+            if (!layerFilterState.get(ref)) {
+
+            } else {
+                hasValues = true;
+                break;
+            }
+        }
+
+        return hasValues;
+    }
+
     public boolean filter(final RenderType layer) {
         final BitSet layerFilterState = layerFilters.get(layer);
         boolean hasValues = false;
@@ -781,9 +802,11 @@ public final class VoxelBlob implements IVoxelSrc {
             }
 
             if (!layerFilterState.get(ref)) {
+                values[x] = 0;
                 noneAir.clear(x);
             } else {
                 hasValues = true;
+                break;
             }
         }
 

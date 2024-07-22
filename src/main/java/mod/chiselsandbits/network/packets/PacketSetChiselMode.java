@@ -19,7 +19,7 @@ public class PacketSetChiselMode extends ModPacket {
     private boolean chatNotification = false;
 
     public PacketSetChiselMode(FriendlyByteBuf buffer) {
-        super(buffer);
+        readPayload(buffer);
     }
 
     public PacketSetChiselMode(final IToolMode mode, final ChiselToolType type, final boolean chatNotification) {

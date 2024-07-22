@@ -18,7 +18,7 @@ public class PacketSetColor extends ModPacket {
     private boolean chatNotification = false;
 
     public PacketSetColor(final FriendlyByteBuf buffer) {
-        super(buffer);
+        readPayload(buffer);
     }
 
     public PacketSetColor(final DyeColor newColor, final ChiselToolType type, final boolean chatNotification) {

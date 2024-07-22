@@ -48,16 +48,16 @@ public class BitItemSmartModel extends BaseSmartModel implements ICacheClearable
             if (large) {
                 final VoxelBlob blob = new VoxelBlob();
                 blob.fill(stateID);
-                final BakedModel a =
-                        new ChiseledBlockBakedModel(stateID, ChiselRenderType.SOLID, blob, DefaultVertexFormat.BLOCK);
+                final BakedModel a = new ChiseledBlockBakedModel(
+                        stateID, ChiselRenderType.SOLID, blob, DefaultVertexFormat.BLOCK, true);
                 final BakedModel b = new ChiseledBlockBakedModel(
-                        stateID, ChiselRenderType.SOLID_FLUID, blob, DefaultVertexFormat.BLOCK);
+                        stateID, ChiselRenderType.SOLID_FLUID, blob, DefaultVertexFormat.BLOCK, true);
                 final BakedModel c = new ChiseledBlockBakedModel(
-                        stateID, ChiselRenderType.CUTOUT_MIPPED, blob, DefaultVertexFormat.BLOCK);
-                final BakedModel d =
-                        new ChiseledBlockBakedModel(stateID, ChiselRenderType.CUTOUT, blob, DefaultVertexFormat.BLOCK);
+                        stateID, ChiselRenderType.CUTOUT_MIPPED, blob, DefaultVertexFormat.BLOCK, true);
+                final BakedModel d = new ChiseledBlockBakedModel(
+                        stateID, ChiselRenderType.CUTOUT, blob, DefaultVertexFormat.BLOCK, true);
                 final BakedModel e = new ChiseledBlockBakedModel(
-                        stateID, ChiselRenderType.TRANSLUCENT, blob, DefaultVertexFormat.BLOCK);
+                        stateID, ChiselRenderType.TRANSLUCENT, blob, DefaultVertexFormat.BLOCK, true);
                 out = new ModelCombined(a, b, c, d, e);
             } else {
                 out = new BitItemBaked(stateID);

@@ -7,7 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class PacketSortBagGui extends ModPacket {
     public PacketSortBagGui(FriendlyByteBuf buffer) {
-        super(buffer);
+        readPayload(buffer);
     }
 
     public PacketSortBagGui() {}

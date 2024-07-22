@@ -23,7 +23,7 @@ public class PacketAccurateSneakPlace extends ModPacket {
     ;
 
     public PacketAccurateSneakPlace(FriendlyByteBuf buffer) {
-        super(buffer);
+        readPayload(buffer);
     }
 
     public PacketAccurateSneakPlace(

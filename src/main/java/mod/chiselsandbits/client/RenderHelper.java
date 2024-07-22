@@ -48,8 +48,6 @@ public class RenderHelper {
             RenderSystem.enableBlend();
             RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
             RenderSystem.lineWidth(2.0F);
-            //            GL11.glLineWidth(2.0F);
-            //            RenderSystem.disableTexture();
             RenderSystem.depthMask(false);
 
             if (!NormalBoundingBox) {
@@ -75,7 +73,6 @@ public class RenderHelper {
 
             RenderSystem.enableDepthTest();
             RenderSystem.depthMask(true);
-            //            RenderSystem.enableTexture();
             RenderSystem.disableBlend();
         }
     }
@@ -97,10 +94,7 @@ public class RenderHelper {
             RenderSystem.enableBlend();
             RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
             RenderSystem.lineWidth(2.0F);
-            //            GL11.glLineWidth(2.0F);
-            //            RenderSystem.disableTexture();
             RenderSystem.depthMask(false);
-            //            RenderSystem.shadeModel(GL11.GL_FLAT);
 
             final Vec3 a2 = a.add(blockPos.getX(), blockPos.getY(), blockPos.getZ());
             final Vec3 b2 = b.add(blockPos.getX(), blockPos.getY(), blockPos.getZ());
@@ -111,11 +105,8 @@ public class RenderHelper {
             RenderSystem.disableDepthTest();
 
             RenderHelper.renderLine(matrixStack, a2, b2, red, green, blue, seeThruAlpha);
-
-            //            RenderSystem.shadeModel(Minecraft.useAmbientOcclusion() ? GL11.GL_SMOOTH : GL11.GL_FLAT);
             RenderSystem.enableDepthTest();
             RenderSystem.depthMask(true);
-            //            RenderSystem.enableTexture();
             RenderSystem.disableBlend();
         }
     }
@@ -271,7 +262,6 @@ public class RenderHelper {
             final int alpha) {
         final Tesselator tess = Tesselator.getInstance();
         final BufferBuilder bufferBuilder = tess.getBuilder();
-        //        RenderSystem.shadeModel(GL11.GL_FLAT);
         bufferBuilder.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION_COLOR);
         bufferBuilder
                 .vertex(matrixStack.last().pose(), (float) a.x, (float) a.y, (float) a.z)

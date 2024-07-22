@@ -30,7 +30,7 @@ public class PacketUndo extends ModPacket {
     private VoxelBlobStateReference after;
 
     public PacketUndo(FriendlyByteBuf buffer) {
-        super(buffer);
+        readPayload(buffer);
     }
 
     public PacketUndo(final BlockPos pos, final VoxelBlobStateReference before, final VoxelBlobStateReference after) {

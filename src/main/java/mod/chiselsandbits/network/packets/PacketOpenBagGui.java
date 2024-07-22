@@ -9,7 +9,7 @@ import net.minecraft.world.SimpleMenuProvider;
 
 public class PacketOpenBagGui extends ModPacket {
     public PacketOpenBagGui(FriendlyByteBuf buffer) {
-        super(buffer);
+        readPayload(buffer);
     }
 
     public PacketOpenBagGui() {}

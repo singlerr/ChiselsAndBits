@@ -163,6 +163,57 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
     private ChiseledBlockBakedModel() {}
 
     public ChiseledBlockBakedModel(
+            final int blockReference,
+            final ChiselRenderType layer,
+            final VoxelBlob data,
+            final VertexFormat format,
+            boolean isItem) {
+        myLayer = layer;
+        final BlockState state = ModUtil.getStateById(blockReference);
+
+        BakedModel originalModel = null;
+
+        if (state != null) {
+            originalModel = Minecraft.getInstance()
+                    .getBlockRenderer()
+                    .getBlockModelShaper()
+                    .getBlockModel(state);
+        }
+
+        if (originalModel != null && data != null) {
+            if (isItem) {
+                if (data.simulateFilter(layer.layer)) {
+                    final ChiseledModelBuilder builder = new ChiseledModelBuilder();
+                    generateFaces(builder, data, RANDOM);
+
+                    // convert from builder to final storage.
+                    up = builder.getSide(Direction.UP);
+                    down = builder.getSide(Direction.DOWN);
+                    east = builder.getSide(Direction.EAST);
+                    west = builder.getSide(Direction.WEST);
+                    north = builder.getSide(Direction.NORTH);
+                    south = builder.getSide(Direction.SOUTH);
+                    generic = builder.getSide(null);
+                }
+            } else {
+                if (layer.filter(data)) {
+                    final ChiseledModelBuilder builder = new ChiseledModelBuilder();
+                    generateFaces(builder, data, RANDOM);
+
+                    // convert from builder to final storage.
+                    up = builder.getSide(Direction.UP);
+                    down = builder.getSide(Direction.DOWN);
+                    east = builder.getSide(Direction.EAST);
+                    west = builder.getSide(Direction.WEST);
+                    north = builder.getSide(Direction.NORTH);
+                    south = builder.getSide(Direction.SOUTH);
+                    generic = builder.getSide(null);
+                }
+            }
+        }
+    }
+
+    public ChiseledBlockBakedModel(
             final int blockReference, final ChiselRenderType layer, final VoxelBlob data, final VertexFormat format) {
         myLayer = layer;
         final BlockState state = ModUtil.getStateById(blockReference);

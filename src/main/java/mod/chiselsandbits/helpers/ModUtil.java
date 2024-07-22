@@ -1,10 +1,9 @@
 package mod.chiselsandbits.helpers;
 
 import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import mod.chiselsandbits.bitbag.BagInventory;
@@ -19,9 +18,11 @@ import mod.chiselsandbits.items.ItemBitBag;
 import mod.chiselsandbits.items.ItemChiseledBit;
 import mod.chiselsandbits.items.ItemNegativePrint;
 import mod.chiselsandbits.items.ItemPositivePrint;
+import mod.chiselsandbits.render.chiseledblock.ChiselRenderType;
 import mod.chiselsandbits.render.helpers.SimpleInstanceCache;
 import mod.chiselsandbits.utils.RenderTypeUtils;
 import mod.chiselsandbits.utils.SingleBlockBlockReader;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -118,6 +119,31 @@ public class ModUtil {
         }
 
         return new ItemStackSlot(inv, -1, ModUtil.getEmptyStack(), who, canEdit);
+    }
+
+    public static Set<Integer> getAllStates(VoxelBlob blob) {
+        return blob.getBlockSums().keySet();
+    }
+
+    public static ChiselRenderType[] getRenderType(BlockState state) {
+        RenderType renderType = ItemBlockRenderTypes.getChunkRenderType(state);
+
+        if (state.getFluidState().isEmpty()) {
+            return new ChiselRenderType[] {ChiselRenderType.fromLayer(renderType, false)};
+        }
+
+        renderType = ItemBlockRenderTypes.getRenderLayer(state.getFluidState());
+
+        return new ChiselRenderType[] {
+            ChiselRenderType.fromLayer(renderType, false), ChiselRenderType.fromLayer(renderType, true)
+        };
+    }
+
+    public static Set<ChiselRenderType> getAllRenderTypes(VoxelBlob blob) {
+        return getAllStates(blob).stream()
+                .filter(id -> id != 0)
+                .flatMap(id -> Stream.of(getRenderType(ModUtil.getStateById(id))))
+                .collect(Collectors.toSet());
     }
 
     public static @Nonnull ItemStack copy(final ItemStack st) {

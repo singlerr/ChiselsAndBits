@@ -10,7 +10,7 @@ public class PacketClearBagGui extends ModPacket {
     private ItemStack stack = null;
 
     public PacketClearBagGui(final FriendlyByteBuf buffer) {
-        super(buffer);
+        readPayload(buffer);
     }
 
     public PacketClearBagGui(final ItemStack inHandItem) {

@@ -45,6 +45,7 @@ public class ModelQuadLayer {
         public ModelQuadLayer build(final int stateid, final int color, final int lightValue) {
             cache.light = Math.max(lightValue, lv.lv);
             cache.uvs = uvr.quadUVs;
+
             cache.color = cache.tint != -1 ? color : 0xffffffff;
 
             if (0x00 <= cache.tint && cache.tint <= 0xff) {

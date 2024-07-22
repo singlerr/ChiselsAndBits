@@ -14,7 +14,7 @@ public class PacketBagGuiStack extends ModPacket {
     private ItemStack is;
 
     public PacketBagGuiStack(FriendlyByteBuf buffer) {
-        super(buffer);
+        readPayload(buffer);
     }
 
     public PacketBagGuiStack(final int index, final ItemStack is) {

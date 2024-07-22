@@ -48,6 +48,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.client.Camera;
@@ -244,34 +245,30 @@ public class ClientSide {
     public void postinit(final ChiselsAndBits mod) {
         readyState = readyState.updateState(ReadyState.TRIGGER_POST);
 
-        Minecraft.getInstance().itemColors.register(new ItemColorBitBag(), ModItems.ITEM_BIT_BAG_DEFAULT.get());
-        Minecraft.getInstance().itemColors.register(new ItemColorBitBag(), ModItems.ITEM_BIT_BAG_DYED.get());
-        Minecraft.getInstance().itemColors.register(new ItemColorBits(), ModItems.ITEM_BLOCK_BIT.get());
-        Minecraft.getInstance().itemColors.register(new ItemColorPatterns(), ModItems.ITEM_POSITIVE_PRINT.get());
-        Minecraft.getInstance()
-                .itemColors
-                .register(new ItemColorPatterns(), ModItems.ITEM_POSITIVE_PRINT_WRITTEN.get());
-        Minecraft.getInstance().itemColors.register(new ItemColorPatterns(), ModItems.ITEM_NEGATIVE_PRINT.get());
-        Minecraft.getInstance()
-                .itemColors
-                .register(new ItemColorPatterns(), ModItems.ITEM_NEGATIVE_PRINT_WRITTEN.get());
-        Minecraft.getInstance().itemColors.register(new ItemColorPatterns(), ModItems.ITEM_MIRROR_PRINT.get());
-        Minecraft.getInstance().itemColors.register(new ItemColorPatterns(), ModItems.ITEM_MIRROR_PRINT_WRITTEN.get());
+        var itemColorRegistry = ColorProviderRegistry.ITEM;
+        var blockColorRegistry = ColorProviderRegistry.BLOCK;
 
-        Minecraft.getInstance()
-                .getBlockColors()
-                .register(
-                        new BlockColorChisled(),
-                        ModBlocks.getMaterialToBlockConversions().values().stream()
-                                .map(RegistryObject::get)
-                                .toArray(Block[]::new));
-        Minecraft.getInstance()
-                .itemColors
-                .register(
-                        new ItemColorChisled(),
-                        ModBlocks.getMaterialToItemConversions().values().stream()
-                                .map(RegistryObject::get)
-                                .toArray(Item[]::new));
+        itemColorRegistry.register(new ItemColorBitBag(), ModItems.ITEM_BIT_BAG_DEFAULT.get());
+        itemColorRegistry.register(new ItemColorBitBag(), ModItems.ITEM_BIT_BAG_DYED.get());
+        itemColorRegistry.register(new ItemColorBits(), ModItems.ITEM_BLOCK_BIT.get());
+        itemColorRegistry.register(new ItemColorPatterns(), ModItems.ITEM_POSITIVE_PRINT.get());
+        itemColorRegistry.register(new ItemColorPatterns(), ModItems.ITEM_POSITIVE_PRINT_WRITTEN.get());
+        itemColorRegistry.register(new ItemColorPatterns(), ModItems.ITEM_NEGATIVE_PRINT.get());
+        itemColorRegistry.register(new ItemColorPatterns(), ModItems.ITEM_NEGATIVE_PRINT_WRITTEN.get());
+        itemColorRegistry.register(new ItemColorPatterns(), ModItems.ITEM_MIRROR_PRINT.get());
+        itemColorRegistry.register(new ItemColorPatterns(), ModItems.ITEM_MIRROR_PRINT_WRITTEN.get());
+
+        blockColorRegistry.register(
+                new BlockColorChisled(),
+                ModBlocks.getMaterialToBlockConversions().values().stream()
+                        .map(RegistryObject::get)
+                        .toArray(Block[]::new));
+        blockColorRegistry.register(new BlockColorChisled(), ModBlocks.CHISELED_BLOCK.get());
+        itemColorRegistry.register(
+                new ItemColorChisled(),
+                ModBlocks.getMaterialToItemConversions().values().stream()
+                        .map(RegistryObject::get)
+                        .toArray(Item[]::new));
     }
 
     public static TextureAtlasSprite undoIcon;
@@ -766,6 +763,7 @@ public class ClientSide {
             stack.translate(-renderView.x, -renderView.y, -renderView.z);
 
             ChiselToolType tool = getHeldToolType(lastHand);
+
             final IToolMode chMode = ChiselModeManager.getChiselMode(getPlayer(), tool, lastHand);
             if (chMode == ChiselMode.DRAWN_REGION) {
                 tool = lastTool;

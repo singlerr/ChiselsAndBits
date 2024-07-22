@@ -45,7 +45,7 @@ public class PacketChisel extends ModPacket {
     InteractionHand hand;
 
     public PacketChisel(FriendlyByteBuf buffer) {
-        super(buffer);
+        readPayload(buffer);
     }
 
     public PacketChisel(

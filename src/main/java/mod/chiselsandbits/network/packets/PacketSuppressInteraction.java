@@ -10,7 +10,7 @@ public class PacketSuppressInteraction extends ModPacket {
     private boolean newSetting = false;
 
     public PacketSuppressInteraction(final FriendlyByteBuf buffer) {
-        super(buffer);
+        readPayload(buffer);
     }
 
     public PacketSuppressInteraction(final boolean newSetting) {

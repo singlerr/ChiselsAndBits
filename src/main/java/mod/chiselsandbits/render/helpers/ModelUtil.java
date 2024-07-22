@@ -21,6 +21,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
@@ -279,7 +280,7 @@ public class ModelUtil implements ICacheClearable {
         if (q.getSprite() == null)
             return Minecraft.getInstance()
                     .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                    .apply(new ResourceLocation("missingno"));
+                    .apply(MissingTextureAtlasSprite.getLocation());
         return q.getSprite();
     }
 
@@ -353,11 +354,9 @@ public class ModelUtil implements ICacheClearable {
     }
 
     private static boolean isMissing(final TextureAtlasSprite texture) {
-        return texture == null
-                || texture
-                        == Minecraft.getInstance()
-                                .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                                .apply(new ResourceLocation("missingno"));
+        if (texture == null) return true;
+
+        return texture.contents().name().equals(MissingTextureAtlasSprite.getLocation());
     }
 
     public static TextureAtlasSprite findTexture(
@@ -463,6 +462,7 @@ public class ModelUtil implements ICacheClearable {
         ChiseledBlockBakedModel out = breakCache.get(key);
 
         if (out == null) {
+
             final BlockState state = ModUtil.getStateById(blockStateID);
             final BakedModel model = ModelUtil.solveModel(
                     state,

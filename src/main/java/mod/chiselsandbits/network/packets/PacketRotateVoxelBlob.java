@@ -14,7 +14,7 @@ public class PacketRotateVoxelBlob extends ModPacket {
     private Rotation rotation;
 
     public PacketRotateVoxelBlob(FriendlyByteBuf buffer) {
-        super(buffer);
+        readPayload(buffer);
     }
 
     public PacketRotateVoxelBlob(final Direction.Axis axis, final Rotation rotation) {

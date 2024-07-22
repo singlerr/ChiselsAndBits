@@ -3,9 +3,11 @@ package mod.chiselsandbits.render;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import mod.chiselsandbits.client.model.baked.BaseBakedBlockModel;
 import mod.chiselsandbits.client.model.data.IModelData;
 import mod.chiselsandbits.core.ClientSide;
+import mod.chiselsandbits.render.chiseledblock.ChiselRenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
@@ -28,6 +30,8 @@ public class ModelCombined extends BaseBakedBlockModel {
 
     boolean isSideLit;
 
+    Set<ChiselRenderType> renderTypes = Set.of();
+
     @SuppressWarnings("unchecked")
     public ModelCombined(final BakedModel... args) {
         face = new ArrayList[Direction.values().length];
@@ -47,6 +51,31 @@ public class ModelCombined extends BaseBakedBlockModel {
         }
 
         isSideLit = Arrays.stream(args).anyMatch(BakedModel::usesBlockLight);
+    }
+
+    public ModelCombined(Set<ChiselRenderType> renderTypes, final BakedModel... args) {
+        this.renderTypes = renderTypes;
+        face = new ArrayList[Direction.values().length];
+
+        generic = new ArrayList<>();
+        for (final Direction f : Direction.values()) {
+            face[f.ordinal()] = new ArrayList<>();
+        }
+
+        merged = args;
+
+        for (final BakedModel m : merged) {
+            generic.addAll(m.getQuads(null, null, COMBINED_RANDOM_MODEL));
+            for (final Direction f : Direction.values()) {
+                face[f.ordinal()].addAll(m.getQuads(null, f, COMBINED_RANDOM_MODEL));
+            }
+        }
+
+        isSideLit = Arrays.stream(args).anyMatch(BakedModel::usesBlockLight);
+    }
+
+    public Set<ChiselRenderType> getRenderTypes() {
+        return renderTypes;
     }
 
     @Override

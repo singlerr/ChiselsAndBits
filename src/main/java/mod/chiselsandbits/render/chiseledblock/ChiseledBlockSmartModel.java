@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import mod.chiselsandbits.chiseledblock.NBTBlobConverter;
 import mod.chiselsandbits.chiseledblock.TileEntityBlockChiseled;
 import mod.chiselsandbits.chiseledblock.data.VoxelBlob;
@@ -19,7 +20,6 @@ import mod.chiselsandbits.interfaces.ICacheClearable;
 import mod.chiselsandbits.render.ModelCombined;
 import mod.chiselsandbits.render.NullBakedModel;
 import mod.chiselsandbits.render.cache.CacheMap;
-import mod.chiselsandbits.utils.ModClientHooks;
 import mod.chiselsandbits.utils.RenderTypeUtils;
 import mod.chiselsandbits.utils.SimpleMaxSizedCache;
 import net.minecraft.client.renderer.RenderType;
@@ -46,6 +46,8 @@ public class ChiseledBlockSmartModel extends BaseSmartModel implements ICacheCle
 
     public static final BitSet FLUID_RENDER_TYPES =
             new BitSet(RenderType.chunkBufferLayers().size());
+
+    private static final RandomSource RANDOM_SOURCE = RandomSource.create();
 
     public static int getSides(final TileEntityBlockChiseled te) {
         final VoxelBlobStateReference ref = te.getBlobStateReference();
@@ -127,51 +129,94 @@ public class ChiseledBlockSmartModel extends BaseSmartModel implements ICacheCle
         return out;
     }
 
-    @Override
-    public BakedModel handleBlockState(BlockState state, RandomSource random, IModelData modelData) {
+    private BakedModel getChiseledModel(BlockState state, RandomSource randomSource, IModelData modelData) {
         if (state == null) {
             return NullBakedModel.instance;
         }
 
-        // This seems silly, but it proves to be faster in practice.
+        if (!modelData.getData(TileEntityBlockChiseled.MODEL_UPDATE)
+                && modelData.getData(TileEntityBlockChiseled.MODEL_PROP) != null)
+            return modelData.getData(TileEntityBlockChiseled.MODEL_PROP);
+
         VoxelBlobStateReference data = modelData.getData(TileEntityBlockChiseled.MP_VBSR);
         final VoxelBlob blob = data == null ? null : data.getVoxelBlob();
         Integer blockP = modelData.getData(TileEntityBlockChiseled.MP_PBSI);
         blockP = blockP == null ? 0 : blockP;
 
-        final RenderType layer = ModClientHooks.getRenderType();
+        Set<ChiselRenderType> integratedRenderTypes = ModUtil.getAllRenderTypes(blob);
+        ChiseledBlockBakedModel[] out = new ChiseledBlockBakedModel[integratedRenderTypes.size()];
 
-        if (layer == null || !ModUtil.support(blockP, layer)) {
-            final ChiseledBlockBakedModel[] models = new ChiseledBlockBakedModel[ChiselRenderType.values().length];
-            int o = 0;
-
-            for (final ChiselRenderType l : ChiselRenderType.values()) {
-                models[o++] = getCachedModel(blockP, blob, l, getModelFormat(), random);
-            }
-
-            return new ModelCombined(models);
+        int i = 0;
+        for (ChiselRenderType type : integratedRenderTypes) {
+            out[i++] = getCachedModel(blockP, blob, type, getModelFormat(), randomSource);
         }
 
-        BakedModel baked;
-        if (RenderType.chunkBufferLayers().contains(layer)
-                && FLUID_RENDER_TYPES.get(RenderType.chunkBufferLayers().indexOf(layer))) {
-            final ChiseledBlockBakedModel a =
-                    getCachedModel(blockP, blob, ChiselRenderType.fromLayer(layer, false), getModelFormat(), random);
-            final ChiseledBlockBakedModel b =
-                    getCachedModel(blockP, blob, ChiselRenderType.fromLayer(layer, true), getModelFormat(), random);
+        BakedModel model = new ModelCombined(integratedRenderTypes, out);
+        modelData.setData(TileEntityBlockChiseled.MODEL_PROP, model);
+        modelData.setData(TileEntityBlockChiseled.MODEL_UPDATE, false);
 
-            if (a.isEmpty()) {
-                baked = b;
-            } else if (b.isEmpty()) {
-                baked = a;
-            } else {
-                baked = new ModelCombined(a, b);
-            }
-        } else {
-            baked = getCachedModel(blockP, blob, ChiselRenderType.fromLayer(layer, false), getModelFormat(), random);
+        return model;
+    }
+
+    @Override
+    public Set<ChiselRenderType> getRenderTypes(IModelData modelData) {
+        BakedModel model = modelData.getData(TileEntityBlockChiseled.MODEL_PROP);
+        if (model instanceof ModelCombined combinedModel) {
+            return combinedModel.getRenderTypes();
         }
 
-        return baked;
+        return Set.of();
+    }
+
+    @Override
+    public BakedModel handleBlockState(BlockState state, RandomSource random, IModelData modelData) {
+        if (state == null) {
+            return NullBakedModel.instance;
+        }
+        return getChiseledModel(state, random, modelData);
+        // This seems silly, but it proves to be faster in practice.
+        //        VoxelBlobStateReference data = modelData.getData(TileEntityBlockChiseled.MP_VBSR);
+        //        final VoxelBlob blob = data == null ? null : data.getVoxelBlob();
+        //        Integer blockP = modelData.getData(TileEntityBlockChiseled.MP_PBSI);
+        //        blockP = blockP == null ? 0 : blockP;
+        //
+        //        final RenderType layer = ModClientHooks.getRenderType();
+        //
+        //        if (layer == null || !ModUtil.support(blockP, layer)) {
+        //            final ChiseledBlockBakedModel[] models = new
+        // ChiseledBlockBakedModel[ChiselRenderType.values().length];
+        //            int o = 0;
+        //
+        //            for (final ChiselRenderType l : ChiselRenderType.values()) {
+        //                models[o++] = getCachedModel(blockP, blob, l, getModelFormat(), random);
+        //            }
+        //
+        //            return new ModelCombined(models);
+        //        }
+        //
+        //        BakedModel baked;
+        //        if (RenderType.chunkBufferLayers().contains(layer)
+        //                && FLUID_RENDER_TYPES.get(RenderType.chunkBufferLayers().indexOf(layer))) {
+        //            final ChiseledBlockBakedModel a =
+        //                    getCachedModel(blockP, blob, ChiselRenderType.fromLayer(layer, false), getModelFormat(),
+        // random);
+        //            final ChiseledBlockBakedModel b =
+        //                    getCachedModel(blockP, blob, ChiselRenderType.fromLayer(layer, true), getModelFormat(),
+        // random);
+        //
+        //            if (a.isEmpty()) {
+        //                baked = b;
+        //            } else if (b.isEmpty()) {
+        //                baked = a;
+        //            } else {
+        //                baked = new ModelCombined(a, b);
+        //            }
+        //        } else {
+        //            baked = getCachedModel(blockP, blob, ChiselRenderType.fromLayer(layer, false), getModelFormat(),
+        // random);
+        //        }
+        //
+        //        return baked;
     }
 
     @Override
@@ -258,55 +303,11 @@ public class ChiseledBlockSmartModel extends BaseSmartModel implements ICacheCle
             @NotNull BlockPos pos,
             @NotNull BlockState state,
             @NotNull IModelData modelData) {
-        if (state == null || world.getBlockEntity(pos) == null) {
+        if (state == null || !(world.getBlockEntity(pos) instanceof TileEntityBlockChiseled te)) {
             return;
         }
 
-        // This seems silly, but it proves to be faster in practice.
-        VoxelBlobStateReference data = modelData.getData(TileEntityBlockChiseled.MP_VBSR);
-        Integer blockP = modelData.getData(TileEntityBlockChiseled.MP_PBSI);
-        blockP = blockP == null ? 0 : blockP;
-
-        final RenderType layer = ModClientHooks.getRenderType();
-
-        if (layer == null) {
-            final ChiseledBlockBakedModel[] models = new ChiseledBlockBakedModel[ChiselRenderType.values().length];
-            int o = 0;
-
-            for (final ChiselRenderType l : ChiselRenderType.values()) {
-                models[o++] = ChiseledBlockSmartModel.getCachedModel(
-                        (TileEntityBlockChiseled) Objects.requireNonNull(world.getBlockEntity(pos)), l);
-            }
-
-            modelData.setData(TileEntityBlockChiseled.MODEL_PROP, new ModelCombined(models));
-            return;
-        }
-
-        BakedModel baked;
-        if (RenderType.chunkBufferLayers().contains(layer)
-                && ChiseledBlockSmartModel.FLUID_RENDER_TYPES.get(
-                        RenderType.chunkBufferLayers().indexOf(layer))) {
-            final ChiseledBlockBakedModel a = ChiseledBlockSmartModel.getCachedModel(
-                    (TileEntityBlockChiseled) Objects.requireNonNull(world.getBlockEntity(pos)),
-                    ChiselRenderType.fromLayer(layer, false));
-            final ChiseledBlockBakedModel b = ChiseledBlockSmartModel.getCachedModel(
-                    (TileEntityBlockChiseled) Objects.requireNonNull(world.getBlockEntity(pos)),
-                    ChiselRenderType.fromLayer(layer, true));
-
-            if (a.isEmpty()) {
-                baked = b;
-            } else if (b.isEmpty()) {
-                baked = a;
-            } else {
-                baked = new ModelCombined(a, b);
-            }
-        } else {
-            baked = ChiseledBlockSmartModel.getCachedModel(
-                    (TileEntityBlockChiseled) Objects.requireNonNull(world.getBlockEntity(pos)),
-                    ChiselRenderType.fromLayer(layer, false));
-        }
-
-        modelData.setData(TileEntityBlockChiseled.MODEL_PROP, baked);
+        getChiseledModel(state, RANDOM_SOURCE, modelData);
     }
 
     private static final class ModelCacheKey {

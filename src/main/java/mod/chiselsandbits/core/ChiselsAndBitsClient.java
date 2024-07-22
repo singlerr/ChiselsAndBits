@@ -18,7 +18,6 @@ import mod.chiselsandbits.utils.Constants;
 import mod.chiselsandbits.utils.TextureUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -32,15 +31,9 @@ public class ChiselsAndBitsClient {
 
     @Environment(EnvType.CLIENT)
     public static void onClientInit(Minecraft inst) {
-        // load this after items are created...
-        // TODO: Load clipboard
-        // CreativeClipboardTab.load( new File( configFile.getParent(), MODID + "_clipboard.cfg" ) );
         ClientSide.instance.preinit();
-
         ClientSide.instance.init();
-
-        ClientLifecycleEvents.CLIENT_STARTED.register(
-                client -> ClientSide.instance.postinit(ChiselsAndBits.getInstance()));
+        ClientSide.instance.postinit(ChiselsAndBits.getInstance());
         MenuScreens.register(ModContainerTypes.BAG_CONTAINER.get(), BagGui::new);
         MenuScreens.register(ModContainerTypes.CHISEL_STATION_CONTAINER.get(), ChiselPrinterScreen::new);
     }

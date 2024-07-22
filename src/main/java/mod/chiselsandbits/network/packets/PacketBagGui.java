@@ -14,7 +14,7 @@ public class PacketBagGui extends ModPacket {
     private boolean holdingShift = false;
 
     public PacketBagGui(FriendlyByteBuf buffer) {
-        super(buffer);
+        readPayload(buffer);
     }
 
     public PacketBagGui(

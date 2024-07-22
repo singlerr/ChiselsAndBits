@@ -6,6 +6,7 @@ import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockColorChisled implements BlockColor {
@@ -15,13 +16,12 @@ public class BlockColorChisled implements BlockColor {
 
     @Override
     public int getColor(
-            final BlockState p_getColor_1_,
-            @Nullable final BlockAndTintGetter p_getColor_2_,
-            @Nullable final BlockPos p_getColor_3_,
-            final int p_getColor_4_) {
-
-        final BlockState tstate = ModUtil.getStateById(p_getColor_4_ >> TINT_BITS);
-        int tintValue = p_getColor_4_ & TINT_MASK;
-        return Minecraft.getInstance().getBlockColors().getColor(tstate, p_getColor_2_, p_getColor_3_, tintValue);
+            @NotNull final BlockState state,
+            @Nullable final BlockAndTintGetter displayReader,
+            @Nullable final BlockPos pos,
+            final int color) {
+        final BlockState containedState = ModUtil.getStateById(color >> TINT_BITS);
+        int tintValue = color & TINT_MASK;
+        return Minecraft.getInstance().getBlockColors().getColor(containedState, displayReader, pos, tintValue);
     }
 }

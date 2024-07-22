@@ -2,12 +2,14 @@ package mod.chiselsandbits.client.model.loader;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Supplier;
 import mod.chiselsandbits.chiseledblock.TileEntityBlockChiseled;
 import mod.chiselsandbits.client.model.baked.DataAwareBakedModel;
 import mod.chiselsandbits.client.model.data.IModelData;
 import mod.chiselsandbits.helpers.ModUtil;
 import mod.chiselsandbits.interfaces.ICacheClearable;
+import mod.chiselsandbits.render.chiseledblock.ChiselRenderType;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
@@ -104,7 +106,7 @@ public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
         Object attachmentData = blockAndTintGetter.getBlockEntityRenderData(blockPos);
 
         if (attachmentData instanceof IModelData modelData) {
-            //            dataAwareBakedModel.updateModelData(blockAndTintGetter, blockPos, blockState, modelData);
+            dataAwareBakedModel.updateModelData(blockAndTintGetter, blockPos, blockState, modelData);
             emitBlockQuads(dataAwareBakedModel, modelData, blockState, blockPos, supplier, renderContext);
         }
     }
@@ -116,13 +118,28 @@ public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
             final BlockPos blockPos,
             final Supplier<RandomSource> supplier,
             final RenderContext renderContext) {
-
+        Set<ChiselRenderType> renderTypes = dataAwareBakedModel.getRenderTypes(blockModelData);
         for (Direction direction : Direction.values()) {
-            emitBlockQuads(
-                    dataAwareBakedModel, blockModelData, blockState, blockPos, direction, supplier, renderContext);
+            renderTypes.forEach(renderType -> emitBlockQuads(
+                    dataAwareBakedModel,
+                    blockModelData,
+                    blockState,
+                    blockPos,
+                    direction,
+                    supplier,
+                    renderContext,
+                    renderType.layer));
         }
 
-        emitBlockQuads(dataAwareBakedModel, blockModelData, blockState, blockPos, null, supplier, renderContext);
+        renderTypes.forEach(renderType -> emitBlockQuads(
+                dataAwareBakedModel,
+                blockModelData,
+                blockState,
+                blockPos,
+                null,
+                supplier,
+                renderContext,
+                renderType.layer));
     }
 
     public void emitBlockQuads(
@@ -142,6 +159,32 @@ public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
         if (!state.getFluidState().isEmpty()) renderType = ItemBlockRenderTypes.getRenderLayer(state.getFluidState());
         else renderType = ItemBlockRenderTypes.getChunkRenderType(state);
 
+        final RenderMaterial material = Objects.requireNonNull(RendererAccess.INSTANCE.getRenderer())
+                .materialFinder()
+                .blendMode(0, BlendMode.fromRenderLayer(renderType))
+                .find();
+
+        quads.forEach(quad -> {
+            final MeshBuilder meshBuilder =
+                    RendererAccess.INSTANCE.getRenderer().meshBuilder();
+            final QuadEmitter emitter = meshBuilder.getEmitter();
+            emitter.fromVanilla(quad, material, direction);
+            emitter.emit();
+            renderContext.meshConsumer().accept(meshBuilder.build());
+        });
+    }
+
+    public void emitBlockQuads(
+            final DataAwareBakedModel dataAwareBakedModel,
+            final IModelData blockModelData,
+            final BlockState blockState,
+            final BlockPos blockPos,
+            final Direction direction,
+            final Supplier<RandomSource> supplier,
+            final RenderContext renderContext,
+            final RenderType renderType) {
+        final List<BakedQuad> quads =
+                dataAwareBakedModel.getQuads(blockState, direction, supplier.get(), blockModelData);
         final RenderMaterial material = Objects.requireNonNull(RendererAccess.INSTANCE.getRenderer())
                 .materialFinder()
                 .blendMode(0, BlendMode.fromRenderLayer(renderType))

@@ -50,6 +50,7 @@ public class TileEntityBlockChiseled extends BlockEntity
     public static final ModelProperty<VoxelBlobStateReference> MP_VBSR = new ModelProperty<>();
     public static final ModelProperty<Integer> MP_PBSI = new ModelProperty<>();
     public static final ModelProperty<BakedModel> MODEL_PROP = new ModelProperty<>();
+    public static final ModelProperty<Boolean> MODEL_UPDATE = new ModelProperty<>();
 
     private final BlockEntityType<?> blockEntityType;
 
@@ -350,6 +351,7 @@ public class TileEntityBlockChiseled extends BlockEntity
     }
 
     public void setBlob(final VoxelBlob vb, final boolean triggerUpdates) {
+        modelData.setData(MODEL_UPDATE, true);
         final int olv = getLightValue();
         final boolean oldNC = isNormalCube();
 
@@ -608,6 +610,7 @@ public class TileEntityBlockChiseled extends BlockEntity
         return new ModelDataMap.Builder()
                 .withInitial(MP_PBSI, getPrimaryBlockStateId())
                 .withInitial(MP_VBSR, getBlobStateReference())
+                .withInitial(MODEL_UPDATE, true)
                 .withProperty(MODEL_PROP)
                 .build();
     }

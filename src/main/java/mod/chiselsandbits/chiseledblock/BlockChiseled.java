@@ -254,7 +254,7 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
     }
 
     public ItemStack getPickBlock(final BlockHitResult target, final BlockPos pos, final TileEntityBlockChiseled te) {
-        if (te.getLevel().isClientSide) {
+        if (te.getLevel().isClientSide()) {
             if (getClientHeldTool() != null) {
                 final VoxelBlob vb = te.getBlob();
 
