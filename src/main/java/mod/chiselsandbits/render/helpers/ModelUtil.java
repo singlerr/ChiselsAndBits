@@ -453,7 +453,7 @@ public class ModelUtil implements ICacheClearable {
         // don't send air though to MC, some mods have registered their custom
         // color handlers for it and it can crash.
 
-        if (ModUtil.isEmpty(target)) return -1;
+//        if (ModUtil.isEmpty(target)) return -1;
         return Minecraft.getInstance().itemColors.getColor(target, tint);
     }
 

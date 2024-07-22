@@ -142,7 +142,7 @@ public class ChiseledBlockSmartModel extends BaseSmartModel implements ICacheCle
 
         final RenderType layer = ModClientHooks.getRenderType();
 
-        if (layer == null || !ModUtil.support(blockP, layer)) {
+        if (layer == null || ! ModUtil.support(blockP, layer)) {
             final ChiseledBlockBakedModel[] models = new ChiseledBlockBakedModel[ChiselRenderType.values().length];
             int o = 0;
 

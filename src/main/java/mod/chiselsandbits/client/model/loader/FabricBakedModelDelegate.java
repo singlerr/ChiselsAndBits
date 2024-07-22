@@ -3,8 +3,13 @@ package mod.chiselsandbits.client.model.loader;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
+
+import mod.chiselsandbits.chiseledblock.TileEntityBlockChiseled;
+import mod.chiselsandbits.chiseledblock.data.VoxelBlob;
+import mod.chiselsandbits.chiseledblock.data.VoxelBlobStateReference;
 import mod.chiselsandbits.client.model.baked.DataAwareBakedModel;
 import mod.chiselsandbits.client.model.data.IModelData;
+import mod.chiselsandbits.helpers.ModUtil;
 import mod.chiselsandbits.interfaces.ICacheClearable;
 import mod.chiselsandbits.utils.ModClientHooks;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
@@ -15,6 +20,8 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -133,9 +140,17 @@ public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
         final List<BakedQuad> quads =
                 dataAwareBakedModel.getQuads(blockState, direction, supplier.get(), blockModelData);
 
+        Integer blockP = blockModelData.getData(TileEntityBlockChiseled.MP_PBSI);
+        BlockState state = ModUtil.getStateById(blockP);
+        RenderType renderType;
+        if(state.getFluidState().isEmpty())
+            renderType = ItemBlockRenderTypes.getRenderLayer(state.getFluidState());
+        else
+            renderType = ItemBlockRenderTypes.getChunkRenderType(state);
+
         final RenderMaterial material = Objects.requireNonNull(RendererAccess.INSTANCE.getRenderer())
                 .materialFinder()
-                .blendMode(0, BlendMode.fromRenderLayer(ModClientHooks.getRenderType()))
+                .blendMode(0, BlendMode.fromRenderLayer(renderType))
                 .find();
 
         quads.forEach(quad -> {
