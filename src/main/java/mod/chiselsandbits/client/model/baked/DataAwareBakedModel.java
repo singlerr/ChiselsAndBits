@@ -20,6 +20,7 @@ public interface DataAwareBakedModel extends BakedModel {
             @NotNull final RandomSource rand,
             @NotNull final IModelData extraData);
 
+    @Deprecated
     void updateModelData(
             @NotNull final BlockAndTintGetter world,
             @NotNull final BlockPos pos,

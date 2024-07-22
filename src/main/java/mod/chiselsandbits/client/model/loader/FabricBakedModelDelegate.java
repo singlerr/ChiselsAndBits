@@ -6,7 +6,9 @@ import java.util.function.Supplier;
 import mod.chiselsandbits.client.model.baked.DataAwareBakedModel;
 import mod.chiselsandbits.client.model.data.IModelData;
 import mod.chiselsandbits.interfaces.ICacheClearable;
+import mod.chiselsandbits.utils.ModClientHooks;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
+import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
@@ -99,7 +101,7 @@ public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
         Object attachmentData = blockAndTintGetter.getBlockEntityRenderData(blockPos);
 
         if (attachmentData instanceof IModelData modelData) {
-            dataAwareBakedModel.updateModelData(blockAndTintGetter, blockPos, blockState, modelData);
+            //            dataAwareBakedModel.updateModelData(blockAndTintGetter, blockPos, blockState, modelData);
             emitBlockQuads(dataAwareBakedModel, modelData, blockState, blockPos, supplier, renderContext);
         }
     }
@@ -133,7 +135,7 @@ public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
 
         final RenderMaterial material = Objects.requireNonNull(RendererAccess.INSTANCE.getRenderer())
                 .materialFinder()
-                //                .blendMode(0, BlendMode.fromRenderLayer(ModClientHooks.getRenderType()))
+                .blendMode(0, BlendMode.fromRenderLayer(ModClientHooks.getRenderType()))
                 .find();
 
         quads.forEach(quad -> {

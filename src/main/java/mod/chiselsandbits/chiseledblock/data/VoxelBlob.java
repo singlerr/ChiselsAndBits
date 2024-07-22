@@ -781,7 +781,6 @@ public final class VoxelBlob implements IVoxelSrc {
             }
 
             if (!layerFilterState.get(ref)) {
-                values[x] = 0;
                 noneAir.clear(x);
             } else {
                 hasValues = true;

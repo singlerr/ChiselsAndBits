@@ -118,7 +118,17 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
     @Override
     public float getFriction(
             BlockState blockState, LevelReader levelReader, BlockPos blockPos, @Nullable Entity entity) {
-        return 0;
+        try {
+            BlockState internalState = getTileEntity(levelReader, blockPos).getBlockState(Blocks.STONE);
+
+            if (internalState != null) {
+                return internalState.getBlock().getFriction();
+            }
+        } catch (ExceptionNoTileEntity e) {
+            Log.noTileError(e);
+        }
+
+        return super.getFriction();
     }
 
     @Environment(EnvType.CLIENT)

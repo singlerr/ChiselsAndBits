@@ -20,7 +20,9 @@ import mod.chiselsandbits.items.ItemChiseledBit;
 import mod.chiselsandbits.items.ItemNegativePrint;
 import mod.chiselsandbits.items.ItemPositivePrint;
 import mod.chiselsandbits.render.helpers.SimpleInstanceCache;
+import mod.chiselsandbits.utils.RenderTypeUtils;
 import mod.chiselsandbits.utils.SingleBlockBlockReader;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -418,6 +420,11 @@ public class ModUtil {
         }
 
         return new ItemStack(blockState.getBlock(), 1);
+    }
+
+    public static boolean support(int primaryStateId, RenderType renderType) {
+        BlockState blockState = ModUtil.getStateById(primaryStateId);
+        return RenderTypeUtils.canRenderInLayer(blockState, renderType);
     }
 
     @Nullable
