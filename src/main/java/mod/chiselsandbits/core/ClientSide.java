@@ -236,6 +236,7 @@ public class ClientSide {
         if (kb instanceof IKeyBinding ext) {
             ext.setKeyConflictContext(context);
         }
+
         KeyBindingHelper.registerKeyBinding(kb);
         return kb;
     }

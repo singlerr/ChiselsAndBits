@@ -3,15 +3,11 @@ package mod.chiselsandbits.client.model.loader;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
-
 import mod.chiselsandbits.chiseledblock.TileEntityBlockChiseled;
-import mod.chiselsandbits.chiseledblock.data.VoxelBlob;
-import mod.chiselsandbits.chiseledblock.data.VoxelBlobStateReference;
 import mod.chiselsandbits.client.model.baked.DataAwareBakedModel;
 import mod.chiselsandbits.client.model.data.IModelData;
 import mod.chiselsandbits.helpers.ModUtil;
 import mod.chiselsandbits.interfaces.ICacheClearable;
-import mod.chiselsandbits.utils.ModClientHooks;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
@@ -143,10 +139,8 @@ public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
         Integer blockP = blockModelData.getData(TileEntityBlockChiseled.MP_PBSI);
         BlockState state = ModUtil.getStateById(blockP);
         RenderType renderType;
-        if(state.getFluidState().isEmpty())
-            renderType = ItemBlockRenderTypes.getRenderLayer(state.getFluidState());
-        else
-            renderType = ItemBlockRenderTypes.getChunkRenderType(state);
+        if (!state.getFluidState().isEmpty()) renderType = ItemBlockRenderTypes.getRenderLayer(state.getFluidState());
+        else renderType = ItemBlockRenderTypes.getChunkRenderType(state);
 
         final RenderMaterial material = Objects.requireNonNull(RendererAccess.INSTANCE.getRenderer())
                 .materialFinder()

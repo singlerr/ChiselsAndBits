@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.DyeColor;
@@ -368,13 +369,8 @@ public class ChiselsAndBitsMenu extends Screen {
 
         tessellator.end();
 
-        //        RenderSystem.shadeModel(GL11.GL_FLAT);
-
-        // matrixStack.translate( 0.0F, 0.0F, 5.0F );
-        //        RenderSystem.enableTexture();
         graphics.setColor(1, 1, 1, 1);
         RenderSystem.disableBlend();
-        //        RenderSystem.enableAlphaTest();
         RenderSystem.bindTexture(Minecraft.getInstance()
                 .getTextureManager()
                 .getTexture(InventoryMenu.BLOCK_ATLAS)
@@ -395,83 +391,48 @@ public class ChiselsAndBitsMenu extends Screen {
             final double y2 = y + scaley;
 
             final TextureAtlasSprite sprite = sip.sprite;
-            RenderSystem.setShaderTexture(
-                    0,
-                    sip.sprite.contents().name().withPrefix("textures/icons/").withSuffix(".png"));
+            final ResourceLocation iconId =
+                    sprite.contents().name().withPrefix("textures/icons/").withSuffix(".png");
             RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
-            buffer = Tesselator.getInstance().getBuilder();
-            buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-
-            final float f = 1.0f;
-            final float a = 1.0f;
-
-            final float u1 = (float) (sip.left * 16.0);
-            final float u2 = (float) ((sip.left + sip.width) * 16.0);
-            final float v1 = (float) (sip.top * 16.0);
-            final float v2 = (float) ((sip.top + sip.height) * 16.0);
-
-            buffer.vertex(middle_x + x1, middle_y + y1, 0)
-                    .uv(sprite.getU(u1), sprite.getV(v1))
-                    .color(f, f, f, a)
-                    .endVertex();
-            buffer.vertex(middle_x + x1, middle_y + y2, 0)
-                    .uv(sprite.getU(u1), sprite.getV(v2))
-                    .color(f, f, f, a)
-                    .endVertex();
-            buffer.vertex(middle_x + x2, middle_y + y2, 0)
-                    .uv(sprite.getU(u2), sprite.getV(v2))
-                    .color(f, f, f, a)
-                    .endVertex();
-            buffer.vertex(middle_x + x2, middle_y + y1, 0)
-                    .uv(sprite.getU(u2), sprite.getV(v1))
-                    .color(f, f, f, a)
-                    .endVertex();
-
-            BufferUploader.drawWithShader(buffer.end());
+            RenderSystem.setShaderTexture(0, iconId);
+            graphics.blit(
+                    iconId,
+                    (int) (middle_x + x1),
+                    (int) (middle_y + y1),
+                    (int) (x2 - x1),
+                    (int) (y2 - y1),
+                    0,
+                    0,
+                    18,
+                    18,
+                    18,
+                    18);
         }
 
         for (final MenuButton btn : btns) {
-            final float f = switchTo == null ? 1.0f : 0.5f;
-            final float a = 1.0f;
-
-            final float u1 = 0;
-            final float u2 = 16;
-            final float v1 = 0;
-            final float v2 = 16;
-
             final TextureAtlasSprite sprite = btn.icon == null ? ClientSide.white : btn.icon;
-            RenderSystem.setShaderTexture(
-                    0, sprite.contents().name().withPrefix("textures/icons/").withSuffix(".png"));
+            ResourceLocation iconId =
+                    sprite.contents().name().withPrefix("textures/icons/").withSuffix(".png");
             RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
-            buffer = Tesselator.getInstance().getBuilder();
-            buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+            RenderSystem.setShaderTexture(0, iconId);
+
             final double btnx1 = btn.x1 + 1;
             final double btnx2 = btn.x2 - 1;
             final double btny1 = btn.y1 + 1;
             final double btny2 = btn.y2 - 1;
 
-            final float red = f * ((btn.color >> 16 & 0xff) / 255.0f);
-            final float green = f * ((btn.color >> 8 & 0xff) / 255.0f);
-            final float blue = f * ((btn.color & 0xff) / 255.0f);
-
-            buffer.vertex(middle_x + btnx1, middle_y + btny1, 0)
-                    .uv(sprite.getU(u1), sprite.getV(v1))
-                    .color(red, green, blue, a)
-                    .endVertex();
-            buffer.vertex(middle_x + btnx1, middle_y + btny2, 0)
-                    .uv(sprite.getU(u1), sprite.getV(v2))
-                    .color(red, green, blue, a)
-                    .endVertex();
-            buffer.vertex(middle_x + btnx2, middle_y + btny2, 0)
-                    .uv(sprite.getU(u2), sprite.getV(v2))
-                    .color(red, green, blue, a)
-                    .endVertex();
-            buffer.vertex(middle_x + btnx2, middle_y + btny1, 0)
-                    .uv(sprite.getU(u2), sprite.getV(v1))
-                    .color(red, green, blue, a)
-                    .endVertex();
-
-            BufferUploader.drawWithShader(buffer.end());
+            graphics.blit(
+                    iconId,
+                    (int) (middle_x + btnx1),
+                    (int) (middle_y + btny1),
+                    (int) (btnx2 - btnx1),
+                    (int) (btny2 - btny1),
+                    0,
+                    0,
+                    18,
+                    18,
+                    18,
+                    18);
         }
 
         for (final MenuRegion mnuRgn : modes) {

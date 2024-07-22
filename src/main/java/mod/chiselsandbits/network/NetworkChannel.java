@@ -1,9 +1,11 @@
 package mod.chiselsandbits.network;
 
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.Function;
 import me.pepperbell.simplenetworking.SimpleChannel;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -30,7 +32,7 @@ public class NetworkChannel {
      */
     public NetworkChannel(final String channelName) {
         rawChannel = new SimpleChannel(new ResourceLocation("chiselsandbits", channelName));
-        rawChannel.initClientListener();
+        EnvExecutor.runWhenOn(EnvType.CLIENT, () -> rawChannel::initClientListener);
         rawChannel.initServerListener();
     }
 

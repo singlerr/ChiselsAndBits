@@ -4,7 +4,6 @@ import java.util.Objects;
 import mod.chiselsandbits.chiseledblock.TileEntityBlockChiseled;
 import mod.chiselsandbits.chiseledblock.data.VoxelBlobStateReference;
 import mod.chiselsandbits.client.model.data.IModelData;
-import mod.chiselsandbits.client.model.data.ModelProperty;
 import mod.chiselsandbits.render.ModelCombined;
 import mod.chiselsandbits.render.NullBakedModel;
 import mod.chiselsandbits.render.chiseledblock.ChiselRenderType;
@@ -23,7 +22,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 public class DataAwareChiseledBlockBakedModel extends BaseSmartModel {
-    public static final ModelProperty<BakedModel> MODEL_PROP = new ModelProperty<>();
 
     @Override
     public boolean usesBlockLight() {
@@ -32,9 +30,9 @@ public class DataAwareChiseledBlockBakedModel extends BaseSmartModel {
 
     @Override
     public BakedModel handleBlockState(final BlockState state, final RandomSource random, final IModelData modelData) {
-        if (!modelData.hasProperty(MODEL_PROP)) return NullBakedModel.instance;
+        if (!modelData.hasProperty(TileEntityBlockChiseled.MODEL_PROP)) return NullBakedModel.instance;
 
-        return modelData.getData(MODEL_PROP);
+        return modelData.getData(TileEntityBlockChiseled.MODEL_PROP);
     }
 
     public void updateModelData(
@@ -62,7 +60,7 @@ public class DataAwareChiseledBlockBakedModel extends BaseSmartModel {
                         (TileEntityBlockChiseled) Objects.requireNonNull(world.getBlockEntity(pos)), l);
             }
 
-            modelData.setData(MODEL_PROP, new ModelCombined(models));
+            modelData.setData(TileEntityBlockChiseled.MODEL_PROP, new ModelCombined(models));
             return;
         }
 
@@ -90,7 +88,7 @@ public class DataAwareChiseledBlockBakedModel extends BaseSmartModel {
                     ChiselRenderType.fromLayer(layer, false));
         }
 
-        modelData.setData(MODEL_PROP, baked);
+        modelData.setData(TileEntityBlockChiseled.MODEL_PROP, baked);
     }
 
     @Override

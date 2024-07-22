@@ -8,7 +8,6 @@ import mod.chiselsandbits.api.*;
 import mod.chiselsandbits.chiseledblock.data.VoxelBlob;
 import mod.chiselsandbits.chiseledblock.data.VoxelBlobStateReference;
 import mod.chiselsandbits.client.UndoTracker;
-import mod.chiselsandbits.client.model.baked.DataAwareChiseledBlockBakedModel;
 import mod.chiselsandbits.client.model.baked.ModelDataAccess;
 import mod.chiselsandbits.client.model.data.IModelData;
 import mod.chiselsandbits.client.model.data.ModelDataMap;
@@ -26,6 +25,7 @@ import mod.chiselsandbits.utils.SingleBlockBlockReader;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -49,6 +49,7 @@ public class TileEntityBlockChiseled extends BlockEntity
         implements IChiseledTileContainer, IChiseledBlockTileEntity, ModelDataAccess {
     public static final ModelProperty<VoxelBlobStateReference> MP_VBSR = new ModelProperty<>();
     public static final ModelProperty<Integer> MP_PBSI = new ModelProperty<>();
+    public static final ModelProperty<BakedModel> MODEL_PROP = new ModelProperty<>();
 
     private final BlockEntityType<?> blockEntityType;
 
@@ -607,7 +608,7 @@ public class TileEntityBlockChiseled extends BlockEntity
         return new ModelDataMap.Builder()
                 .withInitial(MP_PBSI, getPrimaryBlockStateId())
                 .withInitial(MP_VBSR, getBlobStateReference())
-                .withProperty(DataAwareChiseledBlockBakedModel.MODEL_PROP)
+                .withProperty(MODEL_PROP)
                 .build();
     }
 }

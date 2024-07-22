@@ -21,6 +21,8 @@ public class ModelQuadLayer {
         public final ModelLightMapReader lv;
         public ModelUVReader uvr;
 
+        private int tint;
+
         public ModelQuadLayerBuilder(final TextureAtlasSprite sprite, final int uCoord, final int vCoord) {
             cache.sprite = sprite;
             lv = new ModelLightMapReader();
@@ -33,6 +35,11 @@ public class ModelQuadLayer {
 
         public void setFace(Direction face) {
             cache.face = face;
+        }
+
+        public void setTint(int tint) {
+            this.tint = tint;
+            this.cache.tint = tint;
         }
 
         public ModelQuadLayer build(final int stateid, final int color, final int lightValue) {

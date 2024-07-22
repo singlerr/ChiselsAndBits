@@ -106,7 +106,15 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
     @Override
     public SoundType getSoundType(
             BlockState blockState, LevelReader levelReader, BlockPos blockPos, @Nullable Entity entity) {
-        return SoundType.AMETHYST;
+        try {
+            TileEntityBlockChiseled te = getTileEntity(levelReader, blockPos);
+            int p = te.getPrimaryBlockStateId();
+
+            BlockState s = ModUtil.getStateById(p);
+            return s.getSoundType();
+        } catch (ExceptionNoTileEntity e) {
+            return SoundType.STONE;
+        }
     }
 
     @Override

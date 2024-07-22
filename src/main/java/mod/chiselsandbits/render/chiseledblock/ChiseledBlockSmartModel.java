@@ -12,7 +12,6 @@ import mod.chiselsandbits.chiseledblock.data.VoxelBlob;
 import mod.chiselsandbits.chiseledblock.data.VoxelBlobStateInstance;
 import mod.chiselsandbits.chiseledblock.data.VoxelBlobStateReference;
 import mod.chiselsandbits.client.model.baked.BaseSmartModel;
-import mod.chiselsandbits.client.model.baked.DataAwareChiseledBlockBakedModel;
 import mod.chiselsandbits.client.model.data.IModelData;
 import mod.chiselsandbits.core.ChiselsAndBits;
 import mod.chiselsandbits.helpers.ModUtil;
@@ -142,7 +141,7 @@ public class ChiseledBlockSmartModel extends BaseSmartModel implements ICacheCle
 
         final RenderType layer = ModClientHooks.getRenderType();
 
-        if (layer == null || ! ModUtil.support(blockP, layer)) {
+        if (layer == null || !ModUtil.support(blockP, layer)) {
             final ChiseledBlockBakedModel[] models = new ChiseledBlockBakedModel[ChiselRenderType.values().length];
             int o = 0;
 
@@ -279,7 +278,7 @@ public class ChiseledBlockSmartModel extends BaseSmartModel implements ICacheCle
                         (TileEntityBlockChiseled) Objects.requireNonNull(world.getBlockEntity(pos)), l);
             }
 
-            modelData.setData(DataAwareChiseledBlockBakedModel.MODEL_PROP, new ModelCombined(models));
+            modelData.setData(TileEntityBlockChiseled.MODEL_PROP, new ModelCombined(models));
             return;
         }
 
@@ -307,7 +306,7 @@ public class ChiseledBlockSmartModel extends BaseSmartModel implements ICacheCle
                     ChiselRenderType.fromLayer(layer, false));
         }
 
-        modelData.setData(DataAwareChiseledBlockBakedModel.MODEL_PROP, baked);
+        modelData.setData(TileEntityBlockChiseled.MODEL_PROP, baked);
     }
 
     private static final class ModelCacheKey {
