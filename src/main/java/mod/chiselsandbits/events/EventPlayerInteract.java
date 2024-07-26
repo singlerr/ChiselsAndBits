@@ -48,9 +48,7 @@ public class EventPlayerInteract {
         if (event.getPlayer() != null && event.getUseItem() == BaseEvent.Result.DENY) {
             final ItemStack is = event.getItemStack();
             final boolean validEvent = event.getPos() != null && event.getLevel() != null;
-            if (is != null
-                    && (is.getItem() instanceof ItemChisel || is.getItem() instanceof ItemChiseledBit)
-                    && validEvent) {
+            if ((is.getItem() instanceof ItemChisel || is.getItem() instanceof ItemChiseledBit) && validEvent) {
                 final BlockState state = event.getLevel().getBlockState(event.getPos());
                 if (BlockBitInfo.canChisel(state)) {
                     if (event.getLevel().isClientSide) {

@@ -4,7 +4,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import java.util.List;
 import mod.chiselsandbits.registry.ModBlocks;
+import mod.chiselsandbits.registry.ModRenderTypes;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
@@ -291,7 +293,8 @@ public class RenderHelper {
             final int combinedOverlay) {
         final Tesselator tessellator = Tesselator.getInstance();
         final BufferBuilder buffer = tessellator.getBuilder();
-        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);
+        RenderType renderType = ModRenderTypes.GHOST_BLOCK_PREVIEW.get();
+        buffer.begin(renderType.mode(), renderType.format());
 
         for (final Direction enumfacing : Direction.values()) {
             renderQuads(
@@ -314,7 +317,7 @@ public class RenderHelper {
                 blockPos,
                 combinedLightmap,
                 combinedOverlay);
-        tessellator.end();
+        renderType.end(buffer, RenderSystem.getVertexSorting());
     }
 
     public static void renderGhostModel(
@@ -327,15 +330,6 @@ public class RenderHelper {
             final int combinedOverlay) {
         final int alpha = isUnplaceable ? 0x22000000 : 0xaa000000;
         Minecraft.getInstance().getTextureManager().bindForSetup(InventoryMenu.BLOCK_ATLAS);
-        //        guiGraphics.setColor(1,1,1,1);
-        //        RenderSystem.enableBlend();
-        //        RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        //        RenderSystem.colorMask(false, false, false, false);
         RenderHelper.renderModel(matrixStack, baked, worldObj, blockPos, alpha, combinedLightmap, combinedOverlay);
-        //        RenderSystem.colorMask(true, true, true, true);
-        //        RenderSystem.depthFunc(GL11.GL_LEQUAL);
-        RenderHelper.renderModel(matrixStack, baked, worldObj, blockPos, alpha, combinedLightmap, combinedOverlay);
-
-        //        RenderSystem.disableBlend();
     }
 }

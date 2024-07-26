@@ -36,6 +36,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Mirror;
@@ -48,7 +49,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class TileEntityBlockChiseled extends BlockEntity
-        implements IChiseledTileContainer, IChiseledBlockTileEntity, ModelDataAccess {
+        implements IChiseledTileContainer, IChiseledBlockTileEntity, ModelDataAccess, LegacyBlockEntityProperties {
     public static final ModelProperty<VoxelBlobStateReference> MP_VBSR = new ModelProperty<>();
     public static final ModelProperty<Integer> MP_PBSI = new ModelProperty<>();
     public static final ModelProperty<Map<ChiselRenderType, BakedModel>> MODEL_PROP = new ModelProperty<>();
@@ -243,6 +244,23 @@ public class TileEntityBlockChiseled extends BlockEntity
             default:
                 break;
         }
+    }
+
+    @Override
+    public BlockState mirror(LevelAccessor level, BlockPos pos, BlockState blockState, Mirror mirrorIn) {
+        switch (mirrorIn) {
+            case FRONT_BACK:
+                setBlob(getBlob().mirror(Axis.X), true);
+                break;
+            case LEFT_RIGHT:
+                setBlob(getBlob().mirror(Axis.Z), true);
+                break;
+            case NONE:
+            default:
+                break;
+        }
+
+        return blockState;
     }
 
     public void rotate(@NotNull final Rotation rotationIn) {

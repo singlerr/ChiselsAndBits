@@ -67,20 +67,19 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
     @Override
     public BlockState playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
         BlockState newState = super.playerWillDestroy(level, blockPos, blockState, player);
-        if (ChiselsAndBits.getConfig()
-                .getClient()
-                .addBrokenBlocksToCreativeClipboard
-                .get()) {
+        try {
+            final TileEntityBlockChiseled tebc = getTileEntity(level, blockPos);
+            if (ChiselsAndBits.getConfig()
+                    .getClient()
+                    .addBrokenBlocksToCreativeClipboard
+                    .get()) {
 
-            try {
-                final TileEntityBlockChiseled tebc = getTileEntity(level, blockPos);
                 CreativeClipboardTab.getInstance().addItem(tebc.getItemStack(player));
-
-                UndoTracker.getInstance()
-                        .add(level, blockPos, tebc.getBlobStateReference(), new VoxelBlobStateReference(0, 0));
-            } catch (final ExceptionNoTileEntity e) {
-                Log.noTileError(e);
             }
+            UndoTracker.getInstance()
+                    .add(level, blockPos, tebc.getBlobStateReference(), new VoxelBlobStateReference(0, 0));
+        } catch (final ExceptionNoTileEntity e) {
+            Log.noTileError(e);
         }
         return newState;
     }
@@ -342,7 +341,7 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
     public BlockState rotate(
             final BlockState state, final LevelAccessor world, final BlockPos pos, final Rotation direction) {
         try {
-            getTileEntity(world, pos).rotateBlock();
+            getTileEntity(world, pos).rotate(direction);
             return state;
         } catch (final ExceptionNoTileEntity e) {
             Log.noTileError(e);

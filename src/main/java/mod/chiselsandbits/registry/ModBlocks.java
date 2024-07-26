@@ -5,9 +5,7 @@ import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
 import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
 import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.Map;
-import javax.annotation.Nullable;
 import mod.chiselsandbits.bitstorage.BlockBitStorage;
 import mod.chiselsandbits.bitstorage.ItemBlockBitStorage;
 import mod.chiselsandbits.bitstorage.ItemStackSpecialRendererBitStorage;
@@ -141,13 +139,8 @@ public final class ModBlocks {
         return VALID_CHISEL_MATERIALS;
     }
 
-    @Nullable
     public static BlockState getChiseledDefaultState() {
-        final Iterator<RegistryObject<BlockChiseled>> blockIterator =
-                getMaterialToBlockConversions().values().iterator();
-        if (blockIterator.hasNext()) return blockIterator.next().get().defaultBlockState();
-
-        return null;
+        return CHISELED_BLOCK.get().defaultBlockState();
     }
 
     public static BlockChiseled convertGivenStateToChiseledBlock(final BlockState state) {

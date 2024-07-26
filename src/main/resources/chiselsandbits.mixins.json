@@ -3,7 +3,9 @@
 	"package": "mod.chiselsandbits.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-		"ItemEntityMixin"
+		"ItemEntityMixin",
+		"StructurePieceMixin",
+		"StructureTemplateMixin"
 	],
 	"client": [
 		"GameRendererMixin",
