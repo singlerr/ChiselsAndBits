@@ -50,9 +50,6 @@ public class ChiselsAndBits {
 
         EnvExecutor.runWhenOn(
                 EnvType.CLIENT, () -> () -> ClientLifecycleEvents.CLIENT_STARTED.register(this::clientSetup));
-        EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> {
-            ForgeModConfigEvents.loading(Constants.MOD_ID).register(config -> handleIdMapping(Minecraft.getInstance()));
-        });
         VaporizeWater.register();
         EventPlayerInteract.register();
         ModTags.init();
@@ -63,6 +60,8 @@ public class ChiselsAndBits {
         ModTileEntityTypes.onModConstruction();
         ModItemGroups.onModConstruction();
         networkChannel.registerCommonMessages();
+        ForgeModConfigEvents.loading(Constants.MOD_ID).register(c -> handleIdMapping(Minecraft.getInstance()));
+        ForgeModConfigEvents.reloading(Constants.MOD_ID).register(c -> handleIdMapping(Minecraft.getInstance()));
     }
 
     public void setConfig(Configuration config) {
@@ -101,14 +100,12 @@ public class ChiselsAndBits {
     }
 
     public void clearCache() {
-        if (idsHaveBeenMapped) {
-            for (final ICacheClearable clearable : cacheClearables) {
-                clearable.clearCache();
-            }
-
-            addClearable(UndoTracker.getInstance());
-            VoxelBlob.clearCache();
+        for (final ICacheClearable clearable : cacheClearables) {
+            clearable.clearCache();
         }
+
+        addClearable(UndoTracker.getInstance());
+        VoxelBlob.clearCache();
     }
 
     public void addClearable(final ICacheClearable cache) {

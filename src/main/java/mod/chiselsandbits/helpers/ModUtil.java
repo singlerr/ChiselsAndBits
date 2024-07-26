@@ -122,6 +122,7 @@ public class ModUtil {
     }
 
     public static Set<Integer> getAllStates(VoxelBlob blob) {
+        if (blob == null || blob.getBlockSums() == null) return Set.of();
         return blob.getBlockSums().keySet();
     }
 
@@ -141,7 +142,6 @@ public class ModUtil {
 
     public static Set<ChiselRenderType> getAllRenderTypes(VoxelBlob blob) {
         return getAllStates(blob).stream()
-                .filter(id -> id != 0)
                 .flatMap(id -> Stream.of(getRenderType(ModUtil.getStateById(id))))
                 .collect(Collectors.toSet());
     }

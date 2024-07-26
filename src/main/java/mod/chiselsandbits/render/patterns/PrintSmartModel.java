@@ -1,10 +1,12 @@
 package mod.chiselsandbits.render.patterns;
 
+import java.util.Set;
 import java.util.WeakHashMap;
 import mod.chiselsandbits.client.model.baked.BaseSmartModel;
 import mod.chiselsandbits.client.model.data.IModelData;
 import mod.chiselsandbits.core.ClientSide;
 import mod.chiselsandbits.interfaces.IPatternItem;
+import mod.chiselsandbits.render.chiseledblock.ChiselRenderType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -60,4 +62,13 @@ public class PrintSmartModel extends BaseSmartModel {
             @NotNull BlockPos pos,
             @NotNull BlockState state,
             @NotNull IModelData modelData) {}
+
+    @Override
+    public Set<ChiselRenderType> getRenderTypes(
+            @NotNull BlockAndTintGetter world,
+            @NotNull BlockPos pos,
+            @NotNull BlockState state,
+            @NotNull IModelData modelData) {
+        return Set.of(ChiselRenderType.SOLID);
+    }
 }

@@ -104,7 +104,7 @@ public class UndoTracker implements ICacheClearable {
         } else {
             ClientSide.instance
                     .getPlayer()
-                    .sendSystemMessage(Component.literal("mod.chiselsandbits.result.nothing_to_undo"));
+                    .sendSystemMessage(Component.translatable("mod.chiselsandbits.result.nothing_to_undo"));
         }
     }
 
@@ -129,7 +129,7 @@ public class UndoTracker implements ICacheClearable {
         } else {
             ClientSide.instance
                     .getPlayer()
-                    .sendSystemMessage(Component.literal("mod.chiselsandbits.result.nothing_to_redo"));
+                    .sendSystemMessage(Component.translatable("mod.chiselsandbits.result.nothing_to_redo"));
         }
     }
 
@@ -219,7 +219,7 @@ public class UndoTracker implements ICacheClearable {
     @Environment(EnvType.CLIENT)
     private void displayError() {
         for (final String err : errors) {
-            ClientSide.instance.getPlayer().sendSystemMessage(Component.literal(err));
+            ClientSide.instance.getPlayer().sendSystemMessage(Component.translatable(err));
         }
 
         errors.clear();

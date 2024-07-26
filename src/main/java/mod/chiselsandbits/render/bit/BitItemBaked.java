@@ -3,10 +3,12 @@ package mod.chiselsandbits.render.bit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import mod.chiselsandbits.client.model.baked.BaseBakedBlockModel;
 import mod.chiselsandbits.client.model.data.IModelData;
 import mod.chiselsandbits.core.ChiselsAndBits;
 import mod.chiselsandbits.core.ClientSide;
+import mod.chiselsandbits.render.chiseledblock.ChiselRenderType;
 import mod.chiselsandbits.render.helpers.ModelQuadLayer;
 import mod.chiselsandbits.render.helpers.ModelUtil;
 import net.minecraft.client.renderer.RenderType;
@@ -158,7 +160,8 @@ public class BitItemBaked extends BaseBakedBlockModel {
             @Nullable BlockState state,
             @Nullable Direction side,
             @NotNull RandomSource rand,
-            @NotNull IModelData extraData) {
+            @NotNull IModelData extraData,
+            @NotNull ChiselRenderType renderType) {
         return getQuads(state, side, rand);
     }
 
@@ -168,4 +171,13 @@ public class BitItemBaked extends BaseBakedBlockModel {
             @NotNull BlockPos pos,
             @NotNull BlockState state,
             @NotNull IModelData modelData) {}
+
+    @Override
+    public Set<ChiselRenderType> getRenderTypes(
+            @NotNull BlockAndTintGetter world,
+            @NotNull BlockPos pos,
+            @NotNull BlockState state,
+            @NotNull IModelData modelData) {
+        return Set.of();
+    }
 }

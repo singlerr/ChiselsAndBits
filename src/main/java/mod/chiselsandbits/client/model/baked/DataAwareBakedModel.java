@@ -20,7 +20,8 @@ public interface DataAwareBakedModel extends BakedModel {
             @Nullable final BlockState state,
             @Nullable final Direction side,
             @NotNull final RandomSource rand,
-            @NotNull final IModelData extraData);
+            @NotNull final IModelData extraData,
+            @NotNull final ChiselRenderType renderType);
 
     @Deprecated
     void updateModelData(
@@ -29,7 +30,9 @@ public interface DataAwareBakedModel extends BakedModel {
             @NotNull final BlockState state,
             @NotNull final IModelData modelData);
 
-    default Set<ChiselRenderType> getRenderTypes(IModelData modelData) {
-        return Set.of();
-    }
+    Set<ChiselRenderType> getRenderTypes(
+            @NotNull final BlockAndTintGetter world,
+            @NotNull final BlockPos pos,
+            @NotNull final BlockState state,
+            @NotNull IModelData modelData);
 }

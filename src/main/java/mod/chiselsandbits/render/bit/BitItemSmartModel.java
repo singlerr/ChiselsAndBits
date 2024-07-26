@@ -2,6 +2,7 @@ package mod.chiselsandbits.render.bit;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import java.util.HashMap;
+import java.util.Set;
 import mod.chiselsandbits.chiseledblock.data.VoxelBlob;
 import mod.chiselsandbits.client.model.baked.BaseSmartModel;
 import mod.chiselsandbits.client.model.data.IModelData;
@@ -96,4 +97,13 @@ public class BitItemSmartModel extends BaseSmartModel implements ICacheClearable
             @NotNull BlockPos pos,
             @NotNull BlockState state,
             @NotNull IModelData modelData) {}
+
+    @Override
+    public Set<ChiselRenderType> getRenderTypes(
+            @NotNull BlockAndTintGetter world,
+            @NotNull BlockPos pos,
+            @NotNull BlockState state,
+            @NotNull IModelData modelData) {
+        return Set.of();
+    }
 }

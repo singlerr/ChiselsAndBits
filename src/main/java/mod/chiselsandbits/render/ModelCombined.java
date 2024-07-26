@@ -107,7 +107,8 @@ public class ModelCombined extends BaseBakedBlockModel {
             @Nullable BlockState state,
             @Nullable Direction side,
             @NotNull RandomSource rand,
-            @NotNull IModelData extraData) {
+            @NotNull IModelData extraData,
+            @NotNull ChiselRenderType renderType) {
         if (side != null) {
             return face[side.ordinal()];
         }
@@ -121,4 +122,13 @@ public class ModelCombined extends BaseBakedBlockModel {
             @NotNull BlockPos pos,
             @NotNull BlockState state,
             @NotNull IModelData modelData) {}
+
+    @Override
+    public Set<ChiselRenderType> getRenderTypes(
+            @NotNull BlockAndTintGetter world,
+            @NotNull BlockPos pos,
+            @NotNull BlockState state,
+            @NotNull IModelData modelData) {
+        return renderTypes == null ? Set.of() : renderTypes;
+    }
 }

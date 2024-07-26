@@ -22,9 +22,9 @@ import mod.chiselsandbits.helpers.IVoxelSrc;
 import mod.chiselsandbits.helpers.LocalStrings;
 import mod.chiselsandbits.helpers.ModUtil;
 import mod.chiselsandbits.items.ItemChiseledBit;
-import mod.chiselsandbits.utils.RenderTypeUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -47,7 +47,6 @@ public final class VoxelBlob implements IVoxelSrc {
 
     static {
         fluidFilterState = new BitSet(4096);
-        clearCache();
     }
 
     public static synchronized void clearCache() {
@@ -84,31 +83,20 @@ public final class VoxelBlob implements IVoxelSrc {
             if (block instanceof LiquidBlock) {
                 continue;
             }
-
             for (final BlockState state : block.getStateDefinition().getPossibleStates()) {
                 final int id = ModUtil.getStateId(state);
                 if (state == null || state.getBlock() != block) {
                     // reverse mapping is broken, so just skip over this state.
                     continue;
                 }
-
-                for (final RenderType layer : RenderType.chunkBufferLayers()) {
-                    if (RenderTypeUtils.canRenderInLayer(state, layer)) {
-                        layerFilters.get(layer).set(id);
-                    }
-                }
+                layerFilters.get(ItemBlockRenderTypes.getChunkRenderType(state)).set(id);
             }
         }
 
         for (final Fluid fluid : BuiltInRegistries.FLUID) {
             for (final FluidState state : fluid.getStateDefinition().getPossibleStates()) {
                 final int id = ModUtil.getStateId(state.createLegacyBlock());
-
-                for (final RenderType layer : RenderType.chunkBufferLayers()) {
-                    if (RenderTypeUtils.canRenderInLayer(state, layer)) {
-                        layerFilters.get(layer).set(id);
-                    }
-                }
+                layerFilters.get(ItemBlockRenderTypes.getRenderLayer(state)).set(id);
             }
         }
     }
@@ -801,10 +789,7 @@ public final class VoxelBlob implements IVoxelSrc {
                 continue;
             }
 
-            if (!layerFilterState.get(ref)) {
-                values[x] = 0;
-                noneAir.clear(x);
-            } else {
+            if (layerFilterState.get(ref)) {
                 hasValues = true;
                 break;
             }

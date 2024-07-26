@@ -3,16 +3,16 @@
 	"id": "chiselsandbits",
 	"version": "${version}",
 	"name": "chiselsandbits",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "a mod about Sculpting, Decorating and Aesthetics. Ported to 1.20.4 by singlerr",
 	"authors": [
-		"Me!"
+		"OrionOnline, LDTTeam, AlgorithmX2, singlerr"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/singlerr",
+		"sources": "https://github.com/singlerr"
 	},
 	"accessWidener": "chiselsandbits.accesswidener",
-	"license": "CC0-1.0",
+	"license": "All rights reserved",
 	"icon": "assets/chiselsandbits/icon.png",
 	"environment": "*",
 	"entrypoints": {

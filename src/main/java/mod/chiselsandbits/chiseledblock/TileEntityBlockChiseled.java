@@ -2,6 +2,7 @@ package mod.chiselsandbits.chiseledblock;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import mod.chiselsandbits.api.*;
@@ -20,6 +21,7 @@ import mod.chiselsandbits.helpers.ModUtil;
 import mod.chiselsandbits.interfaces.IChiseledTileContainer;
 import mod.chiselsandbits.registry.ModBlocks;
 import mod.chiselsandbits.registry.ModTileEntityTypes;
+import mod.chiselsandbits.render.chiseledblock.ChiselRenderType;
 import mod.chiselsandbits.render.chiseledblock.ChiseledBlockSmartModel;
 import mod.chiselsandbits.utils.SingleBlockBlockReader;
 import net.fabricmc.api.EnvType;
@@ -49,12 +51,14 @@ public class TileEntityBlockChiseled extends BlockEntity
         implements IChiseledTileContainer, IChiseledBlockTileEntity, ModelDataAccess {
     public static final ModelProperty<VoxelBlobStateReference> MP_VBSR = new ModelProperty<>();
     public static final ModelProperty<Integer> MP_PBSI = new ModelProperty<>();
-    public static final ModelProperty<BakedModel> MODEL_PROP = new ModelProperty<>();
+    public static final ModelProperty<Map<ChiselRenderType, BakedModel>> MODEL_PROP = new ModelProperty<>();
     public static final ModelProperty<Boolean> MODEL_UPDATE = new ModelProperty<>();
 
     private final BlockEntityType<?> blockEntityType;
 
     private IModelData modelData = newModelData();
+
+    private boolean renderUpdate = false;
 
     public TileEntityBlockChiseled(BlockPos pos, BlockState state) {
         this(ModTileEntityTypes.CHISELED.get(), pos, state);
@@ -82,8 +86,10 @@ public class TileEntityBlockChiseled extends BlockEntity
     }
 
     private void setBlobStateReference(final VoxelBlobStateReference blobStateReference) {
-        if (this.blobStateReference == null || !this.blobStateReference.equals(blobStateReference))
+        if (this.blobStateReference == null || !this.blobStateReference.equals(blobStateReference)) {
             this.blobStateReference = blobStateReference;
+            modelData.setData(MP_VBSR, blobStateReference);
+        }
     }
 
     public int getPrimaryBlockStateId() {
@@ -92,7 +98,7 @@ public class TileEntityBlockChiseled extends BlockEntity
 
     public void setPrimaryBlockStateId(final int primaryBlockStateId) {
         this.primaryBlockStateId = primaryBlockStateId;
-
+        modelData.setData(MP_PBSI, primaryBlockStateId);
         setLightFromBlock(ModUtil.getStateById(primaryBlockStateId));
     }
 
@@ -150,6 +156,7 @@ public class TileEntityBlockChiseled extends BlockEntity
             ChiselsAndBitsEvents.BLOCK_BIT_POST_MODIFICATION.invoker().handle(bmm);
             setBlobStateReference(newRef);
         }
+        modelData.setData(MODEL_UPDATE, true);
     }
 
     @Override
@@ -351,7 +358,6 @@ public class TileEntityBlockChiseled extends BlockEntity
     }
 
     public void setBlob(final VoxelBlob vb, final boolean triggerUpdates) {
-        modelData.setData(MODEL_UPDATE, true);
         final int olv = getLightValue();
         final boolean oldNC = isNormalCube();
 
@@ -431,6 +437,14 @@ public class TileEntityBlockChiseled extends BlockEntity
                 level.setBlockAndUpdate(worldPosition, state.setValue(BlockChiseled.FULL_BLOCK, isNormalCube));
             }
         }
+    }
+
+    public boolean shouldRenderUpdate() {
+        return renderUpdate;
+    }
+
+    public void setShouldRenderUpdate(boolean renderUpdate) {
+        this.renderUpdate = renderUpdate;
     }
 
     private static class ItemStackGeneratedCache {
@@ -519,6 +533,7 @@ public class TileEntityBlockChiseled extends BlockEntity
     }
 
     public void completeEditOperation(final VoxelBlob vb) {
+        modelData.setData(MODEL_UPDATE, true);
         final VoxelBlobStateReference before = getBlobStateReference();
         setBlob(vb);
         final VoxelBlobStateReference after = getBlobStateReference();

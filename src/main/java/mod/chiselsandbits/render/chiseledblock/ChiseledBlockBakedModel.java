@@ -3,10 +3,7 @@ package mod.chiselsandbits.render.chiseledblock;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import mod.chiselsandbits.chiseledblock.data.VoxelBlob;
 import mod.chiselsandbits.chiseledblock.data.VoxelBlob.VisibleFace;
 import mod.chiselsandbits.client.culling.ICullTest;
@@ -720,7 +717,8 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
             @Nullable BlockState state,
             @Nullable Direction side,
             @NotNull RandomSource rand,
-            @NotNull IModelData extraData) {
+            @NotNull IModelData extraData,
+            @NotNull ChiselRenderType renderType) {
         return getQuads(state, side, rand);
     }
 
@@ -730,4 +728,13 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
             @NotNull BlockPos pos,
             @NotNull BlockState state,
             @NotNull IModelData modelData) {}
+
+    @Override
+    public Set<ChiselRenderType> getRenderTypes(
+            @NotNull BlockAndTintGetter world,
+            @NotNull BlockPos pos,
+            @NotNull BlockState state,
+            @NotNull IModelData modelData) {
+        return Set.of(myLayer);
+    }
 }

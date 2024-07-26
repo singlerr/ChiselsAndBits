@@ -4,6 +4,7 @@ import java.util.List;
 import mod.chiselsandbits.client.model.data.IModelData;
 import mod.chiselsandbits.core.ClientSide;
 import mod.chiselsandbits.render.NullBakedModel;
+import mod.chiselsandbits.render.chiseledblock.ChiselRenderType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -91,10 +92,11 @@ public abstract class BaseSmartModel implements DataAwareBakedModel {
             @Nullable final BlockState state,
             @Nullable final Direction side,
             @NotNull final RandomSource rand,
-            @NotNull final IModelData extraData) {
+            @NotNull final IModelData extraData,
+            @NotNull final ChiselRenderType renderType) {
 
-        final DataAwareBakedModel model = (DataAwareBakedModel) handleBlockState(state, rand, extraData);
-        return model.getQuads(state, side, rand, extraData);
+        final DataAwareBakedModel model = (DataAwareBakedModel) handleBlockState(state, rand, extraData, renderType);
+        return model.getQuads(state, side, rand, extraData, renderType);
     }
 
     @Override
@@ -108,7 +110,11 @@ public abstract class BaseSmartModel implements DataAwareBakedModel {
         return NullBakedModel.instance;
     }
 
-    public BakedModel handleBlockState(final BlockState state, final RandomSource random, final IModelData modelData) {
+    public BakedModel handleBlockState(
+            final BlockState state,
+            final RandomSource random,
+            final IModelData modelData,
+            ChiselRenderType renderType) {
         return NullBakedModel.instance;
     }
 
