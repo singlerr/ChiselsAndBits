@@ -8,6 +8,7 @@ import mod.chiselsandbits.api.*;
 import mod.chiselsandbits.api.APIExceptions.SpaceOccupied;
 import mod.chiselsandbits.chiseledblock.BlockChiseled;
 import mod.chiselsandbits.chiseledblock.BlockChiseled.ReplaceWithChiseledValue;
+import mod.chiselsandbits.chiseledblock.ItemBlockChiseled;
 import mod.chiselsandbits.chiseledblock.NBTBlobConverter;
 import mod.chiselsandbits.chiseledblock.TileEntityBlockChiseled;
 import mod.chiselsandbits.chiseledblock.data.BitIterator;
@@ -134,7 +135,9 @@ public class BitAccess implements IBitAccess {
                 return ModUtil.getEmptyStack();
             }
 
-            stack = new ItemStack(blk, 1);
+            ItemBlockChiseled item = ModItems.ITEM_CHISELED_BLOCK.get();
+
+            stack = new ItemStack(item, 1);
             stack.addTagElement(ModUtil.NBT_BLOCKENTITYTAG, nbttagcompound);
         } else {
             switch (type) {

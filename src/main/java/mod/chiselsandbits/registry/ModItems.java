@@ -2,6 +2,7 @@ package mod.chiselsandbits.registry;
 
 import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
 import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
+import mod.chiselsandbits.chiseledblock.ItemBlockChiseled;
 import mod.chiselsandbits.core.ChiselsAndBits;
 import mod.chiselsandbits.items.*;
 import net.minecraft.core.registries.Registries;
@@ -16,6 +17,9 @@ public final class ModItems {
     private ModItems() {
         throw new IllegalStateException("Tried to initialize: ModItems but this is a Utility class.");
     }
+
+    public static final RegistryObject<ItemBlockChiseled> ITEM_CHISELED_BLOCK = ITEM_REGISTRAR.register(
+            "chiseled_block", () -> new ItemBlockChiseled(ModBlocks.CHISELED_BLOCK.get(), new Item.Properties()));
 
     public static final RegistryObject<ItemChisel> ITEM_CHISEL_STONE =
             ITEM_REGISTRAR.register("chisel_stone", () -> new ItemChisel(Tiers.STONE, new Item.Properties()));

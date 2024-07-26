@@ -139,6 +139,7 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
         return super.getFriction();
     }
 
+    // TODO(This fix stained glass render?)
     @Environment(EnvType.CLIENT)
     @Override
     public float getShadeBrightness(final BlockState state, final BlockGetter worldIn, final BlockPos pos) {

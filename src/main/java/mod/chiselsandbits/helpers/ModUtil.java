@@ -140,6 +140,21 @@ public class ModUtil {
         };
     }
 
+    public static RenderType get(BlockState state) {
+        if (!state.getFluidState().isEmpty()) {
+            return ItemBlockRenderTypes.getRenderLayer(state.getFluidState());
+        }
+        return ItemBlockRenderTypes.getChunkRenderType(state);
+    }
+
+    public static Set<RenderType> extractRenderTypes(VoxelBlob blob) {
+        return getAllStates(blob).stream()
+                .map(ModUtil::getStateById)
+                .filter(state -> !state.isAir())
+                .map(ModUtil::get)
+                .collect(Collectors.toSet());
+    }
+
     public static Set<ChiselRenderType> getAllRenderTypes(VoxelBlob blob) {
         return getAllStates(blob).stream()
                 .flatMap(id -> Stream.of(getRenderType(ModUtil.getStateById(id))))

@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 import mod.chiselsandbits.chiseledblock.NBTBlobConverter;
 import mod.chiselsandbits.chiseledblock.TileEntityBlockChiseled;
 import mod.chiselsandbits.chiseledblock.data.VoxelBlob;
@@ -237,17 +238,25 @@ public class ChiseledBlockSmartModel extends BaseSmartModel implements ICacheCle
 
             vdata = xx.blobToBytes(VoxelBlob.VERSION_COMPACT_PALLETED);
         }
-
-        final BakedModel[] models = new BakedModel[ChiselRenderType.values().length];
-        for (final ChiselRenderType l : ChiselRenderType.values()) {
-            models[l.ordinal()] = getCachedModel(
-                    blockP,
-                    new VoxelBlobStateReference(vdata, 0L).getVoxelBlob(),
-                    l,
-                    DefaultVertexFormat.BLOCK,
-                    RandomSource.create());
-        }
-
+        byte[] finalVdata = vdata;
+        final BakedModel[] models =
+                ModUtil.extractRenderTypes(new VoxelBlobStateReference(vdata, 0L).getVoxelBlob()).stream()
+                        .flatMap(renderType -> {
+                            BakedModel solidModel = getCachedModel(
+                                    blockP,
+                                    new VoxelBlobStateReference(finalVdata, 0L).getVoxelBlob(),
+                                    ChiselRenderType.fromLayer(renderType, false),
+                                    DefaultVertexFormat.BLOCK,
+                                    RANDOM_SOURCE);
+                            BakedModel fluidModel = getCachedModel(
+                                    blockP,
+                                    new VoxelBlobStateReference(finalVdata, 0L).getVoxelBlob(),
+                                    ChiselRenderType.fromLayer(renderType, true),
+                                    DefaultVertexFormat.BLOCK,
+                                    RANDOM_SOURCE);
+                            return Stream.of(solidModel, fluidModel);
+                        })
+                        .toArray(BakedModel[]::new);
         mdl = new ModelCombined(models);
 
         ITEM_TO_MODEL_CACHE.put(stack, mdl);
