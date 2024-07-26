@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "chiselsandbits",
+  "pattern": [
+    "cg ",
+    "s  ",
+    "   "
+  ],
+  "key": {
+    "c": {
+      "tag": "chiselsandbits:chisel"
+    },
+    "g": {
+      "tag": "forge:glass"
+    },
+    "s": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "result": {
+    "count": 1,
+    "item": "chiselsandbits:magnifying_glass"
+  }
+}

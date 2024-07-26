@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "chiselsandbits",
+  "pattern": [
+    "sss",
+    "stt",
+    "   "
+  ],
+  "key": {
+    "s": {
+      "tag": "forge:rods/wooden"
+    },
+    "t": {
+      "tag": "forge:ingots/gold"
+    }
+  },
+  "result": {
+    "count": 1,
+    "item": "chiselsandbits:bitsaw_gold"
+  }
+}

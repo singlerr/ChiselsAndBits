@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "chiselsandbits",
+  "ingredients": [
+    {
+      "item": "chiselsandbits:positiveprint"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "item": "chiselsandbits:positiveprint"
+  }
+}

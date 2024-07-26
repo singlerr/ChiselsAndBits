@@ -1,0 +1,36 @@
+{
+  "parent": "chiselsandbits:chiselsandbits/root",
+  "display": {
+    "icon": {
+      "item": "chiselsandbits:bit_bag"
+    },
+    "title": {
+      "translate": "mod.chiselsandbits.advancements.collect-bits.title"
+    },
+    "description": {
+      "translate": "mod.chiselsandbits.advancements.collect-bits.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
+  },
+  "criteria": {
+    "bit_bag": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "chiselsandbits:bit_bag"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "bit_bag"
+    ]
+  ]
+}

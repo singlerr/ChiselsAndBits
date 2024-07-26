@@ -1,0 +1,36 @@
+{
+  "parent": "chiselsandbits:chiselsandbits/root",
+  "display": {
+    "icon": {
+      "item": "chiselsandbits:bit_storage"
+    },
+    "title": {
+      "translate": "mod.chiselsandbits.advancements.make-tank.title"
+    },
+    "description": {
+      "translate": "mod.chiselsandbits.advancements.make-tank.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
+  },
+  "criteria": {
+    "bit_tank": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "chiselsandbits:bit_storage"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "bit_tank"
+    ]
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "chiselsandbits",
+  "pattern": [
+    "sss",
+    "stt",
+    "   "
+  ],
+  "key": {
+    "s": {
+      "tag": "forge:rods/blaze"
+    },
+    "t": {
+      "tag": "forge:ingots/netherite"
+    }
+  },
+  "result": {
+    "count": 1,
+    "item": "chiselsandbits:bitsaw_netherite"
+  }
+}

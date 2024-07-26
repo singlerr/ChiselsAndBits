@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "chiselsandbits",
+  "pattern": [
+    "sss",
+    "sdd",
+    "   "
+  ],
+  "key": {
+    "s": {
+      "tag": "forge:rods/wooden"
+    },
+    "d": {
+      "tag": "forge:gems/diamond"
+    }
+  },
+  "result": {
+    "count": 1,
+    "item": "chiselsandbits:bitsaw_diamond"
+  }
+}

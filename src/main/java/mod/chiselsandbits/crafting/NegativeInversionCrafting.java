@@ -3,7 +3,6 @@ package mod.chiselsandbits.crafting;
 import mod.chiselsandbits.chiseledblock.NBTBlobConverter;
 import mod.chiselsandbits.chiseledblock.data.VoxelBlob;
 import mod.chiselsandbits.helpers.ModUtil;
-import mod.chiselsandbits.items.ItemNegativePrint;
 import mod.chiselsandbits.registry.ModItems;
 import mod.chiselsandbits.registry.ModRecipeSerializers;
 import net.minecraft.core.NonNullList;
@@ -38,7 +37,7 @@ public class NegativeInversionCrafting extends CustomRecipe {
                 continue;
             }
 
-            if (f.getItem() instanceof ItemNegativePrint) {
+            if (f.getItem().equals(ModItems.ITEM_NEGATIVE_PRINT.get())) {
                 if (ModItems.ITEM_NEGATIVE_PRINT.get().isWritten(f)) {
                     if (targetA != null) {
                         return null;
@@ -73,7 +72,7 @@ public class NegativeInversionCrafting extends CustomRecipe {
             final CompoundTag comp = ModUtil.getTagCompound(targetA).copy();
             tmp.writeChisleData(comp, false);
 
-            final ItemStack outputPattern = new ItemStack(targetA.getItem());
+            final ItemStack outputPattern = new ItemStack(ModItems.ITEM_NEGATIVE_PRINT_WRITTEN.get());
             outputPattern.setTag(comp);
 
             return outputPattern;

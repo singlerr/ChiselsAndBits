@@ -3,15 +3,13 @@ package mod.chiselsandbits.crafting;
 import mod.chiselsandbits.chiseledblock.NBTBlobConverter;
 import mod.chiselsandbits.chiseledblock.data.VoxelBlob;
 import mod.chiselsandbits.helpers.ModUtil;
-import mod.chiselsandbits.items.ItemMirrorPrint;
-import mod.chiselsandbits.items.ItemNegativePrint;
-import mod.chiselsandbits.items.ItemPositivePrint;
 import mod.chiselsandbits.registry.ModItems;
 import mod.chiselsandbits.registry.ModRecipeSerializers;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
@@ -42,7 +40,7 @@ public class MirrorTransferCrafting extends CustomRecipe {
                 continue;
             }
 
-            if (f.getItem() instanceof ItemMirrorPrint) {
+            if (f.getItem().equals(ModItems.ITEM_MIRROR_PRINT_WRITTEN.get())) {
                 if (ModItems.ITEM_MIRROR_PRINT.get().isWritten(f)) {
                     if (targetA != null) {
                         return null;
@@ -52,7 +50,7 @@ public class MirrorTransferCrafting extends CustomRecipe {
                 } else {
                     return null;
                 }
-            } else if (f.getItem() instanceof ItemNegativePrint) {
+            } else if (f.getItem().equals(ModItems.ITEM_NEGATIVE_PRINT.get())) {
                 if (!ModItems.ITEM_NEGATIVE_PRINT.get().isWritten(f)) {
                     if (targetB != null) {
                         return null;
@@ -63,7 +61,7 @@ public class MirrorTransferCrafting extends CustomRecipe {
                 } else {
                     return null;
                 }
-            } else if (f.getItem() instanceof ItemPositivePrint) {
+            } else if (f.getItem().equals(ModItems.ITEM_POSITIVE_PRINT.get())) {
                 if (!ModItems.ITEM_POSITIVE_PRINT.get().isWritten(f)) {
                     if (targetB != null) {
                         return null;
@@ -98,7 +96,13 @@ public class MirrorTransferCrafting extends CustomRecipe {
             final CompoundTag comp = ModUtil.getTagCompound(targetA).copy();
             tmp.writeChisleData(comp, false);
 
-            final ItemStack outputPattern = new ItemStack(targetB.getItem());
+            Item resultItem;
+
+            if (targetB.getItem().equals(ModItems.ITEM_NEGATIVE_PRINT.get()))
+                resultItem = ModItems.ITEM_NEGATIVE_PRINT_WRITTEN.get();
+            else resultItem = ModItems.ITEM_POSITIVE_PRINT_WRITTEN.get();
+
+            final ItemStack outputPattern = new ItemStack(resultItem);
             outputPattern.setTag(comp);
 
             return outputPattern;

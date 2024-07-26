@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "chiselsandbits",
+  "pattern": [
+    "  s",
+    "isy",
+    "ii "
+  ],
+  "key": {
+    "i": {
+      "tag": "forge:ingots/iron"
+    },
+    "s": {
+      "tag": "forge:string"
+    },
+    "y": {
+      "tag": "forge:dyes/yellow"
+    }
+  },
+  "result": {
+    "count": 1,
+    "item": "chiselsandbits:tape_measure"
+  }
+}
