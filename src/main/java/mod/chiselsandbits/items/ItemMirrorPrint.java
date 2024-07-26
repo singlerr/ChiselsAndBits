@@ -66,10 +66,6 @@ public class ItemMirrorPrint extends Item implements IPatternItem {
 
     @Override
     public String getDescriptionId(final ItemStack stack) {
-        if (isWritten(stack)) {
-            return super.getDescriptionId(stack) + "_written";
-        }
-
         return super.getDescriptionId(stack);
     }
 
