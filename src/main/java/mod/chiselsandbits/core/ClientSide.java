@@ -1240,7 +1240,7 @@ public class ClientSide {
             modelBounds = blob.getBounds();
 
             fail:
-            if (refItem.getItem() == ModItems.ITEM_NEGATIVE_PRINT.get()) {
+            if (refItem.getItem() == ModItems.ITEM_NEGATIVE_PRINT_WRITTEN.get()) {
                 final VoxelBlob pattern = blob;
 
                 if (cacheRef instanceof VoxelBlobStateReference) {
