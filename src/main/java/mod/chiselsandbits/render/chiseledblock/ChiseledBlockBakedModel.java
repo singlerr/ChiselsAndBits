@@ -291,7 +291,7 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
                 offsetVec(from, region.getMinX(), region.getMinY(), region.getMinZ(), myFace, -1);
                 final ModelQuadLayer[] mpc =
                         ModelUtil.getCachedFace(region.blockStateID, weight, myFace, myLayer.layer);
-
+                final float maxLightmap = 32.0f / 0xffff;
                 if (mpc != null) {
                     for (final ModelQuadLayer pc : mpc) {
                         final IFaceBuilder faceBuilder = pc.light > 0 ? litBuilder : darkBuilder;
@@ -336,11 +336,17 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
                                         break;
 
                                     case UV:
-                                        int uIndex = faceVertMap[myFace.get3DDataValue()][vertNum] * 2 + 0;
-                                        int vIndex = faceVertMap[myFace.get3DDataValue()][vertNum] * 2 + 1;
-                                        float u = pc.sprite.getU(uvs[uIndex] / 16f);
-                                        float v = pc.sprite.getV(uvs[vIndex] / 16f);
-                                        faceBuilder.put(vertNum, elementIndex, u, v);
+                                        if (element.getIndex() == 2) {
+                                            final float v = maxLightmap * Math.max(0, Math.min(15, pc.light));
+                                            faceBuilder.put(vertNum, elementIndex, v, v);
+                                        } else {
+                                            int uIndex = faceVertMap[myFace.get3DDataValue()][vertNum] * 2 + 0;
+                                            int vIndex = faceVertMap[myFace.get3DDataValue()][vertNum] * 2 + 1;
+                                            float u = pc.sprite.getU(uvs[uIndex] / 16f);
+                                            float v = pc.sprite.getV(uvs[vIndex] / 16f);
+                                            faceBuilder.put(vertNum, elementIndex, u, v);
+                                        }
+
                                         break;
                                     default:
                                         faceBuilder.put(vertNum, elementIndex);
