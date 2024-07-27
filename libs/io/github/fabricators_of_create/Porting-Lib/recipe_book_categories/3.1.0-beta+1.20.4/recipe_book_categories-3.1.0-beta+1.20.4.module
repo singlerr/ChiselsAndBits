@@ -1,0 +1,126 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "io.github.fabricators_of_create.Porting-Lib",
+    "module": "recipe_book_categories",
+    "version": "3.1.0-beta+1.20.4",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.6"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "io.github.fabricators_of_create.Porting-Lib",
+          "module": "core",
+          "version": {
+            "requires": "3.1.0-beta+1.20.4"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "recipe_book_categories-3.1.0-beta+1.20.4.jar",
+          "url": "recipe_book_categories-3.1.0-beta+1.20.4.jar",
+          "size": 189779,
+          "sha512": "c5d3fa3b976ad97f3f3dbfa870d04c7b361d24748fe6123f71899fae3fc3e48f9a00acf813c50abd171c5debacd85ed9f7314deb4268663dfde48797eb232ee7",
+          "sha256": "a99921dda64ce20394be2fac760e207447f330abad5c9d033869afd7e3ce0748",
+          "sha1": "0aaaaa6ddc16bf29d347094ee19546d1b426d674",
+          "md5": "67cea565d533161f4dc1dd39b0f9f80b"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "javax.annotation",
+          "module": "javax.annotation-api",
+          "version": {
+            "requires": "1.3.2"
+          }
+        },
+        {
+          "group": "com.google.code.findbugs",
+          "module": "jsr305",
+          "version": {
+            "requires": "3.0.2"
+          }
+        },
+        {
+          "group": "io.github.fabricators_of_create.Porting-Lib",
+          "module": "core",
+          "version": {
+            "requires": "3.1.0-beta+1.20.4"
+          }
+        },
+        {
+          "group": "net.fabricmc",
+          "module": "fabric-loader",
+          "version": {
+            "requires": "0.15.7"
+          }
+        },
+        {
+          "group": "net.fabricmc.fabric-api",
+          "module": "fabric-api",
+          "version": {
+            "requires": "0.96.4+1.20.4"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "recipe_book_categories-3.1.0-beta+1.20.4.jar",
+          "url": "recipe_book_categories-3.1.0-beta+1.20.4.jar",
+          "size": 189779,
+          "sha512": "c5d3fa3b976ad97f3f3dbfa870d04c7b361d24748fe6123f71899fae3fc3e48f9a00acf813c50abd171c5debacd85ed9f7314deb4268663dfde48797eb232ee7",
+          "sha256": "a99921dda64ce20394be2fac760e207447f330abad5c9d033869afd7e3ce0748",
+          "sha1": "0aaaaa6ddc16bf29d347094ee19546d1b426d674",
+          "md5": "67cea565d533161f4dc1dd39b0f9f80b"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "recipe_book_categories-3.1.0-beta+1.20.4-sources.jar",
+          "url": "recipe_book_categories-3.1.0-beta+1.20.4-sources.jar",
+          "size": 5884,
+          "sha512": "4464deb73ec039b197855603c5b875ce70ed043d485afd15aa86824410c1cb2a49def4f8e37deac75bb049946f92798cb017654fb1f9312e1c57d2957a567005",
+          "sha256": "9cb2cfe9d8f0c0d4c532f2e9f140ff330f7924d9cad59a95b0bdde1f9434f465",
+          "sha1": "dc041267dac889f5ade0ea96d27a64f63583123b",
+          "md5": "604cf6d5d38880c135ba8fd115d4a693"
+        }
+      ]
+    }
+  ]
+}

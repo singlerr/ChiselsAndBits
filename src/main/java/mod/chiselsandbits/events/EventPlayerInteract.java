@@ -44,7 +44,6 @@ public class EventPlayerInteract {
     }
 
     private static void interaction(final PlayerInteractionEvents.LeftClickBlock event) {
-
         if (event.getPlayer() != null && event.getUseItem() == BaseEvent.Result.DENY) {
             final ItemStack is = event.getItemStack();
             final boolean validEvent = event.getPos() != null && event.getLevel() != null;

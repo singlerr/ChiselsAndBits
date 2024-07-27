@@ -130,8 +130,7 @@ public class ItemChisel extends DiggerItem implements IItemScrollWheel, IChiselM
                             new ClipContext(ray_from, ray_to, ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, player);
 
                     final HitResult mop = player.level.clip(context);
-                    if (mop != null && mop instanceof BlockHitResult) {
-                        final BlockHitResult rayTraceResult = (BlockHitResult) mop;
+                    if (mop != null && mop instanceof BlockHitResult rayTraceResult) {
                         final BitLocation loc = new BitLocation(rayTraceResult, BitOperation.CHISEL);
                         ClientSide.instance.pointAt(ChiselToolType.CHISEL, loc, hand);
                         return true;

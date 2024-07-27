@@ -1,0 +1,126 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "io.github.fabricators_of_create.Porting-Lib",
+    "module": "fluids",
+    "version": "3.1.0-beta+1.20.4",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.6"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "io.github.fabricators_of_create.Porting-Lib",
+          "module": "core",
+          "version": {
+            "requires": "3.1.0-beta+1.20.4"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "fluids-3.1.0-beta+1.20.4.jar",
+          "url": "fluids-3.1.0-beta+1.20.4.jar",
+          "size": 231466,
+          "sha512": "e85ed6bd50ec7108970d11e38ce413e398a058907d9644a676fa6023f42fcdb02a3320f9a11b02fc381ed68f63e07a6efba3bdf308d697f36bbd39c2b34d20ea",
+          "sha256": "2ad84d096c8e5d0edde27692a740eb7dfe4e80cadd601a866a8fbaff58f687c2",
+          "sha1": "0276dbb4aacfc82ce7b60a0b68d18f5b0fe3cd12",
+          "md5": "921d4ccaf1be8faf61ece5fe0c007af8"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "javax.annotation",
+          "module": "javax.annotation-api",
+          "version": {
+            "requires": "1.3.2"
+          }
+        },
+        {
+          "group": "com.google.code.findbugs",
+          "module": "jsr305",
+          "version": {
+            "requires": "3.0.2"
+          }
+        },
+        {
+          "group": "io.github.fabricators_of_create.Porting-Lib",
+          "module": "core",
+          "version": {
+            "requires": "3.1.0-beta+1.20.4"
+          }
+        },
+        {
+          "group": "net.fabricmc",
+          "module": "fabric-loader",
+          "version": {
+            "requires": "0.15.7"
+          }
+        },
+        {
+          "group": "net.fabricmc.fabric-api",
+          "module": "fabric-api",
+          "version": {
+            "requires": "0.96.4+1.20.4"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "fluids-3.1.0-beta+1.20.4.jar",
+          "url": "fluids-3.1.0-beta+1.20.4.jar",
+          "size": 231466,
+          "sha512": "e85ed6bd50ec7108970d11e38ce413e398a058907d9644a676fa6023f42fcdb02a3320f9a11b02fc381ed68f63e07a6efba3bdf308d697f36bbd39c2b34d20ea",
+          "sha256": "2ad84d096c8e5d0edde27692a740eb7dfe4e80cadd601a866a8fbaff58f687c2",
+          "sha1": "0276dbb4aacfc82ce7b60a0b68d18f5b0fe3cd12",
+          "md5": "921d4ccaf1be8faf61ece5fe0c007af8"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "fluids-3.1.0-beta+1.20.4-sources.jar",
+          "url": "fluids-3.1.0-beta+1.20.4-sources.jar",
+          "size": 29233,
+          "sha512": "98b12e6a7793d292a306d26562601bd15d7d6d2121ddce5b1a36ab94ef2eb7ff9b986a6707d79e0a607507bde98d03faaaac9fece47835455272f3ea5ee5af4e",
+          "sha256": "4265f4c7558e9f8d77891dda3bac59d394f7cfe6bda73806248b5bbdc5c70309",
+          "sha1": "a4ed9c2be76cd23bd70d1f15865186645ca93977",
+          "md5": "4eda7e5652774ea4ca6cef833846eaf2"
+        }
+      ]
+    }
+  ]
+}

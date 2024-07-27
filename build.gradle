@@ -12,8 +12,18 @@ base {
 }
 
 repositories {
-	mavenLocal()
 	mavenCentral()
+	exclusiveContent {
+		forRepository {
+			maven{
+				url = "file:///${project.projectDir}/libs"
+			}
+		}
+		filter {
+			includeGroup "io.github.feltmc"
+			includeGroup "io.github.fabricators_of_create.Porting-Lib"
+		}
+	}
 	maven { url = "https://mvn.devos.one/releases/" }
 	maven {
 		name = "Fuzs Mod Resources"
@@ -34,7 +44,7 @@ repositories {
 	}
 	maven {
 		name = "Jitpack"
-		url 'https://jitpack.io/'
+		url = 'https://jitpack.io/'
 	}
 	exclusiveContent {
 		forRepository {
@@ -59,26 +69,22 @@ loom{
 
 
 dependencies {
-	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings loom.officialMojangMappings()
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	def portingLibModules = porting_lib_modules.split(",")
 
+	def portingLibModules = porting_lib_modules.split(",")
 	for (final def module in portingLibModules) {
 		include modImplementation("io.github.fabricators_of_create.Porting-Lib:${module}:${porting_lib_version}")
 	}
-
 	include modApi("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${config_api_version}")
 	include modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${reach_distance_api_version}")
 	include modImplementation("com.communi-suggestu.saecularia-caudices:saecularia-caudices-fabric:${saeculariaCaudicesVersion}")
+	include modImplementation("io.github.feltmc:fabricated-forge-caps:${forge_caps_version}")
 	modImplementation("maven.modrinth:modernkeybinding:1.20.4-1.3.0"){
 		transitive = false
 	}
-	modImplementation(fileTree(dir: 'libs', includes:['*.jar']))
 	implementation 'javax.annotation:javax.annotation-api:1.3.2'
 	implementation 'com.google.code.findbugs:jsr305:3.0.2'
 }

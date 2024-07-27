@@ -1,0 +1,168 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "io.github.fabricators_of_create.Porting-Lib",
+    "module": "extensions",
+    "version": "3.1.0-beta+1.20.4",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.6"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "io.github.fabricators_of_create.Porting-Lib",
+          "module": "core",
+          "version": {
+            "requires": "3.1.0-beta+1.20.4"
+          }
+        },
+        {
+          "group": "io.github.fabricators_of_create.Porting-Lib",
+          "module": "attributes",
+          "version": {
+            "requires": "3.1.0-beta+1.20.4"
+          }
+        },
+        {
+          "group": "io.github.fabricators_of_create.Porting-Lib",
+          "module": "accessors",
+          "version": {
+            "requires": "3.1.0-beta+1.20.4"
+          }
+        },
+        {
+          "group": "io.github.fabricators_of_create.Porting-Lib",
+          "module": "common",
+          "version": {
+            "requires": "3.1.0-beta+1.20.4"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "extensions-3.1.0-beta+1.20.4.jar",
+          "url": "extensions-3.1.0-beta+1.20.4.jar",
+          "size": 566154,
+          "sha512": "e5ef38087c31102dcdb1ac3b79a5a77a068c1f7e2161edfc04f262c493b3d5d6037896747430c087d85cae40532fe595349b18194b998afbb7bba7df22b477f2",
+          "sha256": "4f57bdd15cde4c119d9f93135a2d02882c02451f167284e3c672969bebf6a263",
+          "sha1": "c0e909ef2e12f155634661adc147e880178812c6",
+          "md5": "7d9826eadd1795b5761dd491bb89043d"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "javax.annotation",
+          "module": "javax.annotation-api",
+          "version": {
+            "requires": "1.3.2"
+          }
+        },
+        {
+          "group": "com.google.code.findbugs",
+          "module": "jsr305",
+          "version": {
+            "requires": "3.0.2"
+          }
+        },
+        {
+          "group": "io.github.fabricators_of_create.Porting-Lib",
+          "module": "core",
+          "version": {
+            "requires": "3.1.0-beta+1.20.4"
+          }
+        },
+        {
+          "group": "io.github.fabricators_of_create.Porting-Lib",
+          "module": "attributes",
+          "version": {
+            "requires": "3.1.0-beta+1.20.4"
+          }
+        },
+        {
+          "group": "io.github.fabricators_of_create.Porting-Lib",
+          "module": "accessors",
+          "version": {
+            "requires": "3.1.0-beta+1.20.4"
+          }
+        },
+        {
+          "group": "io.github.fabricators_of_create.Porting-Lib",
+          "module": "common",
+          "version": {
+            "requires": "3.1.0-beta+1.20.4"
+          }
+        },
+        {
+          "group": "net.fabricmc",
+          "module": "fabric-loader",
+          "version": {
+            "requires": "0.15.7"
+          }
+        },
+        {
+          "group": "net.fabricmc.fabric-api",
+          "module": "fabric-api",
+          "version": {
+            "requires": "0.96.4+1.20.4"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "extensions-3.1.0-beta+1.20.4.jar",
+          "url": "extensions-3.1.0-beta+1.20.4.jar",
+          "size": 566154,
+          "sha512": "e5ef38087c31102dcdb1ac3b79a5a77a068c1f7e2161edfc04f262c493b3d5d6037896747430c087d85cae40532fe595349b18194b998afbb7bba7df22b477f2",
+          "sha256": "4f57bdd15cde4c119d9f93135a2d02882c02451f167284e3c672969bebf6a263",
+          "sha1": "c0e909ef2e12f155634661adc147e880178812c6",
+          "md5": "7d9826eadd1795b5761dd491bb89043d"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "extensions-3.1.0-beta+1.20.4-sources.jar",
+          "url": "extensions-3.1.0-beta+1.20.4-sources.jar",
+          "size": 42853,
+          "sha512": "d306ce70b7896038c242adaf343b955fcd274f3012c950795e73cfa4c995191dc39cb382a0f7b47495db8f4b357f4250883c27fd40ba7bcb878afd23bcf1ad88",
+          "sha256": "4fcd5ae8c390cce9587283dba0a59fe3efedd590eba2f2fbe797a964a8e52c63",
+          "sha1": "b9d67ca3fed6f55f06273777691d4a815ca7fdb3",
+          "md5": "4ff77f38f4b37190c54a39ba67cf09ea"
+        }
+      ]
+    }
+  ]
+}
