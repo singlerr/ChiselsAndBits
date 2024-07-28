@@ -2,6 +2,7 @@ package mod.chiselsandbits.helpers;
 
 import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nonnull;
@@ -16,8 +17,7 @@ import mod.chiselsandbits.core.ChiselsAndBits;
 import mod.chiselsandbits.helpers.StateLookup.CachedStateLookup;
 import mod.chiselsandbits.items.ItemBitBag;
 import mod.chiselsandbits.items.ItemChiseledBit;
-import mod.chiselsandbits.items.ItemNegativePrint;
-import mod.chiselsandbits.items.ItemPositivePrint;
+import mod.chiselsandbits.registry.ModItems;
 import mod.chiselsandbits.render.chiseledblock.ChiselRenderType;
 import mod.chiselsandbits.render.helpers.SimpleInstanceCache;
 import mod.chiselsandbits.utils.RenderTypeUtils;
@@ -65,7 +65,10 @@ public class ModUtil {
             new SimpleInstanceCache<>(new CompoundTag(), null);
 
     public static Direction getPlaceFace(final LivingEntity placer) {
-        return Direction.orderedByNearest(placer)[0].getOpposite();
+        Direction[] orderedDirections = Direction.orderedByNearest(placer);
+        return orderedDirections[0].getAxis() == Direction.Axis.Y
+                ? orderedDirections[1].getOpposite()
+                : orderedDirections[0].getOpposite();
     }
 
     public static Pair<Vec3, Vec3> getPlayerRay(final Player playerIn) {
@@ -177,14 +180,16 @@ public class ModUtil {
         return st;
     }
 
-    public static boolean isHoldingPattern(final Player player) {
+    public static boolean isHoldingPattern(final Player player, AtomicBoolean positivePattern) {
         final ItemStack inHand = player.getMainHandItem();
 
-        if (inHand != null && inHand.getItem() instanceof ItemPositivePrint) {
+        if (inHand != null && inHand.getItem().equals(ModItems.ITEM_POSITIVE_PRINT_WRITTEN.get())) {
+            positivePattern.set(true);
             return true;
         }
 
-        if (inHand != null && inHand.getItem() instanceof ItemNegativePrint) {
+        if (inHand != null && inHand.getItem().equals(ModItems.ITEM_NEGATIVE_PRINT_WRITTEN.get())) {
+            positivePattern.set(false);
             return true;
         }
 
@@ -207,7 +212,6 @@ public class ModUtil {
 
     public static int getRotations(final LivingEntity placer, final Direction oldYaw) {
         final Direction newFace = ModUtil.getPlaceFace(placer);
-
         int rotations = getRotationIndex(newFace) - getRotationIndex(oldYaw);
 
         // work out the rotation math...

@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import mod.chiselsandbits.api.*;
 import mod.chiselsandbits.api.APIExceptions.CannotBeChiseled;
@@ -1011,8 +1012,8 @@ public class ClientSide {
         if (mop == null) {
             return;
         }
-
-        if (ModUtil.isHoldingPattern(player)) {
+        AtomicBoolean isPositivePatten = new AtomicBoolean(false);
+        if (ModUtil.isHoldingPattern(player, isPositivePatten)) {
             if (mop.getType() != HitResult.Type.BLOCK) {
                 return;
             }
@@ -1029,11 +1030,14 @@ public class ClientSide {
                 return;
             }
 
-            if (!ModItems.ITEM_NEGATIVE_PRINT.get().isWritten(currentItem)) {
+            if (!ModItems.ITEM_NEGATIVE_PRINT_WRITTEN.get().isWritten(currentItem)
+                    && !ModItems.ITEM_POSITIVE_PRINT_WRITTEN.get().isWritten(currentItem)) {
                 return;
             }
 
-            final ItemStack item = ModItems.ITEM_NEGATIVE_PRINT.get().getPatternedItem(currentItem, false);
+            final ItemStack item = isPositivePatten.get()
+                    ? ModItems.ITEM_POSITIVE_PRINT_WRITTEN.get().getPatternedItem(currentItem, false)
+                    : ModItems.ITEM_NEGATIVE_PRINT_WRITTEN.get().getPatternedItem(currentItem, false);
             if (item == null || !item.hasTag()) {
                 return;
             }
@@ -1402,7 +1406,7 @@ public class ClientSide {
         final ItemStack is = player.getMainHandItem();
 
         if (dwheel != 0 && is != null && is.getItem() instanceof IItemScrollWheel && player.isShiftKeyDown()) {
-            //            ((IItemScrollWheel) is.getItem()).scroll(player, is, dwheel);
+            ((IItemScrollWheel) is.getItem()).scroll(player, is, dwheel);
             return true;
         }
         return false;

@@ -31,6 +31,7 @@ public class ChiselsAndBitsClient {
 
     @Environment(EnvType.CLIENT)
     public static void onClientInit(Minecraft inst) {
+
         ClientSide.instance.preinit();
         ClientSide.instance.init();
         ClientSide.instance.postinit(ChiselsAndBits.getInstance());

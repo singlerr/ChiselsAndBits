@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 import mod.chiselsandbits.api.IChiselAndBitsAPI;
 import mod.chiselsandbits.chiseledblock.BlockBitInfo;
 import mod.chiselsandbits.chiseledblock.data.VoxelBlob;
+import mod.chiselsandbits.client.CreativeClipboardTab;
 import mod.chiselsandbits.client.UndoTracker;
 import mod.chiselsandbits.config.Configuration;
 import mod.chiselsandbits.core.api.ChiselAndBitsAPI;
@@ -23,6 +24,7 @@ import mod.chiselsandbits.utils.LanguageHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.config.ModConfig;
 
 public class ChiselsAndBits {
     public static final @Nonnull String MODID = Constants.MOD_ID;
@@ -60,8 +62,18 @@ public class ChiselsAndBits {
         ModTileEntityTypes.onModConstruction();
         ModItemGroups.onModConstruction();
         networkChannel.registerCommonMessages();
+        ForgeModConfigEvents.loading(Constants.MOD_ID).register(this::setupClipboard);
         ForgeModConfigEvents.loading(Constants.MOD_ID).register(c -> handleIdMapping(Minecraft.getInstance()));
         ForgeModConfigEvents.reloading(Constants.MOD_ID).register(c -> handleIdMapping(Minecraft.getInstance()));
+    }
+
+    private void setupClipboard(ModConfig modConfig) {
+        CreativeClipboardTab.getInstance()
+                .load(modConfig
+                        .getFullPath()
+                        .getParent()
+                        .resolve(MODID + "_clipboard.cfg")
+                        .toFile());
     }
 
     public void setConfig(Configuration config) {
