@@ -203,7 +203,8 @@ public class ItemBlockChiseled extends BlockItem implements IVoxelBlobItem, IIte
                 );
 
         ChiselsAndBits.getNetworkChannel().sendToServer(pasp);
-        // TODO: Figure out the placement logic.
+        // constructor of BlockPlaceContext set its block pos to relative block pos of original, this cause placed
+        // chiseled block over 1 bit
         return tryPlace(new BlockPlaceContext(context), ClientSide.offGridPlacement(context.getPlayer()));
     }
 
@@ -239,8 +240,10 @@ public class ItemBlockChiseled extends BlockItem implements IVoxelBlobItem, IIte
             final BlockState newState,
             boolean offgrid) {
         if (offgrid) {
+
             final BitLocation bl = new BitLocation(
-                    new BlockHitResult(new Vec3(hitX, hitY, hitZ), side, pos, false), BitOperation.PLACE);
+                    new BlockHitResult(new Vec3(hitX, hitY, hitZ), side, pos.relative(side.getOpposite()), false),
+                    BitOperation.PLACE);
             return tryPlaceBlockAt(
                     block,
                     stack,

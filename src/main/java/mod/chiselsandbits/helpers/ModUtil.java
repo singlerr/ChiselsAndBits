@@ -269,7 +269,7 @@ public class ModUtil {
         }
 
         final int t_x = -offset_x + middle_x + partial_x;
-        final int t_y = -offset_y + middle_y + partial_y;
+        int t_y = -offset_y + middle_y + partial_y;
         final int t_z = -offset_z + middle_z + partial_z;
 
         return new BlockPos(t_x, t_y, t_z);

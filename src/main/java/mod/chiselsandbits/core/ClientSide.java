@@ -607,7 +607,6 @@ public class ClientSide {
     }
 
     public void applyChiselDelay(Minecraft inst) {
-
         if (!Minecraft.getInstance().options.keyAttack.isUnbound()
                 && !Minecraft.getInstance().options.keyAttack.isDown()) {
             ItemChisel.resetDelay();
@@ -629,7 +628,7 @@ public class ClientSide {
         // used to prevent hyper chisels.. its actually far worse then you might
         // think...
 
-        if (!getToolKey().isUnbound() && !getToolKey().isDown() && lastTool == ChiselToolType.CHISEL) {
+        if (!getToolKey().isDown() && lastTool == ChiselToolType.CHISEL) {
             if (ticksSinceRelease >= 4) {
                 if (drawStart != null) {
                     drawStart = null;
@@ -1297,6 +1296,7 @@ public class ClientSide {
                             0.5,
                             partial,
                             false);
+                    System.out.println(isUnplaceable);
                 }
             }
         }
@@ -1583,7 +1583,7 @@ public class ClientSide {
     }
 
     public static KeyMapping getOffGridPlacementKey() {
-        if (!ClientSide.instance.offgridPlacement.isUnbound() && ClientSide.instance.offgridPlacement.isDefault()) {
+        if (ClientSide.instance.offgridPlacement.isUnbound() && ClientSide.instance.offgridPlacement.isDefault()) {
             return Minecraft.getInstance().options.keyShift;
         }
 
