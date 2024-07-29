@@ -551,11 +551,9 @@ public class TileEntityBlockChiseled extends BlockEntity
     }
 
     public void completeEditOperation(final VoxelBlob vb) {
-        modelData.setData(MODEL_UPDATE, true);
         final VoxelBlobStateReference before = getBlobStateReference();
         setBlob(vb);
         final VoxelBlobStateReference after = getBlobStateReference();
-
         if (level != null) {
             level.setBlocksDirty(worldPosition, level.getBlockState(worldPosition), Blocks.AIR.defaultBlockState());
         }

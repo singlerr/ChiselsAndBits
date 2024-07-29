@@ -38,6 +38,38 @@ public enum ModRenderTypes {
         return typeSupplier.get();
     }
 
+    private static class PreviewState extends RenderStateShard {
+
+        public PreviewState() {
+            super("preview_state", PreviewState::setupState, PreviewState::clearState);
+        }
+
+        private static void setupState() {
+            RenderSystem.enableBlend();
+            RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            RenderSystem.colorMask(false, false, false, false);
+        }
+
+        private static void clearState() {
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.colorMask(true, true, true, true);
+            RenderSystem.disableBlend();
+        }
+
+        private static class PreviewDepthTest extends DepthTestStateShard {
+
+            public PreviewDepthTest() {
+                super("preview_depth_test", 0);
+            }
+
+            @Override
+            public void setupRenderState() {}
+
+            @Override
+            public void clearRenderState() {}
+        }
+    }
+
     private static class InternalState extends RenderStateShard {
         private static final DepthTestStateShard DISABLED_DEPTH_TEST = new DepthTestDisabled();
         private static final DepthTestLessOrEqual LESS_OR_EQUAL_DEPTH_TEST = new DepthTestLessOrEqual();
@@ -234,8 +266,8 @@ public enum ModRenderTypes {
                             .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                             .setLightmapState(LIGHTMAP)
                             .setOverlayState(OVERLAY)
-                            .setDepthTestState(
-                                    GREATER_DEPTH_TEST) // Only difference from RenderType#ENTITY_TRANSLUCENT_CULL
+                            .setDepthTestState(InternalState.DISABLED_DEPTH_TEST) // Only difference from
+                            // RenderType#ENTITY_TRANSLUCENT_CULL
                             .createCompositeState(false));
         }
 

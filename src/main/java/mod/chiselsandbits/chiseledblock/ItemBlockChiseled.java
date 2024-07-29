@@ -315,7 +315,6 @@ public class ItemBlockChiseled extends BlockItem implements IVoxelBlobItem, IIte
                     final int solids = blobs[x][y][z].filled();
                     if (solids > 0) {
                         final BlockPos bp = pos.offset(x, y, z);
-
                         final EventBlockBitModification bmm =
                                 new EventBlockBitModification(world, bp, player, hand, stack, true);
                         ChiselsAndBitsEvents.BLOCK_BIT_MODIFICATION.invoker().handle(bmm);
@@ -326,12 +325,12 @@ public class ItemBlockChiseled extends BlockItem implements IVoxelBlobItem, IIte
                         }
 
                         if (world.isEmptyBlock(bp)
-                                || world.getBlockState(bp)
-                                        .canBeReplaced(new BlockPlaceContext(
-                                                player,
-                                                hand,
-                                                stack,
-                                                new BlockHitResult(new Vec3(hitX, hitY, hitZ), side, pos, false)))) {
+                        /*  || world.getBlockState(bp)
+                        .canBeReplaced(new BlockPlaceContext(
+                                player,
+                                hand,
+                                stack,
+                                new BlockHitResult(new Vec3(hitX, hitY, hitZ), side, pos, false)))*/ ) {
                             continue;
                         }
 
@@ -374,6 +373,7 @@ public class ItemBlockChiseled extends BlockItem implements IVoxelBlobItem, IIte
                                                 // here.
                                                 ))) {
                                     // clear it...
+
                                     world.setBlockAndUpdate(bp, Blocks.AIR.defaultBlockState());
                                 }
 
@@ -390,6 +390,7 @@ public class ItemBlockChiseled extends BlockItem implements IVoxelBlobItem, IIte
 
                                 final TileEntityBlockChiseled target = ModUtil.getChiseledTileEntity(world, bp, true);
                                 if (target != null) {
+                                    // Here
                                     target.completeEditOperation(blobs[x][y][z]);
                                     continue;
                                 }

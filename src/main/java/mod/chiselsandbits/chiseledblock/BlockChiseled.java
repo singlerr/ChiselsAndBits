@@ -157,7 +157,7 @@ public class BlockChiseled extends Block
 
             return getTileEntity(useContext.getLevel(), target).getBlob().filled() == 0;
         } catch (final ExceptionNoTileEntity e) {
-            return super.canBeReplaced(state, useContext);
+            return true;
         }
     }
 

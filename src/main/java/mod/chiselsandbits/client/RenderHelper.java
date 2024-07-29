@@ -2,6 +2,7 @@ package mod.chiselsandbits.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import java.awt.*;
 import java.util.List;
 import mod.chiselsandbits.registry.ModBlocks;
 import mod.chiselsandbits.registry.ModRenderTypes;
@@ -125,14 +126,13 @@ public class RenderHelper {
         int i = 0;
         for (final int j = quads.size(); i < j; ++i) {
             final BakedQuad bakedquad = quads.get(i);
-            final int color = bakedquad.getTintIndex() == -1
+            int color = bakedquad.getTintIndex() == -1
                     ? alpha | 0xffffff
                     : getTint(alpha, bakedquad.getTintIndex(), worldObj, blockPos);
-
-            float cb = color & 0xFF;
-            float cg = (color >>> 8) & 0xFF;
-            float cr = (color >>> 16) & 0xFF;
-            float ca = (color >>> 24) & 0xFF;
+            float cb = (color & 0xFF) / 255f;
+            float cg = ((color >>> 8) & 0xFF) / 255f;
+            float cr = ((color >>> 16) & 0xFF) / 255f;
+            float ca = ((color >>> 24) & 0xFF) / 255f;
 
             renderer.putBulkData(
                     matrixStack.last(),
@@ -293,7 +293,7 @@ public class RenderHelper {
             final int combinedOverlay) {
         final Tesselator tessellator = Tesselator.getInstance();
         final BufferBuilder buffer = tessellator.getBuilder();
-        RenderType renderType = ModRenderTypes.GHOST_BLOCK_PREVIEW.get();
+        RenderType renderType = ModRenderTypes.GHOST_BLOCK_PREVIEW_GREATER.get();
         buffer.begin(renderType.mode(), renderType.format());
 
         for (final Direction enumfacing : Direction.values()) {

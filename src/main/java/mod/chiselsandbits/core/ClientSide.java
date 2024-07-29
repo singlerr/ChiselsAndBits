@@ -1296,7 +1296,6 @@ public class ClientSide {
                             0.5,
                             partial,
                             false);
-
                 }
             }
         }
