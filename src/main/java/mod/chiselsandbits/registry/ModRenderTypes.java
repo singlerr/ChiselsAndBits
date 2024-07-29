@@ -252,7 +252,7 @@ public enum ModRenderTypes {
 
         private static RenderType buildGhostType(final boolean greater) {
             if (!greater) return Sheets.translucentCullBlockSheet();
-
+            // DEPTH TEST TAKES BIG ROLE
             return RenderType.create(
                     Constants.MOD_ID + ":ghost_block_preview_greater",
                     DefaultVertexFormat.NEW_ENTITY,

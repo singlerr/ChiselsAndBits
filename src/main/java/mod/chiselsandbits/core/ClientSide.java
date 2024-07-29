@@ -13,7 +13,6 @@ import io.github.fabricators_of_create.porting_lib.event.client.MouseInputEvents
 import io.github.fabricators_of_create.porting_lib.event.client.OverlayRenderCallback;
 import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -146,8 +145,8 @@ public class ClientSide {
         UseBlockCallback.EVENT.register(this::drawingInteractionPrevention);
         ClientTickEvents.START_CLIENT_TICK.register(this::applyChiselDelay);
         ClientTickEvents.END_CLIENT_TICK.register(this::interaction);
-        //        RenderWorldLastEvent.EVENT.register(this::drawHighlight);
         RenderWorldLastEvent.EVENT.register(this::drawLast);
+        RenderWorldLastEvent.EVENT.register(this::drawHighlight);
         DrawSelectionEvents.BLOCK.register(this::drawHighlight);
         MouseInputEvents.BEFORE_SCROLL.register(this::wheelEvent);
     }
@@ -550,7 +549,7 @@ public class ClientSide {
             return ChiselToolType.CHISEL;
         }
 
-        if (is != null && is.getItem() instanceof ItemChiseledBit) {
+        if (is != null && is.getItem().equals(ModItems.ITEM_BLOCK_BIT.get())) {
             return ChiselToolType.BIT;
         }
 
@@ -616,13 +615,6 @@ public class ClientSide {
     public void interaction(Minecraft inst) {
         if (!readyState.isReady()) {
             return;
-        }
-
-        if (Minecraft.getInstance().player != null
-                && !Minecraft.getInstance().player.inventory.getSelected().isEmpty()) {
-            lastTool = getToolTypeForItem(Objects.requireNonNull(Minecraft.getInstance().player)
-                    .inventory
-                    .getSelected());
         }
 
         // used to prevent hyper chisels.. its actually far worse then you might
@@ -772,6 +764,7 @@ public class ClientSide {
             if (tool != null && tool.isBitOrChisel() && chMode != null) {
                 final Player player = Minecraft.getInstance().player;
                 final HitResult mop = Minecraft.getInstance().hitResult;
+
                 final Level theWorld = player.level;
 
                 if (mop == null || mop.getType() != HitResult.Type.BLOCK) {
@@ -796,7 +789,7 @@ public class ClientSide {
                         final VoxelRegionSrc region = new VoxelRegionSrc(theWorld, location.blockPos, 1);
                         final VoxelBlob vb = data != null ? data.getBlob() : new VoxelBlob();
 
-                        if (isChisel && data == null) {
+                        if ((isChisel) && data == null) {
                             showBox = true;
                             vb.fill(1);
                         }
@@ -840,7 +833,7 @@ public class ClientSide {
                                 RenderHelper.drawSelectionBoundingBoxIfExists(
                                         stack, bb, BlockPos.ZERO, player, partialTicks, false);
 
-                                if (!getToolKey().isUnbound() && !getToolKey().isDown()) {
+                                if (!getToolKey().isDown()) {
                                     final PacketChisel pc = new PacketChisel(
                                             getLastBitOperation(player, lastHand, player.getItemInHand(lastHand)),
                                             location,
@@ -862,6 +855,7 @@ public class ClientSide {
                         } else {
                             final BlockEntity te = theWorld.getChunkAt(location.blockPos)
                                     .getBlockEntity(location.blockPos, LevelChunk.EntityCreationType.CHECK);
+
                             boolean isBitBlock = te instanceof TileEntityBlockChiseled;
                             final boolean isBlockSupported = BlockBitInfo.canChisel(state);
 
