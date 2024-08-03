@@ -269,6 +269,7 @@ public class ClientSide {
                 ModBlocks.getMaterialToItemConversions().values().stream()
                         .map(RegistryObject::get)
                         .toArray(Item[]::new));
+        itemColorRegistry.register(new ItemColorChisled(), ModItems.ITEM_CHISELED_BLOCK.get());
     }
 
     public static TextureAtlasSprite undoIcon;

@@ -17,6 +17,12 @@ public class ItemColorChisled implements ItemColor {
         final Item i = Item.byBlock(blk);
         int tintValue = tint & BlockColorChisled.TINT_MASK;
 
+        try {
+            return ModelUtil.getItemStackColor(blk.getCloneItemStack(null, null, state), tintValue);
+        } catch (Exception ignored) {
+
+        }
+
         if (i != null) {
             return ModelUtil.getItemStackColor(new ItemStack(i, 1), tintValue);
         }

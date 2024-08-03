@@ -18,8 +18,15 @@ public class ItemColorBits implements ItemColor {
         if (ClientSide.instance.holdingShift()) {
             final BlockState state = ModUtil.getStateById(tint >> BlockColorChisled.TINT_BITS);
             final Block blk = state.getBlock();
-            final Item i = Item.byBlock(blk);
             int tintValue = tint & BlockColorChisled.TINT_MASK;
+
+            try {
+                return ModelUtil.getItemStackColor(blk.getCloneItemStack(null, null, state), tintValue);
+            } catch (Exception ignored) {
+
+            }
+
+            final Item i = Item.byBlock(blk);
 
             if (i != null) {
                 return ModelUtil.getItemStackColor(new ItemStack(i, 1), tintValue);
