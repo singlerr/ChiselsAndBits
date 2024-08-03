@@ -86,7 +86,6 @@ public class BitItemBaked extends BaseBakedBlockModel {
                         default:
                             throw new NullPointerException();
                     }
-
                     generic.add(faceBakery.bakeQuad(
                             toB,
                             fromB,

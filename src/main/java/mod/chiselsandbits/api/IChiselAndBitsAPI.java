@@ -13,14 +13,18 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.IItemHandler;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Do not implement, is passed to your {@link IChiselsAndBitsAddon}
  */
 public interface IChiselAndBitsAPI {
+
+    void registerItemStackHandler(Block block, @NotNull ItemStackHandler provider);
 
     /**
      * Determine the Item Type of the item in an ItemStack and return it.

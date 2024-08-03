@@ -461,6 +461,13 @@ public class ModUtil {
         }
         final Item item = getItem(blockState);
         if (item != Items.AIR && item != null) {
+            if (item instanceof BlockItem blockItem) {
+                Block block = blockItem.getBlock();
+                try {
+                    return block.getCloneItemStack(null, null, blockState);
+                } catch (Exception e) {
+                }
+            }
             return new ItemStack(item, 1);
         }
 

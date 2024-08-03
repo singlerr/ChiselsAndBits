@@ -3,7 +3,9 @@ package mod.chiselsandbits.render.chiseledblock;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import mod.chiselsandbits.chiseledblock.data.VoxelBlob;
 import mod.chiselsandbits.chiseledblock.data.VoxelBlob.VisibleFace;
 import mod.chiselsandbits.client.culling.ICullTest;
@@ -301,7 +303,6 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
                         faceBuilder.setFace(myFace, pc.tint);
 
                         getFaceUvs(uvs, myFace, from, to, pc.uvs);
-
                         // build it.
                         for (int vertNum = 0; vertNum < 4; vertNum++) {
                             for (int elementIndex = 0;
@@ -315,7 +316,7 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
                                         faceBuilder.put(vertNum, elementIndex, pos[0], pos[1], pos[2]);
                                         break;
                                     case COLOR:
-                                        final int cb = pc.color;
+                                        int cb = pc.color;
                                         final float[] colorData = new float[4];
                                         colorData[0] = ((cb >> 16) & 0xFF) / 255.0F;
                                         colorData[1] = ((cb >> 8) & 0xFF) / 255.0F;

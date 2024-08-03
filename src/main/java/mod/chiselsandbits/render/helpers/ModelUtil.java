@@ -134,7 +134,6 @@ public class ModelUtil implements ICacheClearable {
 
         final HashMap<Direction, ArrayList<ModelQuadLayerBuilder>> tmp = new HashMap<>();
         final int color = BlockBitInfo.getColorFor(state, 0);
-
         for (final Direction f : Direction.values()) {
             tmp.put(f, new ArrayList<>());
         }

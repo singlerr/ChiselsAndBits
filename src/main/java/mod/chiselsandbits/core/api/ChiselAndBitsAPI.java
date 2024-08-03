@@ -1,6 +1,8 @@
 package mod.chiselsandbits.core.api;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import mod.chiselsandbits.api.*;
 import mod.chiselsandbits.api.APIExceptions.CannotBeChiseled;
 import mod.chiselsandbits.api.APIExceptions.InvalidBitItem;
@@ -37,13 +39,26 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.CapabilityItemHandler;
+import org.jetbrains.annotations.NotNull;
 
 public class ChiselAndBitsAPI implements IChiselAndBitsAPI {
+
+    private final Map<Block, ItemStackHandler> itemStackHandlers = new ConcurrentHashMap<>();
+
+    public Map<Block, ItemStackHandler> getItemStackHandlers() {
+        return itemStackHandlers;
+    }
+
+    @Override
+    public void registerItemStackHandler(Block block, @NotNull ItemStackHandler provider) {
+        itemStackHandlers.put(block, provider);
+    }
 
     @Override
     public boolean canBeChiseled(final Level world, final BlockPos pos) {

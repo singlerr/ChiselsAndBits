@@ -31,7 +31,7 @@ public class ChiselsAndBits {
 
     private static ChiselsAndBits instance;
     private Configuration config;
-    private final IChiselAndBitsAPI api = new ChiselAndBitsAPI();
+    private static final IChiselAndBitsAPI api = new ChiselAndBitsAPI();
     private final NetworkChannel networkChannel = new NetworkChannel(MODID);
 
     List<ICacheClearable> cacheClearables = new ArrayList<>();
@@ -89,7 +89,7 @@ public class ChiselsAndBits {
     }
 
     public static IChiselAndBitsAPI getApi() {
-        return instance.api;
+        return api;
     }
 
     public static NetworkChannel getNetworkChannel() {
