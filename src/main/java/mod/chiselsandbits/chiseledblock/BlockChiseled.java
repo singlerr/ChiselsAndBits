@@ -54,7 +54,7 @@ public class BlockChiseled extends Block
 
     public static final BlockPos ZERO = BlockPos.ZERO;
 
-    private static ThreadLocal<BlockState> actingAs = new ThreadLocal<BlockState>();
+    private static ThreadLocal<BlockState> actingAs = new ThreadLocal<>();
 
     public static final BooleanProperty FULL_BLOCK = BooleanProperty.create("full_block");
 
@@ -202,7 +202,7 @@ public class BlockChiseled extends Block
             popResource(worldIn, pos, getTileEntity(te).getItemStack(player));
         } catch (final ExceptionNoTileEntity e) {
             Log.noTileError(e);
-            super.playerDestroy(worldIn, player, pos, state, (BlockEntity) null, stack);
+            super.playerDestroy(worldIn, player, pos, state, null, stack);
         }
     }
 

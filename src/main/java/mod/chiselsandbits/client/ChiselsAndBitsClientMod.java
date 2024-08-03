@@ -6,13 +6,12 @@ import mod.chiselsandbits.core.ChiselsAndBitsClient;
 import mod.chiselsandbits.events.extra.ResourceRegistrationEvent;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
-import net.minecraft.client.Minecraft;
 
 public class ChiselsAndBitsClientMod implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ModelLoadingPlugin.register(new ChiselsAndBitsModelLoadingPlugin());
-        ChiselsAndBitsClient.onClientInit(Minecraft.getInstance());
+        ChiselsAndBitsClient.onClientInit();
         ResourceRegistrationEvent.EVENT.register(() -> {
             ChiselsAndBitsClient.registerIconTextures();
             TextureStitchCallback.POST.register(ChiselsAndBitsClient::retrieveRegisteredIconSprites);

@@ -511,7 +511,7 @@ public class TileEntityBlockChiseled extends BlockEntity
             }
 
             final BitAccess ba = new BitAccess(null, null, vb, VoxelBlob.NULL_BLOB);
-            final ItemStack itemstack = ba.getBitsAsItem(placingFace, ItemType.CHISLED_BLOCK, false);
+            final ItemStack itemstack = ba.getBitsAsItem(placingFace, ItemType.CHISELED_BLOCK, false);
 
             pickCache = new ItemStackGeneratedCache(itemstack, getBlobStateReference(), rotations);
             return itemstack;
@@ -521,7 +521,7 @@ public class TileEntityBlockChiseled extends BlockEntity
             }
 
             final BitAccess ba = new BitAccess(null, null, getBlob(), VoxelBlob.NULL_BLOB);
-            final ItemStack itemstack = ba.getBitsAsItem(null, ItemType.CHISLED_BLOCK, false);
+            final ItemStack itemstack = ba.getBitsAsItem(null, ItemType.CHISELED_BLOCK, false);
 
             pickCache = new ItemStackGeneratedCache(itemstack, getBlobStateReference(), 0);
             return itemstack;

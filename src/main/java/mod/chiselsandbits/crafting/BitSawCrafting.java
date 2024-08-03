@@ -218,7 +218,7 @@ public class BitSawCrafting extends CustomRecipe {
             }
 
             blob.fill(a);
-            final ItemStack out = contents.getBitsAsItem(null, ItemType.CHISLED_BLOCK, false);
+            final ItemStack out = contents.getBitsAsItem(null, ItemType.CHISELED_BLOCK, false);
 
             if (out != null) {
                 ModUtil.setStackSize(out, 2);

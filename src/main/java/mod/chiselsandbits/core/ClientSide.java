@@ -12,6 +12,7 @@ import io.github.fabricators_of_create.porting_lib.event.client.DrawSelectionEve
 import io.github.fabricators_of_create.porting_lib.event.client.MouseInputEvents;
 import io.github.fabricators_of_create.porting_lib.event.client.OverlayRenderCallback;
 import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -100,7 +101,7 @@ import org.lwjgl.opengl.GL11;
 
 public class ClientSide {
 
-    private static final Random RANDOM = new Random();
+    private static final Random RANDOM = new SecureRandom();
     public static final ClientSide instance = new ClientSide();
 
     ReadyState readyState = ReadyState.PENDING_PRE;
@@ -119,27 +120,19 @@ public class ClientSide {
     public final TapeMeasures tapeMeasures = new TapeMeasures();
 
     public KeyMapping getKeyBinding(ModKeyBinding modKeyBinding) {
-        switch (modKeyBinding) {
-            case ROTATE_CCW:
-                return rotateCCW;
-            case ROTATE_CW:
-                return rotateCW;
-            case UNDO:
-                return undo;
-            case REDO:
-                return redo;
-            case ADD_TO_CLIPBOARD:
-                return addToClipboard;
-            case PICK_BIT:
-                return pickBit;
-            case OFFGRID_PLACEMENT:
-                return ClientSide.getOffGridPlacementKey();
-            default:
-                return modeMenu;
-        }
+        return switch (modKeyBinding) {
+            case ROTATE_CCW -> rotateCCW;
+            case ROTATE_CW -> rotateCW;
+            case UNDO -> undo;
+            case REDO -> redo;
+            case ADD_TO_CLIPBOARD -> addToClipboard;
+            case PICK_BIT -> pickBit;
+            case OFFGRID_PLACEMENT -> ClientSide.getOffGridPlacementKey();
+            default -> modeMenu;
+        };
     }
 
-    public void preinit() {
+    public void preInit() {
         readyState = readyState.updateState(ReadyState.TRIGGER_PRE);
         OverlayRenderCallback.EVENT.register(this::onRenderGUI);
         UseBlockCallback.EVENT.register(this::drawingInteractionPrevention);
@@ -156,11 +149,6 @@ public class ClientSide {
         BlockEntityRenderers.register(
                 ModTileEntityTypes.BIT_STORAGE.get(),
                 context -> new TileEntitySpecialRenderBitStorage(context.getBlockEntityRenderDispatcher()));
-        //        ItemBlockRenderTypes.setRenderLayer(ModBlocks.BIT_STORAGE_BLOCK.get(), RenderType.cutoutMipped());
-        //        ModBlocks.getMaterialToBlockConversions().values().stream()
-        //                .map(RegistryObject::get)
-        //                .forEach(b -> ItemBlockRenderTypes.setRenderLayer(b, (Predicate<RenderType>)
-        //                        input -> RenderType.chunkBufferLayers().contains(input)));
 
         for (final ChiselMode mode : ChiselMode.values()) {
             mode.binding = registerKeybind(
@@ -237,12 +225,11 @@ public class ClientSide {
         if (kb instanceof IKeyBinding ext) {
             ext.setKeyConflictContext(context);
         }
-
         KeyBindingHelper.registerKeyBinding(kb);
         return kb;
     }
 
-    public void postinit(final ChiselsAndBits mod) {
+    public void postInit() {
         readyState = readyState.updateState(ReadyState.TRIGGER_POST);
 
         var itemColorRegistry = ColorProviderRegistry.ITEM;
@@ -265,11 +252,11 @@ public class ClientSide {
                         .toArray(Block[]::new));
         blockColorRegistry.register(new BlockColorChisled(), ModBlocks.CHISELED_BLOCK.get());
         itemColorRegistry.register(
-                new ItemColorChisled(),
+                new ItemColorChiseled(),
                 ModBlocks.getMaterialToItemConversions().values().stream()
                         .map(RegistryObject::get)
                         .toArray(Item[]::new));
-        itemColorRegistry.register(new ItemColorChisled(), ModItems.ITEM_CHISELED_BLOCK.get());
+        itemColorRegistry.register(new ItemColorChiseled(), ModItems.ITEM_CHISELED_BLOCK.get());
     }
 
     public static TextureAtlasSprite undoIcon;
@@ -419,7 +406,7 @@ public class ClientSide {
                 try {
                     final IBitAccess access =
                             ChiselsAndBits.getApi().getBitAccess(mc.level, rayTraceResult.getBlockPos());
-                    final ItemStack is = access.getBitsAsItem(null, ItemType.CHISLED_BLOCK, false);
+                    final ItemStack is = access.getBitsAsItem(null, ItemType.CHISELED_BLOCK, false);
 
                     CreativeClipboardTab.getInstance().addItem(is);
                 } catch (final CannotBeChiseled e) {

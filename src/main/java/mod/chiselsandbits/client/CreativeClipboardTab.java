@@ -38,7 +38,7 @@ public class CreativeClipboardTab implements ICacheClearable {
                 return;
             }
 
-            final ItemStack is = bitData.getBitsAsItem(null, ItemType.CHISLED_BLOCK, true);
+            final ItemStack is = bitData.getBitsAsItem(null, ItemType.CHISELED_BLOCK, true);
 
             if (is == null) {
                 return;

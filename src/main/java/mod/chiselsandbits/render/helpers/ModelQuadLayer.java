@@ -21,8 +21,6 @@ public class ModelQuadLayer {
         public final ModelLightMapReader lv;
         public ModelUVReader uvr;
 
-        private int tint;
-
         public ModelQuadLayerBuilder(final TextureAtlasSprite sprite, final int uCoord, final int vCoord) {
             cache.sprite = sprite;
             lv = new ModelLightMapReader();
@@ -38,11 +36,10 @@ public class ModelQuadLayer {
         }
 
         public void setTint(int tint) {
-            this.tint = tint;
             this.cache.tint = tint;
         }
 
-        public ModelQuadLayer build(final int stateid, final int color, final int lightValue) {
+        public ModelQuadLayer build(final int stateId, final int color, final int lightValue) {
             cache.light = Math.max(lightValue, lv.lv);
             cache.uvs = uvr.quadUVs;
 
@@ -50,7 +47,7 @@ public class ModelQuadLayer {
 
             if (0x00 <= cache.tint && cache.tint <= 0xff) {
                 cache.color = 0xffffffff;
-                cache.tint = (stateid << 8) | cache.tint;
+                cache.tint = (stateId << 8) | cache.tint;
             } else {
                 cache.tint = -1;
             }

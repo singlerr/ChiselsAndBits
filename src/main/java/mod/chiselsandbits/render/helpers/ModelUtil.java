@@ -254,16 +254,7 @@ public class ModelUtil implements ICacheClearable {
                     l.add(b);
                     LightUtil.put(b.uvr, q);
                 }
-
-                //                if (ChiselsAndBits.getConfig()
-                //                        .getClient()
-                //                        .enableFaceLightmapExtraction
-                //                        .get()) {
-                //                    // TODO: Check if this works.
-                //                    b.lv.setVertexFormat(DefaultVertexFormat.BLOCK);
-                //                    LightUtil.put(b.lv, q);
-                //                }
-            } catch (final Exception e) {
+            } catch (final Exception ignored) {
 
             }
         }
@@ -274,8 +265,7 @@ public class ModelUtil implements ICacheClearable {
     }
 
     public static TextureAtlasSprite findQuadTexture(final BakedQuad q, final BlockState state)
-            throws IllegalArgumentException, IllegalAccessException, NullPointerException {
-
+            throws IllegalArgumentException, NullPointerException {
         if (q.getSprite() == null)
             return Minecraft.getInstance()
                     .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
@@ -285,7 +275,7 @@ public class ModelUtil implements ICacheClearable {
 
     public static BakedModel solveModel(
             final BlockState state, final RandomSource weight, final BakedModel originalModel, final RenderType layer) {
-        boolean hasFaces = false;
+        boolean hasFaces;
 
         try {
             hasFaces = hasFaces(originalModel, state, null, weight);
@@ -340,7 +330,7 @@ public class ModelUtil implements ICacheClearable {
 
         try {
             texture = findTexture(null, l, f);
-        } catch (final Exception e) {
+        } catch (final Exception ignored) {
         }
 
         final ModelVertexRange mvr = new ModelVertexRange();
@@ -389,7 +379,7 @@ public class ModelUtil implements ICacheClearable {
 
                     texture = findTexture(texture, getModelQuads(model, state, null, random), null);
                 }
-            } catch (final Exception errr) {
+            } catch (final Exception ignored) {
             }
         }
 
@@ -399,7 +389,7 @@ public class ModelUtil implements ICacheClearable {
                 if (model != null) {
                     texture = model.getParticleIcon();
                 }
-            } catch (final Exception err) {
+            } catch (final Exception ignored) {
             }
         }
 
@@ -409,7 +399,7 @@ public class ModelUtil implements ICacheClearable {
                         .getBlockRenderer()
                         .getBlockModelShaper()
                         .getParticleIcon(state);
-            } catch (final Exception err) {
+            } catch (final Exception ignored) {
             }
         }
 
@@ -429,7 +419,7 @@ public class ModelUtil implements ICacheClearable {
 
     private static TextureAtlasSprite findTexture(
             TextureAtlasSprite texture, final List<BakedQuad> faceQuads, final Direction myFace)
-            throws IllegalArgumentException, IllegalAccessException, NullPointerException {
+            throws IllegalArgumentException, NullPointerException {
         for (final BakedQuad q : faceQuads) {
             if (q.getDirection() == myFace) {
                 texture = findQuadTexture(q, null);

@@ -19,9 +19,6 @@
 		"main": [
           "mod.chiselsandbits.ChiselsAndBitsMod"
 		],
-		"fabric-datagen": [
-			"mod.chiselsandbits.ChiselsAndBitsDataGenerator"
-		],
 		"client": [
 			"mod.chiselsandbits.client.ChiselsAndBitsClientMod"
 		]

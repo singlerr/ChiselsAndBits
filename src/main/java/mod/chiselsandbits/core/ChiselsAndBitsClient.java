@@ -30,11 +30,11 @@ public class ChiselsAndBitsClient {
     private static IconSpriteUploader spriteUploader;
 
     @Environment(EnvType.CLIENT)
-    public static void onClientInit(Minecraft inst) {
+    public static void onClientInit() {
 
-        ClientSide.instance.preinit();
+        ClientSide.instance.preInit();
         ClientSide.instance.init();
-        ClientSide.instance.postinit(ChiselsAndBits.getInstance());
+        ClientSide.instance.postInit();
         MenuScreens.register(ModContainerTypes.BAG_CONTAINER.get(), BagGui::new);
         MenuScreens.register(ModContainerTypes.CHISEL_STATION_CONTAINER.get(), ChiselPrinterScreen::new);
     }

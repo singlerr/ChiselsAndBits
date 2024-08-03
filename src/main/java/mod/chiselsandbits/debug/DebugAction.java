@@ -112,11 +112,11 @@ public abstract class DebugAction {
                     player,
                     api.getItemType(ItemChiseledBit.createStack(
                                     ModUtil.getStateId(Blocks.COBBLESTONE.defaultBlockState()), 1, true))
-                            == ItemType.CHISLED_BIT);
+                            == ItemType.CHISELED_BIT);
             apiAssert(
                     "CHISLED_BLOCK",
                     player,
-                    api.getItemType(access.getBitsAsItem(Direction.UP, ItemType.CHISLED_BLOCK, false)) == null);
+                    api.getItemType(access.getBitsAsItem(Direction.UP, ItemType.CHISELED_BLOCK, false)) == null);
             apiAssert(
                     "MIRROR_DESIGN 2",
                     player,
@@ -143,8 +143,8 @@ public abstract class DebugAction {
             apiAssert(
                     "CHISLED_BLOCK 2",
                     player,
-                    api.getItemType(access.getBitsAsItem(null, ItemType.CHISLED_BLOCK, false))
-                            == ItemType.CHISLED_BLOCK);
+                    api.getItemType(access.getBitsAsItem(null, ItemType.CHISELED_BLOCK, false))
+                            == ItemType.CHISELED_BLOCK);
             apiAssert(
                     "MIRROR_DESIGN 3",
                     player,
@@ -519,7 +519,7 @@ public abstract class DebugAction {
             try {
                 final IBitAccess access = api.getBitAccess(w, loc.getBlockPos());
 
-                player.inventory.add(access.getBitsAsItem(side, ItemType.CHISLED_BLOCK, false));
+                player.inventory.add(access.getBitsAsItem(side, ItemType.CHISELED_BLOCK, false));
                 player.inventory.add(access.getBitsAsItem(side, ItemType.MIRROR_DESIGN, false));
                 player.inventory.add(access.getBitsAsItem(side, ItemType.NEGATIVE_DESIGN, false));
                 player.inventory.add(access.getBitsAsItem(side, ItemType.POSITIVE_DESIGN, false));

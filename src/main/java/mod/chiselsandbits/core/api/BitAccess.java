@@ -127,7 +127,7 @@ public class BitAccess implements IBitAccess {
 
         final ItemStack stack;
 
-        if (type == ItemType.CHISLED_BLOCK) {
+        if (type == ItemType.CHISELED_BLOCK) {
             final BlockState state = ModUtil.getStateById(cb.mostCommonState);
             final BlockChiseled blk = ModBlocks.convertGivenStateToChiseledBlock(state);
 

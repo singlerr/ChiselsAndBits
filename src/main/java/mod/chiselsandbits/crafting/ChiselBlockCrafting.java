@@ -107,7 +107,7 @@ public class ChiselBlockCrafting extends CustomRecipe {
                 modified = c.modified;
 
                 if (!c.isAir) {
-                    block = ba.getBitsAsItem(Direction.NORTH, ItemType.CHISLED_BLOCK, false);
+                    block = ba.getBitsAsItem(Direction.NORTH, ItemType.CHISELED_BLOCK, false);
                 } else {
                     block = ModUtil.getEmptyStack();
                 }
@@ -171,7 +171,7 @@ public class ChiselBlockCrafting extends CustomRecipe {
                             }
                         });
 
-                        i.block = item.getBitsAsItem(Direction.EAST, ItemType.CHISLED_BLOCK, false);
+                        i.block = item.getBitsAsItem(Direction.EAST, ItemType.CHISELED_BLOCK, false);
                         if (i.block != null) {
                             ModUtil.setStackSize(i.block, ModUtil.getStackSize(is));
                             i.block_slot = x;

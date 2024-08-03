@@ -384,7 +384,7 @@ public class TileEntityBitStorage extends BlockEntity implements IItemHandler {
             boolean change = false;
             for (int x = 0; x < playerIn.inventory.getContainerSize(); x++) {
                 final ItemStack stackInSlot = ModUtil.nonNull(playerIn.inventory.getItem(x));
-                if (ChiselsAndBits.getApi().getItemType(stackInSlot) == ItemType.CHISLED_BIT) {
+                if (ChiselsAndBits.getApi().getItemType(stackInSlot) == ItemType.CHISELED_BIT) {
                     playerIn.inventory.setItem(x, insertItem(0, stackInSlot, false));
                     change = true;
                 }
@@ -415,7 +415,7 @@ public class TileEntityBitStorage extends BlockEntity implements IItemHandler {
 
     boolean addHeldBits(final @Nonnull ItemStack current, final Player playerIn) {
         if (playerIn.isShiftKeyDown() || this.bits == 0) {
-            if (ChiselsAndBits.getApi().getItemType(current) == ItemType.CHISLED_BIT
+            if (ChiselsAndBits.getApi().getItemType(current) == ItemType.CHISELED_BIT
                     || BlockBitInfo.canChisel(current)) {
                 final ItemStack resultStack = insertItem(0, current, false);
                 if (!playerIn.isCreative()) {

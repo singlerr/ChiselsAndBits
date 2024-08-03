@@ -71,7 +71,7 @@ public class BagStorage implements IBitBag {
             final int slotQty = slotId == 0 ? 0 : contents[indexQty];
 
             final ItemType type = ChiselsAndBits.getApi().getItemType(stack);
-            if (type == ItemType.CHISLED_BIT) {
+            if (type == ItemType.CHISELED_BIT) {
                 try {
                     final IBitBrush brush = ChiselsAndBits.getApi().createBrush(stack);
                     if (brush.getStateID() == slotId || slotId == 0) {
@@ -155,6 +155,6 @@ public class BagStorage implements IBitBag {
 
     @Override
     public boolean isItemValid(final int slot, @NotNull final ItemStack stack) {
-        return ChiselsAndBits.getApi().getItemType(stack) == ItemType.CHISLED_BIT;
+        return ChiselsAndBits.getApi().getItemType(stack) == ItemType.CHISELED_BIT;
     }
 }

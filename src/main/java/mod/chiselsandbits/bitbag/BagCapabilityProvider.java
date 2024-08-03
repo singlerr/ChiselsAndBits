@@ -17,7 +17,6 @@ public class BagCapabilityProvider extends BagStorage implements ICapabilityProv
     private final LazyOptional<IItemHandler> capResult = LazyOptional.of(() -> this);
 
     public BagCapabilityProvider(final ItemStack stack, final CompoundTag nbt) {
-
         this.stack = stack;
     }
 

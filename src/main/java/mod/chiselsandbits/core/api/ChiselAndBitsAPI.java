@@ -114,7 +114,7 @@ public class ChiselAndBitsAPI implements IChiselAndBitsAPI {
             return new BitBrush(0);
         }
 
-        if (getItemType(stack) == ItemType.CHISLED_BIT) {
+        if (getItemType(stack) == ItemType.CHISELED_BIT) {
             final int stateID = ItemChiseledBit.getStackState(stack);
             final BlockState state = ModUtil.getStateById(stateID);
 
@@ -141,7 +141,7 @@ public class ChiselAndBitsAPI implements IChiselAndBitsAPI {
     @Override
     public ItemType getItemType(final ItemStack stack) {
         if (stack.getItem() instanceof ItemChiseledBit) {
-            return ItemType.CHISLED_BIT;
+            return ItemType.CHISELED_BIT;
         }
 
         if (stack.getItem() instanceof ItemBitBag) {
@@ -153,7 +153,7 @@ public class ChiselAndBitsAPI implements IChiselAndBitsAPI {
         }
 
         if (stack.getItem() instanceof ItemBlockChiseled) {
-            return ItemType.CHISLED_BLOCK;
+            return ItemType.CHISELED_BLOCK;
         }
 
         if (stack.getItem() instanceof ItemMirrorPrint) {
