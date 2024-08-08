@@ -174,8 +174,9 @@ public class ChiseledBlockSmartModel extends BaseSmartModel implements ICacheCle
         BlockState state = ModUtil.getStateById(stateId);
         if (state.isAir()) return Optional.empty();
 
-        if (state.getFluidState().isSource()) {
+        if (!state.getFluidState().isEmpty() || state.getFluidState().isSource()) {
             RenderType renderType = ItemBlockRenderTypes.getRenderLayer(state.getFluidState());
+
             ChiselRenderType solidLayer, fluidLayer;
             ChiseledBlockBakedModel solid = getCachedModel(
                     blockP,

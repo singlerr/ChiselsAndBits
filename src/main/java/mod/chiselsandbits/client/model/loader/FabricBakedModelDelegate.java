@@ -1,22 +1,22 @@
 package mod.chiselsandbits.client.model.loader;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
+import mod.chiselsandbits.chiseledblock.data.VoxelBlob;
 import mod.chiselsandbits.client.model.baked.DataAwareBakedModel;
 import mod.chiselsandbits.client.model.data.IModelData;
 import mod.chiselsandbits.interfaces.ICacheClearable;
 import mod.chiselsandbits.render.chiseledblock.ChiselRenderType;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
+import net.fabricmc.fabric.api.renderer.v1.material.MaterialFinder;
 import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -33,6 +33,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
     private final BakedModel delegate;
+
+    private boolean cached = false;
 
     public FabricBakedModelDelegate(final BakedModel delegate) {
         this.delegate = delegate;
@@ -100,6 +102,11 @@ public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
             return;
         }
 
+        if (!cached) {
+            VoxelBlob.clearCache();
+            cached = true;
+        }
+
         Object attachmentData = blockAndTintGetter.getBlockEntityRenderData(blockPos);
 
         if (attachmentData instanceof IModelData modelData) {
@@ -121,6 +128,12 @@ public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
         Set<ChiselRenderType> renderTypes =
                 dataAwareBakedModel.getRenderTypes(world, blockPos, blockState, blockModelData);
 
+        MaterialFinder materialFinder = RendererAccess.INSTANCE.getRenderer().materialFinder();
+
+        renderTypes.forEach(r -> materialFinder.blendMode(BlendMode.fromRenderLayer(r.layer)));
+
+        RenderMaterial renderMaterial = materialFinder.find();
+
         for (Direction direction : Direction.values()) {
             renderTypes.forEach(renderType -> emitBlockQuads(
                     dataAwareBakedModel,
@@ -130,11 +143,20 @@ public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
                     direction,
                     supplier,
                     renderContext,
-                    renderType));
+                    renderType,
+                    renderMaterial));
         }
 
         renderTypes.forEach(renderType -> emitBlockQuads(
-                dataAwareBakedModel, blockModelData, blockState, blockPos, null, supplier, renderContext, renderType));
+                dataAwareBakedModel,
+                blockModelData,
+                blockState,
+                blockPos,
+                null,
+                supplier,
+                renderContext,
+                renderType,
+                renderMaterial));
     }
 
     public void emitBlockQuads(
@@ -145,16 +167,12 @@ public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
             final Direction direction,
             final Supplier<RandomSource> supplier,
             final RenderContext renderContext,
-            ChiselRenderType renderType) {
+            ChiselRenderType renderType,
+            RenderMaterial renderMaterial) {
         final List<BakedQuad> quads =
                 dataAwareBakedModel.getQuads(blockState, direction, supplier.get(), blockModelData, renderType);
 
-        final RenderMaterial material = Objects.requireNonNull(RendererAccess.INSTANCE.getRenderer())
-                .materialFinder()
-                .blendMode(BlendMode.fromRenderLayer(RenderType.solid()))
-                .blendMode(BlendMode.fromRenderLayer(RenderType.cutoutMipped()))
-                .blendMode(BlendMode.fromRenderLayer(RenderType.translucent()))
-                .find();
+        final RenderMaterial material = renderMaterial;
 
         quads.forEach(quad -> {
             final MeshBuilder meshBuilder =

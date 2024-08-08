@@ -157,7 +157,6 @@ public class TileEntityBlockChiseled extends BlockEntity
             ChiselsAndBitsEvents.BLOCK_BIT_POST_MODIFICATION.invoker().handle(bmm);
             setBlobStateReference(newRef);
         }
-        modelData.setData(MODEL_UPDATE, true);
     }
 
     @Override
@@ -439,9 +438,8 @@ public class TileEntityBlockChiseled extends BlockEntity
                 level.updateNeighborsAt(worldPosition, blk);
             }
         } else {
-            setBlobStateReference(new VoxelBlobStateReference(0, getPositionRandom(worldPosition)));
-            setState(getState(), getBlobStateReference());
-
+            setState(getState(), new VoxelBlobStateReference(0, getPositionRandom(worldPosition)));
+            setPrimaryBlockStateId(0);
             ModUtil.removeChiseledBlock(Objects.requireNonNull(level), worldPosition);
         }
 

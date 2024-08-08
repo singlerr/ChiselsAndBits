@@ -35,6 +35,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
@@ -89,6 +90,13 @@ public final class VoxelBlob implements IVoxelSrc {
                     // reverse mapping is broken, so just skip over this state.
                     continue;
                 }
+
+                if (state.getBlock() instanceof SimpleWaterloggedBlock) {
+                    layerFilters
+                            .get(ItemBlockRenderTypes.getRenderLayer(state.getFluidState()))
+                            .set(id);
+                }
+
                 layerFilters.get(ItemBlockRenderTypes.getChunkRenderType(state)).set(id);
             }
         }
@@ -748,10 +756,10 @@ public final class VoxelBlob implements IVoxelSrc {
             }
 
             if (fluidFilterState.get(ref) != wantsFluids) {
-                values[x] = 0;
-                noneAir.clear(x);
+
             } else {
                 hasValues = true;
+                break;
             }
         }
 
