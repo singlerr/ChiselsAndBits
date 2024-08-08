@@ -6,6 +6,7 @@ import java.awt.*;
 import java.util.List;
 import mod.chiselsandbits.registry.ModBlocks;
 import mod.chiselsandbits.registry.ModRenderTypes;
+import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -262,6 +263,7 @@ public class RenderHelper {
             final int green,
             final int blue,
             final int alpha) {
+
         final Tesselator tess = Tesselator.getInstance();
         final BufferBuilder bufferBuilder = tess.getBuilder();
         bufferBuilder.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION_COLOR);
@@ -328,6 +330,8 @@ public class RenderHelper {
             final boolean isUnplaceable,
             final int combinedLightmap,
             final int combinedOverlay) {
+        if (Minecraft.getInstance().options.getCameraType() != CameraType.FIRST_PERSON) return;
+
         final int alpha = isUnplaceable ? 0x22000000 : 0xaa000000;
         Minecraft.getInstance().getTextureManager().bindForSetup(InventoryMenu.BLOCK_ATLAS);
         RenderHelper.renderModel(matrixStack, baked, worldObj, blockPos, alpha, combinedLightmap, combinedOverlay);

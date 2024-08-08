@@ -266,7 +266,7 @@ public enum ModRenderTypes {
                             .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                             .setLightmapState(LIGHTMAP)
                             .setOverlayState(OVERLAY)
-                            .setDepthTestState(InternalState.DISABLED_DEPTH_TEST) // Only difference from
+                            .setDepthTestState(InternalState.LEQUAL_DEPTH_TEST) // Only difference from
                             // RenderType#ENTITY_TRANSLUCENT_CULL
                             .createCompositeState(false));
         }

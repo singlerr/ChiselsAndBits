@@ -149,18 +149,12 @@ public final class VoxelBlobStateInstance implements Comparable<VoxelBlobStateIn
     }
 
     public Collection<AABB> getBoxes(final BoxType type) {
-        switch (type) {
-            case COLLISION:
-                return new BoxCollection(getBoxType(HAS_SOLIDS));
-
-            case OCCLUSION:
-                return new BoxCollection(getBoxType(HAS_SOLIDS), getBoxType(HAS_FLUIDS));
-
-            case SWIMMING:
-                return new BoxCollection(getBoxType(HAS_FLUIDS));
-        }
-
-        return Collections.emptyList();
+        return switch (type) {
+            case COLLISION -> new BoxCollection(getBoxType(HAS_SOLIDS));
+            case OCCLUSION -> new BoxCollection(getBoxType(HAS_SOLIDS), getBoxType(HAS_FLUIDS));
+            case SWIMMING -> new BoxCollection(getBoxType(HAS_FLUIDS));
+            default -> Collections.emptyList();
+        };
     }
 
     private AABB[] generateBoxes(final VoxelBlob blob) {

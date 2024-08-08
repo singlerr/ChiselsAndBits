@@ -50,7 +50,6 @@ public class BoxCollection implements Collection<AABB> {
             throw new RuntimeException("Not Implemented.");
         }
     }
-    ;
 
     public BoxCollection(final AABB[] a) {
         arrays = new AABB[1][];

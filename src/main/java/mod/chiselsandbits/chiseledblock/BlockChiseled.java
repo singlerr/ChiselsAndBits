@@ -306,7 +306,7 @@ public class BlockChiseled extends Block
             final VoxelBlob blob = getTileEntity(worldIn, pos).getBlob();
             if (blob == null) return Shapes.empty();
 
-            return VoxelShapeCache.getInstance().get(blob, BoxType.COLLISION);
+            return VoxelShapeCache.getInstance().get(blob, BoxType.OCCLUSION);
         } catch (ExceptionNoTileEntity exceptionNoTileEntity) {
             return Shapes.empty();
         }

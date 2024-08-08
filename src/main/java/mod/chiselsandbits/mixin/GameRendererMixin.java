@@ -18,7 +18,7 @@ public abstract class GameRendererMixin {
                             value = "INVOKE",
                             target =
                                     "Lnet/minecraft/client/renderer/LevelRenderer;renderLevel(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V",
-                            shift = At.Shift.AFTER))
+                            shift = At.Shift.BEFORE))
     private void mod$dispatchRenderWorldLastEvent(float ticks, long l, PoseStack poseStack, CallbackInfo ci) {
         RenderWorldLastEvent.EVENT.invoker().handle(poseStack, ticks);
     }

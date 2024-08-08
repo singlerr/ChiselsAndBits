@@ -64,9 +64,9 @@ public final class ModBlocks {
                     BlockBehaviour.Properties.of()
                             .pushReaction(PushReaction.BLOCK)
                             .strength(1.5f, 6f)
+                            .isSuffocating((blockState, blockGetter, blockPos) -> true)
                             .isViewBlocking((p_test_1_, p_test_2_, p_test_3_) -> false)
-                            .isRedstoneConductor((p_test_1_, p_test_2_, p_test_3_) -> false)
-                            .noOcclusion()));
+                            .isRedstoneConductor((p_test_1_, p_test_2_, p_test_3_) -> false)));
     public static final RegistryObject<BlockItem> CHISEL_PRINTER_ITEM = ITEM_REGISTRAR.register(
             "chiseled_printer", () -> new BlockItem(ModBlocks.CHISEL_PRINTER_BLOCK.get(), new Item.Properties()));
 
