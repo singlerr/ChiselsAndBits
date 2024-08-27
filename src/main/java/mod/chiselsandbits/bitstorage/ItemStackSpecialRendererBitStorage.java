@@ -57,6 +57,8 @@ public class ItemStackSpecialRendererBitStorage extends BlockEntityWithoutLevelR
                                 .map(s -> s.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE))
                                 .orElse(FluidStack.EMPTY),
                         IFluidHandler.FluidAction.EXECUTE));
-        blockEntityRenderDispatcher.renderItem(tileEntity, matrixStack, buffer, combinedLight, combinedOverlay);
+        Minecraft.getInstance()
+                .getBlockEntityRenderDispatcher()
+                .renderItem(tileEntity, matrixStack, buffer, combinedLight, combinedOverlay);
     }
 }

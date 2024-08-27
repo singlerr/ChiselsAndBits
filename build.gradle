@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.7-SNAPSHOT'
+	id 'fabric-loom' version '1.7.3'
 	id 'maven-publish'
 	id 'com.diffplug.spotless' version '6.25.0'
 }
@@ -13,18 +13,23 @@ base {
 
 repositories {
 	mavenCentral()
-	exclusiveContent {
-		forRepository {
-			maven{
-				url = "file:///${project.projectDir}/libs"
-			}
+	maven {
+		name = 'Fabric'
+		url = 'https://maven.fabricmc.net/'
+	}
+	maven {
+		url = 'https://jitpack.io'
+		content {
+			includeGroup "com.github.Chocohead" // Fixes extremely slowing down Gradle configuration
 		}
-		filter {
+	}
+	maven{
+		url = "file:///${project.projectDir}/libs"
+		content {
 			includeGroup "io.github.feltmc"
 			includeGroup "io.github.fabricators_of_create.Porting-Lib"
 		}
 	}
-	maven { url = "https://mvn.devos.one/releases/" }
 	maven {
 		name = "Fuzs Mod Resources"
 		url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
@@ -39,13 +44,7 @@ repositories {
 		name = 'LDTTeam - Modding'
 		url = 'https://ldtteam.jfrog.io/ldtteam/modding/'
 	}
-	maven {
-		url = "https://maven.nova-committee.cn/releases"
-	}
-	maven {
-		name = "Jitpack"
-		url = 'https://jitpack.io/'
-	}
+	maven { url = "https://mvn.devos.one/releases/" }
 	exclusiveContent {
 		forRepository {
 			maven {

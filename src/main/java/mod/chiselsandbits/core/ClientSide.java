@@ -28,7 +28,6 @@ import mod.chiselsandbits.chiseledblock.iterators.ChiselTypeIterator;
 import mod.chiselsandbits.client.*;
 import mod.chiselsandbits.client.gui.ChiselsAndBitsMenu;
 import mod.chiselsandbits.client.gui.SpriteIconPositioning;
-import mod.chiselsandbits.events.extra.RenderWorldLastEvent;
 import mod.chiselsandbits.helpers.*;
 import mod.chiselsandbits.interfaces.IItemScrollWheel;
 import mod.chiselsandbits.interfaces.IPatternItem;
@@ -50,6 +49,8 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.client.Camera;
@@ -138,8 +139,8 @@ public class ClientSide {
         UseBlockCallback.EVENT.register(this::drawingInteractionPrevention);
         ClientTickEvents.START_CLIENT_TICK.register(this::applyChiselDelay);
         ClientTickEvents.END_CLIENT_TICK.register(this::interaction);
-        RenderWorldLastEvent.EVENT.register(this::drawLast);
-        RenderWorldLastEvent.EVENT.register(this::drawHighlight);
+        WorldRenderEvents.LAST.register(this::drawLast);
+        WorldRenderEvents.LAST.register(this::drawHighlight);
         DrawSelectionEvents.BLOCK.register(this::drawHighlight);
         MouseInputEvents.BEFORE_SCROLL.register(this::wheelEvent);
     }
@@ -677,7 +678,9 @@ public class ClientSide {
     boolean wasDrawing = false;
 
     @Environment(EnvType.CLIENT)
-    public void drawHighlight(PoseStack stack, float partialTicks) {
+    public void drawHighlight(WorldRenderContext context) {
+        PoseStack stack = context.matrixStack();
+        float partialTicks = context.tickDelta();
         stack.pushPose();
         Vec3 renderView = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
         stack.translate(-renderView.x, -renderView.y, -renderView.z);
@@ -972,9 +975,12 @@ public class ClientSide {
     }
 
     @Environment(EnvType.CLIENT)
-    public void drawLast(PoseStack stack, float partialTicks) {
+    public void drawLast(WorldRenderContext context) {
         // important and used for tesr / block rendering.
         ++lastRenderedFrame;
+
+        float partialTicks = context.tickDelta();
+        PoseStack stack = context.matrixStack();
 
         if (Minecraft.getInstance().options.hideGui) {
             return;

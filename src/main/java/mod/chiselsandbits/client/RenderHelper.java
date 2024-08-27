@@ -5,17 +5,19 @@ import com.mojang.blaze3d.vertex.*;
 import java.awt.*;
 import java.util.List;
 import mod.chiselsandbits.registry.ModBlocks;
-import mod.chiselsandbits.registry.ModRenderTypes;
+import mod.chiselsandbits.utils.Constants;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -24,6 +26,29 @@ import org.lwjgl.opengl.GL11;
 public class RenderHelper {
 
     public static RandomSource RENDER_RANDOM = RandomSource.create();
+    private static final RenderType CHISEL_PREVIEW = previewRender();
+
+    private static RenderType previewRender() {
+        RenderType.CompositeState compositeState = RenderType.CompositeState.builder()
+                .setShaderState(RenderType.RENDERTYPE_ENTITY_TRANSLUCENT_CULL_SHADER)
+                .setTextureState(new RenderStateShard.TextureStateShard(TextureAtlas.LOCATION_BLOCKS, false, false))
+                .setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
+                .setLightmapState(RenderType.LIGHTMAP)
+                .setLayeringState(RenderType.VIEW_OFFSET_Z_LAYERING)
+                .setWriteMaskState(RenderType.COLOR_WRITE)
+                .setCullState(RenderType.NO_CULL)
+                .setDepthTestState(RenderStateShard.NO_DEPTH_TEST)
+                .setOverlayState(RenderType.NO_OVERLAY)
+                .createCompositeState(true);
+        return RenderType.create(
+                Constants.MOD_ID + ":chisels_preview",
+                DefaultVertexFormat.NEW_ENTITY,
+                VertexFormat.Mode.QUADS,
+                1536,
+                true,
+                true,
+                compositeState);
+    }
 
     public static void drawSelectionBoundingBoxIfExists(
             final PoseStack matrixStack,
@@ -49,11 +74,6 @@ public class RenderHelper {
             final int alpha,
             final int seeThruAlpha) {
         if (bb != null) {
-            RenderSystem.enableBlend();
-            RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-            RenderSystem.lineWidth(2.0F);
-            RenderSystem.depthMask(false);
-
             if (!NormalBoundingBox) {
                 RenderHelper.renderBoundingBox(
                         matrixStack,
@@ -65,8 +85,6 @@ public class RenderHelper {
                         alpha);
             }
 
-            RenderSystem.disableDepthTest();
-
             RenderHelper.renderBoundingBox(
                     matrixStack,
                     bb.expandTowards(0.002D, 0.002D, 0.002D).move(blockPos.getX(), blockPos.getY(), blockPos.getZ()),
@@ -74,10 +92,6 @@ public class RenderHelper {
                     green,
                     blue,
                     seeThruAlpha);
-
-            RenderSystem.enableDepthTest();
-            RenderSystem.depthMask(true);
-            RenderSystem.disableBlend();
         }
     }
 
@@ -95,23 +109,13 @@ public class RenderHelper {
             final int alpha,
             final int seeThruAlpha) {
         if (a != null && b != null) {
-            RenderSystem.enableBlend();
-            RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-            RenderSystem.lineWidth(2.0F);
-            RenderSystem.depthMask(false);
-
             final Vec3 a2 = a.add(blockPos.getX(), blockPos.getY(), blockPos.getZ());
             final Vec3 b2 = b.add(blockPos.getX(), blockPos.getY(), blockPos.getZ());
             if (!NormalBoundingBox) {
                 RenderHelper.renderLine(matrixStack, a2, b2, red, green, blue, alpha);
             }
 
-            RenderSystem.disableDepthTest();
-
             RenderHelper.renderLine(matrixStack, a2, b2, red, green, blue, seeThruAlpha);
-            RenderSystem.enableDepthTest();
-            RenderSystem.depthMask(true);
-            RenderSystem.disableBlend();
         }
     }
 
@@ -134,7 +138,6 @@ public class RenderHelper {
             float cg = ((color >>> 8) & 0xFF) / 255f;
             float cr = ((color >>> 16) & 0xFF) / 255f;
             float ca = ((color >>> 24) & 0xFF) / 255f;
-
             renderer.putBulkData(
                     matrixStack.last(),
                     bakedquad,
@@ -160,7 +163,11 @@ public class RenderHelper {
         final Tesselator tess = Tesselator.getInstance();
         final BufferBuilder bufferBuilder = tess.getBuilder();
         //        RenderSystem.shadeModel(GL11.GL_FLAT);
-        bufferBuilder.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION_COLOR);
+        RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
+        RenderSystem.lineWidth(5.5f);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        bufferBuilder.begin(VertexFormat.Mode.DEBUG_LINES, DefaultVertexFormat.POSITION_COLOR);
 
         final float minX = (float) boundingBox.minX;
         final float minY = (float) boundingBox.minY;
@@ -251,8 +258,9 @@ public class RenderHelper {
                 .endVertex();
 
         tess.end();
-
-        Minecraft.getInstance().renderBuffers().bufferSource().endBatch();
+        RenderSystem.setShaderColor(1, 1, 1, 1);
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
     }
 
     public static void renderLine(
@@ -266,7 +274,11 @@ public class RenderHelper {
 
         final Tesselator tess = Tesselator.getInstance();
         final BufferBuilder bufferBuilder = tess.getBuilder();
-        bufferBuilder.begin(VertexFormat.Mode.LINE_STRIP, DefaultVertexFormat.POSITION_COLOR);
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.lineWidth(3.5f);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        bufferBuilder.begin(VertexFormat.Mode.DEBUG_LINES, DefaultVertexFormat.POSITION_COLOR);
         bufferBuilder
                 .vertex(matrixStack.last().pose(), (float) a.x, (float) a.y, (float) a.z)
                 .color(red, green, blue, alpha)
@@ -276,6 +288,9 @@ public class RenderHelper {
                 .color(red, green, blue, alpha)
                 .endVertex();
         tess.end();
+        RenderSystem.setShaderColor(1, 1, 1, 1);
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
     }
 
     public static int getTint(final int alpha, final int tintIndex, final Level worldObj, final BlockPos blockPos) {
@@ -295,7 +310,9 @@ public class RenderHelper {
             final int combinedOverlay) {
         final Tesselator tessellator = Tesselator.getInstance();
         final BufferBuilder buffer = tessellator.getBuilder();
-        RenderType renderType = ModRenderTypes.GHOST_BLOCK_PREVIEW_GREATER.get();
+
+        RenderType renderType = CHISEL_PREVIEW;
+
         buffer.begin(renderType.mode(), renderType.format());
 
         for (final Direction enumfacing : Direction.values()) {
@@ -319,6 +336,7 @@ public class RenderHelper {
                 blockPos,
                 combinedLightmap,
                 combinedOverlay);
+
         renderType.end(buffer, RenderSystem.getVertexSorting());
     }
 
@@ -330,10 +348,9 @@ public class RenderHelper {
             final boolean isUnplaceable,
             final int combinedLightmap,
             final int combinedOverlay) {
-        if (Minecraft.getInstance().options.getCameraType() != CameraType.FIRST_PERSON) return;
 
+        if (Minecraft.getInstance().options.getCameraType() == CameraType.THIRD_PERSON_BACK) return;
         final int alpha = isUnplaceable ? 0x22000000 : 0xaa000000;
-        Minecraft.getInstance().getTextureManager().bindForSetup(InventoryMenu.BLOCK_ATLAS);
         RenderHelper.renderModel(matrixStack, baked, worldObj, blockPos, alpha, combinedLightmap, combinedOverlay);
     }
 }
