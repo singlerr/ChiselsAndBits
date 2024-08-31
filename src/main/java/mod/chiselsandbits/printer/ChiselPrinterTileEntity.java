@@ -269,8 +269,7 @@ public class ChiselPrinterTileEntity extends BlockEntity implements MenuProvider
 
         c.setBlob(blob);
 
-        final BlockState state = c.getPrimaryBlockState();
-        final ItemStack itemstack = new ItemStack(ModBlocks.convertGivenStateToChiseledBlock(state), 1);
+        final ItemStack itemstack = new ItemStack(ModBlocks.getChiseledBlock(), 1);
         c.writeChisleData(tag, false);
 
         itemstack.addTagElement(ModUtil.NBT_BLOCKENTITYTAG, tag);

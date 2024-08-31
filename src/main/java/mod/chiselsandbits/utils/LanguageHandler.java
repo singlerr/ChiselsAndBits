@@ -2,7 +2,6 @@ package mod.chiselsandbits.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;

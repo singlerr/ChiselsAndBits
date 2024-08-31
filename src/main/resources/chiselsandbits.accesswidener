@@ -34,3 +34,5 @@ extendable method net/minecraft/client/gui/Font renderText (Ljava/lang/String;FF
 extendable method net/minecraft/client/gui/Font renderText (Lnet/minecraft/util/FormattedCharSequence;FFIZLorg/joml/Matrix4f;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/client/gui/Font$DisplayMode;II)F
 extendable method net/minecraft/world/item/Item getCraftingRemainingItem ()Lnet/minecraft/world/item/Item;
 accessible method net/minecraft/world/item/context/UseOnContext getHitResult ()Lnet/minecraft/world/phys/BlockHitResult;
+accessible class net/minecraft/client/renderer/RenderType$CompositeState
+accessible class net/minecraft/client/renderer/RenderStateShard$TextureStateShard

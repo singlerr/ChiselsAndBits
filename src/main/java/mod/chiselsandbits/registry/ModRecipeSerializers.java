@@ -1,44 +1,64 @@
 package mod.chiselsandbits.registry;
 
-import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
-import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
-import mod.chiselsandbits.core.ChiselsAndBits;
+import com.google.common.base.Suppliers;
+import java.util.function.Supplier;
 import mod.chiselsandbits.crafting.*;
+import mod.chiselsandbits.utils.Constants;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 
 public final class ModRecipeSerializers {
-
-    private static final LazyRegistrar<RecipeSerializer<?>> REGISTRAR =
-            LazyRegistrar.create(BuiltInRegistries.RECIPE_SERIALIZER, ChiselsAndBits.MODID);
 
     private ModRecipeSerializers() {
         throw new IllegalStateException("Tried to initialize: ModRecipeSerializers but this is a Utility class.");
     }
 
-    public static final RegistryObject<SimpleCraftingRecipeSerializer<BagDyeing>> BAG_DYEING =
-            REGISTRAR.register("bag_dyeing", () -> new SimpleCraftingRecipeSerializer<>(BagDyeing::new));
-    public static final RegistryObject<SimpleCraftingRecipeSerializer<ChiselCrafting>> CHISEL_CRAFTING =
-            REGISTRAR.register("chisel_crafting", () -> new SimpleCraftingRecipeSerializer<>(ChiselCrafting::new));
-    public static final RegistryObject<SimpleCraftingRecipeSerializer<ChiselBlockCrafting>> CHISEL_BLOCK_CRAFTING =
-            REGISTRAR.register(
-                    "chisel_block_crafting", () -> new SimpleCraftingRecipeSerializer<>(ChiselBlockCrafting::new));
-    public static final RegistryObject<SimpleCraftingRecipeSerializer<StackableCrafting>> STACKABLE_CRAFTING =
-            REGISTRAR.register(
-                    "stackable_crafting", () -> new SimpleCraftingRecipeSerializer<>(StackableCrafting::new));
-    public static final RegistryObject<SimpleCraftingRecipeSerializer<NegativeInversionCrafting>>
-            NEGATIVE_INVERSION_CRAFTING = REGISTRAR.register(
-                    "negative_inversion_crafting",
-                    () -> new SimpleCraftingRecipeSerializer<>(NegativeInversionCrafting::new));
-    public static final RegistryObject<SimpleCraftingRecipeSerializer<MirrorTransferCrafting>>
-            MIRROR_TRANSFER_CRAFTING = REGISTRAR.register(
-                    "mirror_transfer_crafting",
-                    () -> new SimpleCraftingRecipeSerializer<>(MirrorTransferCrafting::new));
-    public static final RegistryObject<SimpleCraftingRecipeSerializer<BitSawCrafting>> BIT_SAW_CRAFTING =
-            REGISTRAR.register("bit_saw_crafting", () -> new SimpleCraftingRecipeSerializer<>(BitSawCrafting::new));
+    public static final Supplier<SimpleCraftingRecipeSerializer<BagDyeing>> BAG_DYEING =
+            Suppliers.memoize(() -> new SimpleCraftingRecipeSerializer<>(BagDyeing::new));
+    public static final Supplier<SimpleCraftingRecipeSerializer<ChiselCrafting>> CHISEL_CRAFTING =
+            Suppliers.memoize(() -> new SimpleCraftingRecipeSerializer<>(ChiselCrafting::new));
+    public static final Supplier<SimpleCraftingRecipeSerializer<ChiselBlockCrafting>> CHISEL_BLOCK_CRAFTING =
+            Suppliers.memoize(() -> new SimpleCraftingRecipeSerializer<>(ChiselBlockCrafting::new));
+    public static final Supplier<SimpleCraftingRecipeSerializer<StackableCrafting>> STACKABLE_CRAFTING =
+            Suppliers.memoize(() -> new SimpleCraftingRecipeSerializer<>(StackableCrafting::new));
+    public static final Supplier<SimpleCraftingRecipeSerializer<NegativeInversionCrafting>>
+            NEGATIVE_INVERSION_CRAFTING =
+                    Suppliers.memoize(() -> new SimpleCraftingRecipeSerializer<>(NegativeInversionCrafting::new));
+    public static final Supplier<SimpleCraftingRecipeSerializer<MirrorTransferCrafting>> MIRROR_TRANSFER_CRAFTING =
+            Suppliers.memoize(() -> new SimpleCraftingRecipeSerializer<>(MirrorTransferCrafting::new));
+    public static final Supplier<SimpleCraftingRecipeSerializer<BitSawCrafting>> BIT_SAW_CRAFTING =
+            Suppliers.memoize(() -> new SimpleCraftingRecipeSerializer<>(BitSawCrafting::new));
 
     public static void onModConstruction() {
-        REGISTRAR.register();
+        Registry.register(
+                BuiltInRegistries.RECIPE_SERIALIZER,
+                new ResourceLocation(Constants.MOD_ID, "bag_dyeing"),
+                BAG_DYEING.get());
+        Registry.register(
+                BuiltInRegistries.RECIPE_SERIALIZER,
+                new ResourceLocation(Constants.MOD_ID, "chisel_crafting"),
+                CHISEL_CRAFTING.get());
+        Registry.register(
+                BuiltInRegistries.RECIPE_SERIALIZER,
+                new ResourceLocation(Constants.MOD_ID, "chisel_block_crafting"),
+                CHISEL_BLOCK_CRAFTING.get());
+        Registry.register(
+                BuiltInRegistries.RECIPE_SERIALIZER,
+                new ResourceLocation(Constants.MOD_ID, "stackable_crafting"),
+                STACKABLE_CRAFTING.get());
+        Registry.register(
+                BuiltInRegistries.RECIPE_SERIALIZER,
+                new ResourceLocation(Constants.MOD_ID, "negative_inversion_crafting"),
+                NEGATIVE_INVERSION_CRAFTING.get());
+        Registry.register(
+                BuiltInRegistries.RECIPE_SERIALIZER,
+                new ResourceLocation(Constants.MOD_ID, "mirror_transfer_crafting"),
+                MIRROR_TRANSFER_CRAFTING.get());
+        Registry.register(
+                BuiltInRegistries.RECIPE_SERIALIZER,
+                new ResourceLocation(Constants.MOD_ID, "bit_saw_crafting"),
+                BIT_SAW_CRAFTING.get());
     }
 }

@@ -8,10 +8,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import committee.nova.mkb.api.IKeyBinding;
 import committee.nova.mkb.api.IKeyConflictContext;
 import committee.nova.mkb.keybinding.KeyConflictContext;
-import io.github.fabricators_of_create.porting_lib.event.client.DrawSelectionEvents;
-import io.github.fabricators_of_create.porting_lib.event.client.MouseInputEvents;
-import io.github.fabricators_of_create.porting_lib.event.client.OverlayRenderCallback;
-import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Random;
@@ -28,6 +24,8 @@ import mod.chiselsandbits.chiseledblock.iterators.ChiselTypeIterator;
 import mod.chiselsandbits.client.*;
 import mod.chiselsandbits.client.gui.ChiselsAndBitsMenu;
 import mod.chiselsandbits.client.gui.SpriteIconPositioning;
+import mod.chiselsandbits.compat.client.GameMouseEvents;
+import mod.chiselsandbits.compat.client.OverlayRenderCallback;
 import mod.chiselsandbits.helpers.*;
 import mod.chiselsandbits.interfaces.IItemScrollWheel;
 import mod.chiselsandbits.interfaces.IPatternItem;
@@ -53,7 +51,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.minecraft.client.Camera;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -63,7 +60,6 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.TerrainParticle;
 import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -83,7 +79,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -141,8 +136,9 @@ public class ClientSide {
         ClientTickEvents.END_CLIENT_TICK.register(this::interaction);
         WorldRenderEvents.LAST.register(this::drawLast);
         WorldRenderEvents.LAST.register(this::drawHighlight);
-        DrawSelectionEvents.BLOCK.register(this::drawHighlight);
-        MouseInputEvents.BEFORE_SCROLL.register(this::wheelEvent);
+        WorldRenderEvents.BLOCK_OUTLINE.register(this::drawHighlight);
+
+        GameMouseEvents.BEFORE_SCROLL.register(this::wheelEvent);
     }
 
     public void init() {
@@ -246,17 +242,7 @@ public class ClientSide {
         itemColorRegistry.register(new ItemColorPatterns(), ModItems.ITEM_MIRROR_PRINT.get());
         itemColorRegistry.register(new ItemColorPatterns(), ModItems.ITEM_MIRROR_PRINT_WRITTEN.get());
 
-        blockColorRegistry.register(
-                new BlockColorChisled(),
-                ModBlocks.getMaterialToBlockConversions().values().stream()
-                        .map(RegistryObject::get)
-                        .toArray(Block[]::new));
         blockColorRegistry.register(new BlockColorChisled(), ModBlocks.CHISELED_BLOCK.get());
-        itemColorRegistry.register(
-                new ItemColorChiseled(),
-                ModBlocks.getMaterialToItemConversions().values().stream()
-                        .map(RegistryObject::get)
-                        .toArray(Item[]::new));
         itemColorRegistry.register(new ItemColorChiseled(), ModItems.ITEM_CHISELED_BLOCK.get());
     }
 
@@ -435,8 +421,9 @@ public class ClientSide {
             }
         }
 
-        if (type == OverlayRenderCallback.Types.PLAYER_HEALTH
-                && ChiselsAndBits.getConfig().getClient().enableToolbarIcons.get()) {
+        if (
+        /*type == OverlayRenderCallback.Types.PLAYER_HEALTH
+        &&*/ ChiselsAndBits.getConfig().getClient().enableToolbarIcons.get()) {
             final Minecraft mc = Minecraft.getInstance();
 
             if (!mc.player.isSpectator()) {
@@ -695,7 +682,7 @@ public class ClientSide {
         if (tool == ChiselToolType.TAPEMEASURE) {
             final Player player = getPlayer();
             final HitResult mop = Minecraft.getInstance().hitResult;
-            ;
+
             final Level theWorld = player.level;
 
             if (mop != null && mop.getType() == HitResult.Type.BLOCK) {
@@ -733,12 +720,9 @@ public class ClientSide {
 
     @Environment(EnvType.CLIENT)
     public boolean drawHighlight(
-            LevelRenderer context,
-            Camera info,
-            HitResult target,
-            float partialTicks,
-            PoseStack stack,
-            MultiBufferSource buffers) {
+            WorldRenderContext context, WorldRenderContext.BlockOutlineContext blockOutlineContext) {
+        PoseStack stack = context.matrixStack();
+        float partialTicks = context.tickDelta();
         try {
             stack.pushPose();
             Vec3 renderView =

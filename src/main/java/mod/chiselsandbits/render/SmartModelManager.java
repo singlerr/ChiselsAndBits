@@ -1,14 +1,11 @@
 package mod.chiselsandbits.render;
 
-import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import mod.chiselsandbits.chiseledblock.BlockChiseled;
 import mod.chiselsandbits.client.model.loader.FabricBakedModelDelegate;
 import mod.chiselsandbits.core.ChiselsAndBits;
 import mod.chiselsandbits.interfaces.ICacheClearable;
-import mod.chiselsandbits.registry.ModBlocks;
 import mod.chiselsandbits.registry.ModItems;
 import mod.chiselsandbits.render.bit.BitItemSmartModel;
 import mod.chiselsandbits.render.chiseledblock.ChiseledBlockSmartModel;
@@ -44,10 +41,6 @@ public class SmartModelManager {
         FabricBakedModelDelegate smartModel = new FabricBakedModelDelegate(new ChiseledBlockSmartModel());
         add(Constants.DataGenerator.CHISELED_BLOCK_MODEL, smartModel);
 
-        for (RegistryObject<BlockChiseled> bc :
-                ModBlocks.getMaterialToBlockConversions().values()) {
-            add(new ResourceLocation(ChiselsAndBits.MODID, bc.get().name), smartModel);
-        }
         ChiselsAndBits.getInstance().addClearable(smartModel);
 
         add(new ResourceLocation(ChiselsAndBits.MODID, "block_bit"), new BitItemSmartModel());

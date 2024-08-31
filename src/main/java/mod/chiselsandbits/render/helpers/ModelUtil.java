@@ -1,7 +1,6 @@
 package mod.chiselsandbits.render.helpers;
 
 import com.google.common.collect.Maps;
-import io.github.fabricators_of_create.porting_lib.util.client.ClientHooks;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -70,11 +69,9 @@ public class ModelUtil implements ICacheClearable {
 
         final RenderType original = ModClientHooks.getRenderType();
         try {
-            ClientHooks.setRenderType(layer);
             return getInnerCachedFace(cacheVal, stateID, weight, face, layer);
         } finally {
             // restore previous layer.
-            ClientHooks.setRenderType(original);
         }
     }
 

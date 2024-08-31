@@ -73,10 +73,6 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	def portingLibModules = porting_lib_modules.split(",")
-	for (final def module in portingLibModules) {
-		include modImplementation("io.github.fabricators_of_create.Porting-Lib:${module}:${porting_lib_version}")
-	}
 	include modApi("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${config_api_version}")
 	include modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${reach_distance_api_version}")
 	include modImplementation("com.communi-suggestu.saecularia-caudices:saecularia-caudices-fabric:${saeculariaCaudicesVersion}")

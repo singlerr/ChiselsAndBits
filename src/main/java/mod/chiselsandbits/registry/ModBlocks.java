@@ -1,43 +1,26 @@
 package mod.chiselsandbits.registry;
 
-import com.google.common.collect.Maps;
-import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
-import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
-import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
-import java.util.Arrays;
-import java.util.Map;
+import com.google.common.base.Suppliers;
+import java.util.function.Supplier;
 import mod.chiselsandbits.bitstorage.BlockBitStorage;
 import mod.chiselsandbits.bitstorage.ItemBlockBitStorage;
-import mod.chiselsandbits.bitstorage.ItemStackSpecialRendererBitStorage;
 import mod.chiselsandbits.chiseledblock.BlockChiseled;
-import mod.chiselsandbits.chiseledblock.ItemBlockChiseled;
-import mod.chiselsandbits.chiseledblock.MaterialType;
 import mod.chiselsandbits.chiseledblock.ReflectionHelperBlock;
-import mod.chiselsandbits.core.ChiselsAndBits;
 import mod.chiselsandbits.printer.ChiselPrinterBlock;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
-import net.minecraft.core.registries.Registries;
+import mod.chiselsandbits.utils.Constants;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
 
 public final class ModBlocks {
 
-    private static final LazyRegistrar<Block> BLOCK_REGISTRAR =
-            LazyRegistrar.create(Registries.BLOCK, ChiselsAndBits.MODID);
-    private static final LazyRegistrar<Item> ITEM_REGISTRAR =
-            LazyRegistrar.create(Registries.ITEM, ChiselsAndBits.MODID);
-
-    public static final Map<String, RegistryObject<BlockChiseled>> MATERIAL_TO_BLOCK_CONVERSIONS = Maps.newHashMap();
-    public static final Map<String, RegistryObject<ItemBlockChiseled>> MATERIAL_TO_ITEM_CONVERSIONS = Maps.newHashMap();
-
-    public static final RegistryObject<BlockBitStorage> BIT_STORAGE_BLOCK = BLOCK_REGISTRAR.register(
-            "bit_storage",
-            () -> new BlockBitStorage(BlockBehaviour.Properties.of()
+    public static final Supplier<BlockBitStorage> BIT_STORAGE_BLOCK =
+            Suppliers.memoize(() -> new BlockBitStorage(BlockBehaviour.Properties.of()
                     .strength(1.5F, 6.0F)
                     .requiresCorrectToolForDrops()
                     .dynamicShape()
@@ -47,48 +30,28 @@ public final class ModBlocks {
                     .isSuffocating((p_test_1_, p_test_2_, p_test_3_) -> false)
                     .isViewBlocking((p_test_1_, p_test_2_, p_test_3_) -> false)));
 
-    public static final RegistryObject<BlockItem> BIT_STORAGE_BLOCK_ITEM = ITEM_REGISTRAR.register(
-            "bit_storage", () -> new ItemBlockBitStorage(BIT_STORAGE_BLOCK.get(), new Item.Properties()));
-    public static final RegistryObject<ChiselPrinterBlock> CHISEL_PRINTER_BLOCK = BLOCK_REGISTRAR.register(
-            "chiseled_printer",
-            () -> new ChiselPrinterBlock(BlockBehaviour.Properties.of()
+    public static final Supplier<ItemBlockBitStorage> BIT_STORAGE_BLOCK_ITEM =
+            Suppliers.memoize(() -> new ItemBlockBitStorage(BIT_STORAGE_BLOCK.get(), new Item.Properties()));
+    public static final Supplier<ChiselPrinterBlock> CHISEL_PRINTER_BLOCK =
+            Suppliers.memoize(() -> new ChiselPrinterBlock(BlockBehaviour.Properties.of()
                     .strength(1.5f, 6f)
                     .noOcclusion()
                     .isRedstoneConductor((p_test_1_, p_test_2_, p_test_3_) -> false)
                     .isViewBlocking((p_test_1_, p_test_2_, p_test_3_) -> false)));
 
-    public static final RegistryObject<BlockChiseled> CHISELED_BLOCK = BLOCK_REGISTRAR.register(
+    public static final Supplier<BlockChiseled> CHISELED_BLOCK = Suppliers.memoize(() -> new BlockChiseled(
             "chiseled_block",
-            () -> new BlockChiseled(
-                    "chiseled_block",
-                    BlockBehaviour.Properties.of()
-                            .pushReaction(PushReaction.BLOCK)
-                            .strength(1.5f, 6f)
-                            .isSuffocating((blockState, blockGetter, blockPos) -> true)
-                            .isViewBlocking((p_test_1_, p_test_2_, p_test_3_) -> false)
-                            .isRedstoneConductor((p_test_1_, p_test_2_, p_test_3_) -> false)));
-    public static final RegistryObject<BlockItem> CHISEL_PRINTER_ITEM = ITEM_REGISTRAR.register(
-            "chiseled_printer", () -> new BlockItem(ModBlocks.CHISEL_PRINTER_BLOCK.get(), new Item.Properties()));
+            BlockBehaviour.Properties.of()
+                    .pushReaction(PushReaction.BLOCK)
+                    .strength(1.5f, 6f)
+                    .isSuffocating((blockState, blockGetter, blockPos) -> true)
+                    .isViewBlocking((p_test_1_, p_test_2_, p_test_3_) -> false)
+                    .isRedstoneConductor((p_test_1_, p_test_2_, p_test_3_) -> false)));
+    public static final Supplier<BlockItem> CHISEL_PRINTER_ITEM =
+            Suppliers.memoize(() -> new BlockItem(CHISEL_PRINTER_BLOCK.get(), new Item.Properties()));
 
-    public static final RegistryObject<ReflectionHelperBlock> REFLECTION_HELPER_BLOCK =
-            BLOCK_REGISTRAR.register("reflection_helper_block", ReflectionHelperBlock::new);
-
-    public static final MaterialType[] VALID_CHISEL_MATERIALS = new MaterialType[] {
-        new MaterialType("wood", "wood"),
-        new MaterialType("rock", "stone"),
-        new MaterialType("iron", "metal"),
-        new MaterialType("cloth", "cloth_decoration"),
-        new MaterialType("ice", "ice"),
-        new MaterialType("packed_ice", "ice_solid"),
-        new MaterialType("clay", "clay"),
-        new MaterialType("glass", "glass"),
-        new MaterialType("sand", "sand"),
-        new MaterialType("ground", "dirt"),
-        new MaterialType("grass", "dirt"),
-        new MaterialType("snow", "snow"),
-        new MaterialType("fluid", "water"),
-        new MaterialType("leaves", "leaves"),
-    };
+    public static final Supplier<ReflectionHelperBlock> REFLECTION_HELPER_BLOCK =
+            Suppliers.memoize(ReflectionHelperBlock::new);
 
     private ModBlocks() {
         throw new IllegalStateException("Tried to initialize: ModBlocks but this is a Utility class.");
@@ -96,59 +59,38 @@ public final class ModBlocks {
 
     public static void onModConstruction() {
 
-        Arrays.stream(VALID_CHISEL_MATERIALS).forEach(materialType -> {
-            MATERIAL_TO_BLOCK_CONVERSIONS.put(
-                    materialType.getType(),
-                    BLOCK_REGISTRAR.register(
-                            "chiseled" + materialType.getName(),
-                            () -> new BlockChiseled(
-                                    "chiseled" + materialType.getName(),
-                                    BlockBehaviour.Properties.of()
-                                            .pushReaction(PushReaction.BLOCK)
-                                            .strength(1.5f, 6f)
-                                            .isViewBlocking((p_test_1_, p_test_2_, p_test_3_) -> false)
-                                            .isRedstoneConductor((p_test_1_, p_test_2_, p_test_3_) -> false)
-                                            .noOcclusion())));
-            MATERIAL_TO_ITEM_CONVERSIONS.put(
-                    materialType.getType(),
-                    ITEM_REGISTRAR.register(
-                            "chiseled" + materialType.getName(),
-                            () -> new ItemBlockChiseled(
-                                    MATERIAL_TO_BLOCK_CONVERSIONS
-                                            .get(materialType.getType())
-                                            .get(),
-                                    new Item.Properties())));
-        });
-        BLOCK_REGISTRAR.register();
-        ITEM_REGISTRAR.register();
-        EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> {
-            BuiltinItemRendererRegistry.INSTANCE.register(
-                    BIT_STORAGE_BLOCK_ITEM.get(), new ItemStackSpecialRendererBitStorage()::renderByItem);
-        });
-    }
+        Registry.register(
+                BuiltInRegistries.BLOCK,
+                new ResourceLocation(Constants.MOD_ID, "bit_storage"),
+                BIT_STORAGE_BLOCK.get());
+        Registry.register(
+                BuiltInRegistries.BLOCK,
+                new ResourceLocation(Constants.MOD_ID, "chiseled_printer"),
+                BIT_STORAGE_BLOCK.get());
+        Registry.register(
+                BuiltInRegistries.BLOCK,
+                new ResourceLocation(Constants.MOD_ID, "chiseled_block"),
+                CHISELED_BLOCK.get());
+        Registry.register(
+                BuiltInRegistries.BLOCK,
+                new ResourceLocation(Constants.MOD_ID, "reflection_helper_block"),
+                REFLECTION_HELPER_BLOCK.get());
 
-    public static Map<String, RegistryObject<ItemBlockChiseled>> getMaterialToItemConversions() {
-        return MATERIAL_TO_ITEM_CONVERSIONS;
-    }
-
-    public static Map<String, RegistryObject<BlockChiseled>> getMaterialToBlockConversions() {
-        return MATERIAL_TO_BLOCK_CONVERSIONS;
-    }
-
-    public static MaterialType[] getValidChiselMaterials() {
-        return VALID_CHISEL_MATERIALS;
+        Registry.register(
+                BuiltInRegistries.ITEM,
+                new ResourceLocation(Constants.MOD_ID, "bit_storage"),
+                BIT_STORAGE_BLOCK_ITEM.get());
+        Registry.register(
+                BuiltInRegistries.ITEM,
+                new ResourceLocation(Constants.MOD_ID, "chiseled_printer"),
+                CHISEL_PRINTER_ITEM.get());
     }
 
     public static BlockState getChiseledDefaultState() {
         return CHISELED_BLOCK.get().defaultBlockState();
     }
 
-    public static BlockChiseled convertGivenStateToChiseledBlock(final BlockState state) {
-
+    public static BlockChiseled getChiseledBlock() {
         return CHISELED_BLOCK.get();
-    }
-
-    public static RegistryObject<BlockChiseled> convertGivenMaterialToChiseledRegistryBlock() {
-        return CHISELED_BLOCK;
     }
 }

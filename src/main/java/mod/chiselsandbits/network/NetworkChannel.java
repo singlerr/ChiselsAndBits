@@ -1,16 +1,18 @@
 package mod.chiselsandbits.network;
 
-import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.function.Function;
-import me.pepperbell.simplenetworking.SimpleChannel;
+import mod.chiselsandbits.utils.Constants;
+import mod.chiselsandbits.utils.EnvExecutor;
 import net.fabricmc.api.EnvType;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -19,11 +21,8 @@ import org.jetbrains.annotations.Nullable;
 public class NetworkChannel {
     private static final String LATEST_PROTO_VER = "1.0";
     private static final String ACCEPTED_PROTO_VERS = LATEST_PROTO_VER;
-    /**
-     * Forge network channel
-     */
-    private final SimpleChannel rawChannel;
 
+    private final ResourceLocation networkId;
     /**
      * Creates a new instance of network channel.
      *
@@ -31,9 +30,7 @@ public class NetworkChannel {
      * @throws IllegalArgumentException if channelName already exists
      */
     public NetworkChannel(final String channelName) {
-        rawChannel = new SimpleChannel(new ResourceLocation("chiselsandbits", channelName));
-        EnvExecutor.runWhenOn(EnvType.CLIENT, () -> rawChannel::initClientListener);
-        rawChannel.initServerListener();
+        networkId = new ResourceLocation(Constants.MOD_ID, channelName);
     }
 
     /**
@@ -53,21 +50,20 @@ public class NetworkChannel {
      */
     public <MSG extends ModPacket> void registerMessage(
             int id, final Class<MSG> msgClazz, final Function<FriendlyByteBuf, MSG> msgCreator) {
-        rawChannel.registerC2SPacket(msgClazz, id++, msgCreator);
-        rawChannel.registerS2CPacket(msgClazz, id, msgCreator);
-    }
-
-    private <MSG extends ModPacket> MSG createPacket(Class<?> clz, FriendlyByteBuf buf) {
-        try {
-
-            Constructor<?> c = clz.getConstructor(FriendlyByteBuf.class);
-            return (MSG) c.newInstance(buf);
-        } catch (NoSuchMethodException
-                | InvocationTargetException
-                | InstantiationException
-                | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+        ResourceLocation packetId = new ResourceLocation(Constants.MOD_ID, msgClazz.getSimpleName());
+        PacketType<MSG> packetType = PacketType.create(packetId, msgCreator);
+        EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> {
+            ClientPlayNetworking.registerGlobalReceiver(
+                    packetType, (packet, player, responseSender) -> packet.processPacket(null, false));
+        });
+        EnvExecutor.runWhenOn(EnvType.SERVER, () -> () -> {
+            ServerPlayNetworking.registerGlobalReceiver(packetType, new ServerPlayNetworking.PlayPacketHandler<MSG>() {
+                @Override
+                public void receive(MSG packet, ServerPlayer player, PacketSender responseSender) {
+                    packet.processPacket(new Context(player, responseSender), true);
+                }
+            });
+        });
     }
     /**
      * Sends to server.
@@ -75,7 +71,7 @@ public class NetworkChannel {
      * @param msg message to send
      */
     public void sendToServer(final ModPacket msg) {
-        rawChannel.sendToServer(msg);
+        ClientPlayNetworking.send(msg);
     }
 
     /**
@@ -85,7 +81,7 @@ public class NetworkChannel {
      * @param player target player
      */
     public void sendToPlayer(final ModPacket msg, final ServerPlayer player) {
-        rawChannel.sendToClient(msg, player);
+        ServerPlayNetworking.send(player, msg);
     }
 
     /**
@@ -110,7 +106,7 @@ public class NetworkChannel {
      * @param msg message to send
      */
     public void sendToEveryone(final ModPacket msg) {
-        rawChannel.sendToClientsInCurrentServer(msg);
+        throw new NotImplementedException();
     }
 
     /**
@@ -126,7 +122,7 @@ public class NetworkChannel {
      * @param entity target entity to look at
      */
     public void sendToTrackingEntity(final ModPacket msg, final Entity entity) {
-        rawChannel.sendToClientsTracking(msg, entity);
+        throw new NotImplementedException();
     }
 
     /**
@@ -142,8 +138,8 @@ public class NetworkChannel {
      * @param entity target entity to look at
      */
     public void sendToTrackingEntityAndSelf(final ModPacket msg, final Entity entity) {
-        rawChannel.sendToClientsTrackingAndSelf(msg, entity);
+        throw new NotImplementedException();
     }
 
-    public record Context(@Nullable ServerPlayer serverPlayer, PacketSender packetSender, SimpleChannel channel) {}
+    public record Context(@Nullable ServerPlayer serverPlayer, PacketSender packetSender) {}
 }

@@ -2,9 +2,9 @@ package mod.chiselsandbits.client.model.baked;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Transformation;
-import io.github.fabricators_of_create.porting_lib.models.TransformTypeDependentItemBakedModel;
-import io.github.fabricators_of_create.porting_lib.models.util.TransformationHelper;
 import mod.chiselsandbits.utils.TransformationUtils;
+import net.minecraft.client.renderer.block.model.ItemTransform;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -31,6 +31,11 @@ public abstract class BaseBakedPerspectiveModel implements BakedModel, Transform
         firstPerson_righthand = firstPerson_lefthand = getMatrix(0, 0, 0, 0, 45, 0, 0.40f);
     }
 
+    @Override
+    public ItemTransforms getTransforms() {
+        return new PerspectiveItemModelDelegate(this);
+    }
+
     private static Transformation getMatrix(
             final float transX,
             final float transY,
@@ -41,14 +46,12 @@ public abstract class BaseBakedPerspectiveModel implements BakedModel, Transform
             final float scaleXYZ) {
         final Vector3f translation = new Vector3f(transX, transY, transZ);
         final Vector3f scale = new Vector3f(scaleXYZ, scaleXYZ, scaleXYZ);
-        final Quaternionf rotation = TransformationHelper.quatFromXYZ(rotX, rotY, rotZ, true);
+        final Quaternionf rotation = TransformationUtils.quatFromXYZ(rotX, rotY, rotZ, true);
         return new Transformation(translation, rotation, scale, null);
     }
 
     @Override
-    public BakedModel applyTransform(
-            ItemDisplayContext context, PoseStack poseStack, boolean leftHand, DefaultTransform defaultTransform) {
-
+    public BakedModel applyTransform(ItemDisplayContext context, PoseStack poseStack, boolean leftHand) {
         switch (context) {
             case FIRST_PERSON_LEFT_HAND:
                 TransformationUtils.push(poseStack, firstPerson_lefthand, leftHand);
@@ -75,5 +78,33 @@ public abstract class BaseBakedPerspectiveModel implements BakedModel, Transform
 
         TransformationUtils.push(poseStack, fixed, leftHand);
         return this;
+    }
+
+    private static final class PerspectiveItemModelDelegate extends ItemTransforms {
+
+        private final TransformTypeDependentItemBakedModel delegate;
+
+        public PerspectiveItemModelDelegate(TransformTypeDependentItemBakedModel delegate) {
+            super(
+                    ItemTransform.NO_TRANSFORM,
+                    ItemTransform.NO_TRANSFORM,
+                    ItemTransform.NO_TRANSFORM,
+                    ItemTransform.NO_TRANSFORM,
+                    ItemTransform.NO_TRANSFORM,
+                    ItemTransform.NO_TRANSFORM,
+                    ItemTransform.NO_TRANSFORM,
+                    ItemTransform.NO_TRANSFORM);
+            this.delegate = delegate;
+        }
+
+        @Override
+        public ItemTransform getTransform(ItemDisplayContext itemDisplayContext) {
+            return new ItemTransform(new Vector3f(), new Vector3f(), new Vector3f()) {
+                @Override
+                public void apply(boolean bl, PoseStack poseStack) {
+                    delegate.applyTransform(itemDisplayContext, poseStack, bl);
+                }
+            };
+        }
     }
 }

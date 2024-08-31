@@ -2,8 +2,6 @@ package mod.chiselsandbits.bitstorage;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import java.util.Objects;
 import mod.chiselsandbits.chiseledblock.data.VoxelBlob;
 import mod.chiselsandbits.core.ChiselsAndBits;
@@ -11,14 +9,11 @@ import mod.chiselsandbits.helpers.ModUtil;
 import mod.chiselsandbits.render.chiseledblock.ChiselRenderType;
 import mod.chiselsandbits.render.chiseledblock.ChiseledBlockBakedModel;
 import mod.chiselsandbits.render.chiseledblock.ChiseledBlockSmartModel;
-import mod.chiselsandbits.utils.FluidCuboidHelper;
 import mod.chiselsandbits.utils.FluidUtil;
-import mod.chiselsandbits.utils.RenderTypeUtils;
 import mod.chiselsandbits.utils.SimpleMaxSizedCache;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.world.level.block.state.BlockState;
@@ -42,33 +37,35 @@ public class TileEntitySpecialRenderBitStorage implements BlockEntityRenderer<Ti
             final int combinedLightIn,
             final int combinedOverlayIn) {
         if (te.getMyFluid() != null) {
-            final FluidStack fluidStack = te.getBitsAsFluidStack();
-            if (fluidStack != null) {
-                RenderType.chunkBufferLayers().forEach(renderType -> {
-                    if (!RenderTypeUtils.canRenderInLayer(fluidStack.getFluid().defaultFluidState(), renderType))
-                        return;
-
-                    if (renderType == RenderType.translucent() && Minecraft.useShaderTransparency())
-                        renderType = Sheets.translucentCullBlockSheet();
-
-                    final VertexConsumer builder = buffer.getBuffer(renderType);
-
-                    final float fullness = (float) fluidStack.getAmount() / (float) TileEntityBitStorage.MAX_CONTENTS;
-
-                    FluidCuboidHelper.renderScaledFluidCuboid(
-                            fluidStack,
-                            matrixStackIn,
-                            builder,
-                            combinedLightIn,
-                            combinedOverlayIn,
-                            1,
-                            1,
-                            1,
-                            15,
-                            15 * fullness,
-                            15);
-                });
-            }
+            //            final FluidStack fluidStack = te.getBitsAsFluidStack();
+            //            if (fluidStack != null) {
+            //                RenderType.chunkBufferLayers().forEach(renderType -> {
+            //                    if (!RenderTypeUtils.canRenderInLayer(fluidStack.getFluid().defaultFluidState(),
+            // renderType))
+            //                        return;
+            //
+            //                    if (renderType == RenderType.translucent() && Minecraft.useShaderTransparency())
+            //                        renderType = Sheets.translucentCullBlockSheet();
+            //
+            //                    final VertexConsumer builder = buffer.getBuffer(renderType);
+            //
+            //                    final float fullness = (float) fluidStack.getAmount() / (float)
+            // TileEntityBitStorage.MAX_CONTENTS;
+            //
+            //                    FluidCuboidHelper.renderScaledFluidCuboid(
+            //                            fluidStack,
+            //                            matrixStackIn,
+            //                            builder,
+            //                            combinedLightIn,
+            //                            combinedOverlayIn,
+            //                            1,
+            //                            1,
+            //                            1,
+            //                            15,
+            //                            15 * fullness,
+            //                            15);
+            //                });
+            //            }
 
             return;
         }

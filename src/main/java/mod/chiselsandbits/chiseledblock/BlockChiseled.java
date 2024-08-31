@@ -370,7 +370,7 @@ public class BlockChiseled extends Block
         ReplaceWithChiseledValue rv = new ReplaceWithChiseledValue();
 
         if (BlockBitInfo.canChisel(actingState) || isAir) {
-            BlockChiseled blk = ModBlocks.convertGivenStateToChiseledBlock(originalState);
+            BlockChiseled blk = ModBlocks.getChiseledBlock();
 
             int BlockID = ModUtil.getStateId(actingState);
 
@@ -378,7 +378,7 @@ public class BlockChiseled extends Block
                 actingState = ModUtil.getStateById(fragmentBlockStateID);
                 target = actingState.getBlock();
                 BlockID = ModUtil.getStateId(actingState);
-                blk = ModBlocks.convertGivenStateToChiseledBlock(actingState);
+                blk = ModBlocks.getChiseledBlock();
                 // its still air tho..
                 actingState = Blocks.AIR.defaultBlockState();
             }
@@ -502,9 +502,9 @@ public class BlockChiseled extends Block
             float numer = player.inventory.getDestroySpeed(state);
 
             if (!canHarvestBlockInternal(new SingleBlockBlockReader(state), ZERO, player)) {
-                return player.getDigSpeed(actingState, pos) / hardness / 100F * (numer / denom);
+                return player.getDestroySpeed(actingState) / hardness / 100F * (numer / denom);
             } else {
-                return player.getDigSpeed(actingState, pos) / hardness / 30F * (numer / denom);
+                return player.getDestroySpeed(actingState) / hardness / 30F * (numer / denom);
             }
         }
 

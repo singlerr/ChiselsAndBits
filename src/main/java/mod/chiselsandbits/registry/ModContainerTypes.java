@@ -1,29 +1,32 @@
 package mod.chiselsandbits.registry;
 
-import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
-import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
+import com.google.common.base.Suppliers;
+import java.util.function.Supplier;
 import mod.chiselsandbits.bitbag.BagContainer;
-import mod.chiselsandbits.core.ChiselsAndBits;
 import mod.chiselsandbits.printer.ChiselPrinterContainer;
-import net.minecraft.core.registries.Registries;
+import mod.chiselsandbits.utils.Constants;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.inventory.MenuType;
 
 public final class ModContainerTypes {
 
-    private static final LazyRegistrar<MenuType<?>> REGISTRAR =
-            LazyRegistrar.create(Registries.MENU, ChiselsAndBits.MODID);
-
     private ModContainerTypes() {
         throw new IllegalStateException("Tried to initialize: ModContainerTypes but this is a Utility class.");
     }
 
-    public static final RegistryObject<MenuType<BagContainer>> BAG_CONTAINER =
-            REGISTRAR.register("bag", () -> new MenuType<>(BagContainer::new, FeatureFlagSet.of()));
-    public static final RegistryObject<MenuType<ChiselPrinterContainer>> CHISEL_STATION_CONTAINER = REGISTRAR.register(
-            "chisel_station", () -> new MenuType<>(ChiselPrinterContainer::new, FeatureFlagSet.of()));
+    public static final Supplier<MenuType<BagContainer>> BAG_CONTAINER =
+            Suppliers.memoize(() -> new MenuType<>(BagContainer::new, FeatureFlagSet.of()));
+    public static final Supplier<MenuType<ChiselPrinterContainer>> CHISEL_STATION_CONTAINER =
+            Suppliers.memoize(() -> new MenuType<>(ChiselPrinterContainer::new, FeatureFlagSet.of()));
 
     public static void onModConstruction() {
-        REGISTRAR.register();
+        Registry.register(BuiltInRegistries.MENU, new ResourceLocation(Constants.MOD_ID, "bag"), BAG_CONTAINER.get());
+        Registry.register(
+                BuiltInRegistries.MENU,
+                new ResourceLocation(Constants.MOD_ID, "chisel_station"),
+                CHISEL_STATION_CONTAINER.get());
     }
 }

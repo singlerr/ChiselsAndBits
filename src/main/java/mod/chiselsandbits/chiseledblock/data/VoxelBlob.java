@@ -1,6 +1,5 @@
 package mod.chiselsandbits.chiseledblock.data;
 
-import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
 import io.netty.buffer.Unpooled;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -22,6 +21,7 @@ import mod.chiselsandbits.helpers.IVoxelSrc;
 import mod.chiselsandbits.helpers.LocalStrings;
 import mod.chiselsandbits.helpers.ModUtil;
 import mod.chiselsandbits.items.ItemChiseledBit;
+import mod.chiselsandbits.utils.EnvExecutor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;

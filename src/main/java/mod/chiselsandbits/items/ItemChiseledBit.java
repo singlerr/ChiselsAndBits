@@ -1,7 +1,6 @@
 package mod.chiselsandbits.items;
 
 import com.google.common.base.Stopwatch;
-import io.github.fabricators_of_create.porting_lib.util.FluidUtil;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;

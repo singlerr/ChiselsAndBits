@@ -20,7 +20,6 @@ public class PacketAccurateSneakPlace extends ModPacket {
 
         InteractionResult tryPlace(UseOnContext context, boolean offGrid);
     }
-    ;
 
     public PacketAccurateSneakPlace(FriendlyByteBuf buffer) {
         readPayload(buffer);

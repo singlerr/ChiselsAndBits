@@ -200,7 +200,7 @@ public class NBTBlobConverter {
     }
 
     public ItemStack getItemStack(final boolean crossWorld) {
-        final Block blk = ModBlocks.convertGivenStateToChiseledBlock(getPrimaryBlockState());
+        final Block blk = ModBlocks.getChiseledBlock();
 
         if (blk != null) {
             final ItemStack is = new ItemStack(blk);

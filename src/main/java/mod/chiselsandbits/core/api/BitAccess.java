@@ -24,7 +24,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.state.BlockState;
 
 public class BitAccess implements IBitAccess {
 
@@ -128,8 +127,7 @@ public class BitAccess implements IBitAccess {
         final ItemStack stack;
 
         if (type == ItemType.CHISELED_BLOCK) {
-            final BlockState state = ModUtil.getStateById(cb.mostCommonState);
-            final BlockChiseled blk = ModBlocks.convertGivenStateToChiseledBlock(state);
+            final BlockChiseled blk = ModBlocks.getChiseledBlock();
 
             if (blk == null) {
                 return ModUtil.getEmptyStack();

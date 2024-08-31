@@ -4,13 +4,10 @@ import static net.minecraft.core.Direction.*;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
-import net.minecraft.world.inventory.InventoryMenu;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
@@ -24,78 +21,80 @@ public final class FluidCuboidHelper {
     /**
      * Renders a fluid block with offset from the matrices and from x1/y1/z1 to x2/y2/z2 using block model coordinates, so from 0-16
      */
-    public static void renderScaledFluidCuboid(
-            FluidStack fluid,
-            PoseStack matrices,
-            VertexConsumer renderer,
-            int combinedLight,
-            final int combinedOverlay,
-            float x1,
-            float y1,
-            float z1,
-            float x2,
-            float y2,
-            float z2) {
-        renderFluidCuboid(
-                fluid,
-                matrices,
-                renderer,
-                combinedLight,
-                combinedOverlay,
-                x1 / 16,
-                y1 / 16,
-                z1 / 16,
-                x2 / 16,
-                y2 / 16,
-                z2 / 16);
-    }
+    //    public static void renderScaledFluidCuboid(
+    //           /* FluidStack fluid,*/
+    //            PoseStack matrices,
+    //            VertexConsumer renderer,
+    //            int combinedLight,
+    //            final int combinedOverlay,
+    //            float x1,
+    //            float y1,
+    //            float z1,
+    //            float x2,
+    //            float y2,
+    //            float z2) {
+    //        renderFluidCuboid(
+    //                fluid,
+    //                matrices,
+    //                renderer,
+    //                combinedLight,
+    //                combinedOverlay,
+    //                x1 / 16,
+    //                y1 / 16,
+    //                z1 / 16,
+    //                x2 / 16,
+    //                y2 / 16,
+    //                z2 / 16);
+    //    }
 
     /**
      * Renders a fluid block with offset from the matrices and from x1/y1/z1 to x2/y2/z2 inside the block local coordinates, so from 0-1
      */
-    public static void renderFluidCuboid(
-            FluidStack fluid,
-            PoseStack matrices,
-            VertexConsumer renderer,
-            int combinedLight,
-            final int combinedOverlay,
-            float x1,
-            float y1,
-            float z1,
-            float x2,
-            float y2,
-            float z2) {
-
-        int color = FluidUtil.getColor(fluid.getFluid());
-        renderFluidCuboid(fluid, matrices, renderer, combinedLight, combinedOverlay, x1, y1, z1, x2, y2, z2, color);
-    }
+    //    public static void renderFluidCuboid(
+    //            FluidStack fluid,
+    //            PoseStack matrices,
+    //            VertexConsumer renderer,
+    //            int combinedLight,
+    //            final int combinedOverlay,
+    //            float x1,
+    //            float y1,
+    //            float z1,
+    //            float x2,
+    //            float y2,
+    //            float z2) {
+    //
+    //        int color = FluidUtil.getColor(fluid.getFluid());
+    //        renderFluidCuboid(fluid, matrices, renderer, combinedLight, combinedOverlay, x1, y1, z1, x2, y2, z2,
+    // color);
+    //    }
 
     /**
      * Renders a fluid block with offset from the matrices and from x1/y1/z1 to x2/y2/z2 inside the block local coordinates, so from 0-1
      */
-    public static void renderFluidCuboid(
-            FluidStack fluid,
-            PoseStack matrices,
-            VertexConsumer renderer,
-            int combinedLight,
-            final int combinedOverlay,
-            float x1,
-            float y1,
-            float z1,
-            float x2,
-            float y2,
-            float z2,
-            int color) {
-        TextureAtlasSprite still = Minecraft.getInstance()
-                .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                .apply(FluidUtil.getStillTexture(fluid.getFluid()).contents().name());
-        TextureAtlasSprite flowing = Minecraft.getInstance()
-                .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                .apply(FluidUtil.getFlowingTexture(fluid.getFluid()).contents().name());
-
-        renderFluidCuboid(
-                still, flowing, color, matrices, renderer, combinedOverlay, combinedLight, x1, y1, z1, x2, y2, z2);
-    }
+    //    public static void renderFluidCuboid(
+    //            FluidStack fluid,
+    //            PoseStack matrices,
+    //            VertexConsumer renderer,
+    //            int combinedLight,
+    //            final int combinedOverlay,
+    //            float x1,
+    //            float y1,
+    //            float z1,
+    //            float x2,
+    //            float y2,
+    //            float z2,
+    //            int color) {
+    //        TextureAtlasSprite still = Minecraft.getInstance()
+    //                .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
+    //                .apply(FluidUtil.getStillTexture(fluid.getFluid()).contents().name());
+    //        TextureAtlasSprite flowing = Minecraft.getInstance()
+    //                .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
+    //                .apply(FluidUtil.getFlowingTexture(fluid.getFluid()).contents().name());
+    //
+    //        renderFluidCuboid(
+    //                still, flowing, color, matrices, renderer, combinedOverlay, combinedLight, x1, y1, z1, x2, y2,
+    // z2);
+    //    }
 
     public static void renderFluidCuboid(
             TextureAtlasSprite still,

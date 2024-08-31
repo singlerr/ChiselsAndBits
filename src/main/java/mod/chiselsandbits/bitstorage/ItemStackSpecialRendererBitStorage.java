@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
@@ -33,7 +34,8 @@ public class ItemStackSpecialRendererBitStorage extends BlockEntityWithoutLevelR
             int combinedOverlay) {
         final BakedModel model = Minecraft.getInstance()
                 .getModelManager()
-                .getModel(new ModelResourceLocation(ModBlocks.BIT_STORAGE_BLOCK.getId(), "facing=east"));
+                .getModel(new ModelResourceLocation(
+                        BuiltInRegistries.BLOCK.getKey(ModBlocks.BIT_STORAGE_BLOCK.get()), "facing=east"));
 
         Minecraft.getInstance()
                 .getBlockRenderer()

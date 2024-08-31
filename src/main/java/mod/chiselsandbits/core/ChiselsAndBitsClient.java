@@ -1,12 +1,9 @@
 package mod.chiselsandbits.core;
 
-import io.github.fabricators_of_create.porting_lib.models.geometry.IGeometryLoader;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Map;
 import mod.chiselsandbits.bitbag.BagGui;
 import mod.chiselsandbits.client.gui.SpriteIconPositioning;
-import mod.chiselsandbits.client.model.loader.ChiseledBlockModelLoader;
 import mod.chiselsandbits.core.textures.IconSpriteUploader;
 import mod.chiselsandbits.modes.ChiselMode;
 import mod.chiselsandbits.modes.IToolMode;
@@ -14,7 +11,6 @@ import mod.chiselsandbits.modes.PositivePatternMode;
 import mod.chiselsandbits.modes.TapeMeasureModes;
 import mod.chiselsandbits.printer.ChiselPrinterScreen;
 import mod.chiselsandbits.registry.ModContainerTypes;
-import mod.chiselsandbits.utils.Constants;
 import mod.chiselsandbits.utils.TextureUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -39,10 +35,11 @@ public class ChiselsAndBitsClient {
         MenuScreens.register(ModContainerTypes.CHISEL_STATION_CONTAINER.get(), ChiselPrinterScreen::new);
     }
 
-    @Environment(EnvType.CLIENT)
-    public static void onModelRegistry(Map<ResourceLocation, IGeometryLoader<?>> loaders) {
-        loaders.put(new ResourceLocation(Constants.MOD_ID, "chiseled_block"), ChiseledBlockModelLoader.getInstance());
-    }
+    //    @Environment(EnvType.CLIENT)
+    //    public static void onModelRegistry(Map<ResourceLocation, IGeometryLoader<?>> loaders) {
+    //        loaders.put(new ResourceLocation(Constants.MOD_ID, "chiseled_block"),
+    // ChiseledBlockModelLoader.getInstance());
+    //    }
 
     @Environment(EnvType.CLIENT)
     public static void registerIconTextures() {

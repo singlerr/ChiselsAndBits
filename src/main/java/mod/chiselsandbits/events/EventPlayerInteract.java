@@ -1,7 +1,5 @@
 package mod.chiselsandbits.events;
 
-import io.github.fabricators_of_create.porting_lib.core.event.BaseEvent;
-import io.github.fabricators_of_create.porting_lib.entity.events.PlayerInteractionEvents;
 import java.util.WeakHashMap;
 import mod.chiselsandbits.chiseledblock.BlockBitInfo;
 import mod.chiselsandbits.core.ClientSide;

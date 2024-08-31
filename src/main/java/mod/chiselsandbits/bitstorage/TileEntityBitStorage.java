@@ -1,6 +1,5 @@
 package mod.chiselsandbits.bitstorage;
 
-import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import mod.chiselsandbits.api.IBitBag;
@@ -12,7 +11,6 @@ import mod.chiselsandbits.helpers.ModUtil;
 import mod.chiselsandbits.items.ItemChiseledBit;
 import mod.chiselsandbits.registry.ModItems;
 import mod.chiselsandbits.registry.ModTileEntityTypes;
-import mod.chiselsandbits.utils.FluidUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -28,6 +26,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
@@ -331,28 +330,28 @@ public class TileEntityBitStorage extends BlockEntity implements IItemHandler {
         return extractBits(slot, Math.min(amount, ModItems.ITEM_BLOCK_BIT.get().getMaxStackSize()), simulate);
     }
 
-    public FluidStack getAccessableFluid() {
-        if (myFluid == null && state != null) return FluidStack.EMPTY;
-
-        int mb = (bits - bits % BITS_PER_MB_CONVERSION) / BITS_PER_MB_CONVERSION;
-        mb *= MB_PER_BIT_CONVERSION;
-
-        if (mb > 0 && myFluid != null) {
-            return new FluidStack(myFluid, mb);
-        }
-
-        return FluidStack.EMPTY;
-    }
-
-    FluidStack getBitsAsFluidStack() {
-        if (myFluid == null && state != null) return FluidStack.EMPTY;
-
-        if (bits > 0 && myFluid != null) {
-            return new FluidStack(myFluid, bits);
-        }
-
-        return null;
-    }
+    //    public FluidStack getAccessableFluid() {
+    //        if (myFluid == null && state != null) return FluidStack.EMPTY;
+    //
+    //        int mb = (bits - bits % BITS_PER_MB_CONVERSION) / BITS_PER_MB_CONVERSION;
+    //        mb *= MB_PER_BIT_CONVERSION;
+    //
+    //        if (mb > 0 && myFluid != null) {
+    //            return new FluidStack(myFluid, mb);
+    //        }
+    //
+    //        return FluidStack.EMPTY;
+    //    }
+    //
+    //    FluidStack getBitsAsFluidStack() {
+    //        if (myFluid == null && state != null) return FluidStack.EMPTY;
+    //
+    //        if (bits > 0 && myFluid != null) {
+    //            return new FluidStack(myFluid, bits);
+    //        }
+    //
+    //        return null;
+    //    }
 
     public int getLightValue() {
         final BlockState workingState =
@@ -467,9 +466,10 @@ public class TileEntityBitStorage extends BlockEntity implements IItemHandler {
         @NotNull
         @Override
         public net.minecraftforge.fluids.FluidStack getFluidInTank(final int tank) {
-            return new net.minecraftforge.fluids.FluidStack(
-                    source.getAccessableFluid().getFluid(),
-                    source.getAccessableFluid().getAmount());
+            /*   return new net.minecraftforge.fluids.FluidStack(
+            source.getAccessableFluid().getFluid(),
+            source.getAccessableFluid().getAmount());*/
+            return FluidStack.EMPTY;
         }
 
         @Override
@@ -489,43 +489,45 @@ public class TileEntityBitStorage extends BlockEntity implements IItemHandler {
 
         @Override
         public boolean isFluidValid(final int tank, @NotNull final net.minecraftforge.fluids.FluidStack stack) {
-            if (source.getAccessableFluid().isEmpty() && source.state == null) return true;
-
-            if (source.state != null) return false;
-            return Objects.equals(
-                    FluidUtil.getRegistryName(source.getAccessableFluid().getFluid()),
-                    FluidUtil.getRegistryName(stack.getFluid()));
+            //            if (source.getAccessableFluid().isEmpty() && source.state == null) return true;
+            //
+            //            if (source.state != null) return false;
+            //            return Objects.equals(
+            //                    FluidUtil.getRegistryName(source.getAccessableFluid().getFluid()),
+            //                    FluidUtil.getRegistryName(stack.getFluid()));
+            return false;
         }
 
         @Override
         public int fill(final net.minecraftforge.fluids.FluidStack resource, final FluidAction action) {
-            if (resource == null || source.state != null) {
-                return 0;
-            }
-
-            final int possibleAmount =
-                    resource.getAmount() - resource.getAmount() % TileEntityBitStorage.MB_PER_BIT_CONVERSION;
-
-            if (possibleAmount > 0) {
-                final int bitCount = possibleAmount
-                        * TileEntityBitStorage.BITS_PER_MB_CONVERSION
-                        / TileEntityBitStorage.MB_PER_BIT_CONVERSION;
-                final ItemStack bitItems = source.getFluidBitStack(resource.getFluid(), bitCount);
-                final ItemStack leftOver = source.insertItem(0, bitItems, action.simulate());
-
-                if (ModUtil.isEmpty(leftOver)) {
-                    return possibleAmount;
-                }
-
-                int mbUsedUp = ModUtil.getStackSize(leftOver);
-
-                // round up...
-                mbUsedUp *= TileEntityBitStorage.MB_PER_BIT_CONVERSION;
-                mbUsedUp += TileEntityBitStorage.BITS_PER_MB_CONVERSION - 1;
-                mbUsedUp /= TileEntityBitStorage.BITS_PER_MB_CONVERSION;
-
-                return resource.getAmount() - mbUsedUp;
-            }
+            //            if (resource == null || source.state != null) {
+            //                return 0;
+            //            }
+            //
+            //            final int possibleAmount =
+            //                    resource.getAmount() - resource.getAmount() %
+            // TileEntityBitStorage.MB_PER_BIT_CONVERSION;
+            //
+            //            if (possibleAmount > 0) {
+            //                final int bitCount = possibleAmount
+            //                        * TileEntityBitStorage.BITS_PER_MB_CONVERSION
+            //                        / TileEntityBitStorage.MB_PER_BIT_CONVERSION;
+            //                final ItemStack bitItems = source.getFluidBitStack(resource.getFluid(), bitCount);
+            //                final ItemStack leftOver = source.insertItem(0, bitItems, action.simulate());
+            //
+            //                if (ModUtil.isEmpty(leftOver)) {
+            //                    return possibleAmount;
+            //                }
+            //
+            //                int mbUsedUp = ModUtil.getStackSize(leftOver);
+            //
+            //                // round up...
+            //                mbUsedUp *= TileEntityBitStorage.MB_PER_BIT_CONVERSION;
+            //                mbUsedUp += TileEntityBitStorage.BITS_PER_MB_CONVERSION - 1;
+            //                mbUsedUp /= TileEntityBitStorage.BITS_PER_MB_CONVERSION;
+            //
+            //                return resource.getAmount() - mbUsedUp;
+            //            }
 
             return 0;
         }
@@ -534,33 +536,34 @@ public class TileEntityBitStorage extends BlockEntity implements IItemHandler {
         @Override
         public net.minecraftforge.fluids.FluidStack drain(
                 final net.minecraftforge.fluids.FluidStack resource, final FluidAction action) {
-            if (resource == null || source.state != null) {
-                return net.minecraftforge.fluids.FluidStack.EMPTY;
-            }
-
-            final FluidStack a = source.getAccessableFluid();
-
-            if (a != null
-                    && resource.containsFluid(new net.minecraftforge.fluids.FluidStack(
-                            a.getFluid(), a.getAmount()))) // right type of fluid.
-            {
-                final int aboutHowMuch = (int) resource.getAmount();
-
-                final int mbThatCanBeRemoved = (int) Math.min(
-                        a.getAmount(), aboutHowMuch - aboutHowMuch % TileEntityBitStorage.MB_PER_BIT_CONVERSION);
-                if (mbThatCanBeRemoved > 0) {
-                    a.setAmount(mbThatCanBeRemoved);
-
-                    if (action.execute()) {
-                        final int bitCount = mbThatCanBeRemoved
-                                * TileEntityBitStorage.BITS_PER_MB_CONVERSION
-                                / TileEntityBitStorage.MB_PER_BIT_CONVERSION;
-                        source.extractBits(0, bitCount, false);
-                    }
-
-                    return new net.minecraftforge.fluids.FluidStack(a.getFluid(), a.getAmount());
-                }
-            }
+            //            if (resource == null || source.state != null) {
+            //                return net.minecraftforge.fluids.FluidStack.EMPTY;
+            //            }
+            //
+            //            final FluidStack a = source.getAccessableFluid();
+            //
+            //            if (a != null
+            //                    && resource.containsFluid(new net.minecraftforge.fluids.FluidStack(
+            //                            a.getFluid(), a.getAmount()))) // right type of fluid.
+            //            {
+            //                final int aboutHowMuch = (int) resource.getAmount();
+            //
+            //                final int mbThatCanBeRemoved = (int) Math.min(
+            //                        a.getAmount(), aboutHowMuch - aboutHowMuch %
+            // TileEntityBitStorage.MB_PER_BIT_CONVERSION);
+            //                if (mbThatCanBeRemoved > 0) {
+            //                    a.setAmount(mbThatCanBeRemoved);
+            //
+            //                    if (action.execute()) {
+            //                        final int bitCount = mbThatCanBeRemoved
+            //                                * TileEntityBitStorage.BITS_PER_MB_CONVERSION
+            //                                / TileEntityBitStorage.MB_PER_BIT_CONVERSION;
+            //                        source.extractBits(0, bitCount, false);
+            //                    }
+            //
+            //                    return new net.minecraftforge.fluids.FluidStack(a.getFluid(), a.getAmount());
+            //                }
+            //            }
 
             return net.minecraftforge.fluids.FluidStack.EMPTY;
         }
@@ -568,31 +571,32 @@ public class TileEntityBitStorage extends BlockEntity implements IItemHandler {
         @NotNull
         @Override
         public net.minecraftforge.fluids.FluidStack drain(final long maxDrain, final FluidAction action) {
-            if (maxDrain <= 0 || source.state != null) {
-                return net.minecraftforge.fluids.FluidStack.EMPTY;
-            }
-
-            final FluidStack a = source.getAccessableFluid();
-
-            if (a != null) // right type of fluid.
-            {
-                final int aboutHowMuch = (int) maxDrain;
-
-                final int mbThatCanBeRemoved = (int) Math.min(
-                        a.getAmount(), aboutHowMuch - aboutHowMuch % TileEntityBitStorage.MB_PER_BIT_CONVERSION);
-                if (mbThatCanBeRemoved > 0) {
-                    a.setAmount(mbThatCanBeRemoved);
-
-                    if (action.execute()) {
-                        final int bitCount = mbThatCanBeRemoved
-                                * TileEntityBitStorage.BITS_PER_MB_CONVERSION
-                                / TileEntityBitStorage.MB_PER_BIT_CONVERSION;
-                        source.extractBits(0, bitCount, false);
-                    }
-
-                    return new net.minecraftforge.fluids.FluidStack(a.getFluid(), a.getAmount());
-                }
-            }
+            //            if (maxDrain <= 0 || source.state != null) {
+            //                return net.minecraftforge.fluids.FluidStack.EMPTY;
+            //            }
+            //
+            //            final FluidStack a = source.getAccessableFluid();
+            //
+            //            if (a != null) // right type of fluid.
+            //            {
+            //                final int aboutHowMuch = (int) maxDrain;
+            //
+            //                final int mbThatCanBeRemoved = (int) Math.min(
+            //                        a.getAmount(), aboutHowMuch - aboutHowMuch %
+            // TileEntityBitStorage.MB_PER_BIT_CONVERSION);
+            //                if (mbThatCanBeRemoved > 0) {
+            //                    a.setAmount(mbThatCanBeRemoved);
+            //
+            //                    if (action.execute()) {
+            //                        final int bitCount = mbThatCanBeRemoved
+            //                                * TileEntityBitStorage.BITS_PER_MB_CONVERSION
+            //                                / TileEntityBitStorage.MB_PER_BIT_CONVERSION;
+            //                        source.extractBits(0, bitCount, false);
+            //                    }
+            //
+            //                    return new net.minecraftforge.fluids.FluidStack(a.getFluid(), a.getAmount());
+            //                }
+            //            }
 
             return net.minecraftforge.fluids.FluidStack.EMPTY;
         }

@@ -1,8 +1,6 @@
 package mod.chiselsandbits.core;
 
 import fuzs.forgeconfigapiport.fabric.api.forge.v4.ForgeModConfigEvents;
-import io.github.fabricators_of_create.porting_lib.models.geometry.RegisterGeometryLoadersCallback;
-import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -20,6 +18,7 @@ import mod.chiselsandbits.network.NetworkChannel;
 import mod.chiselsandbits.registry.*;
 import mod.chiselsandbits.render.chiseledblock.ChiseledBlockSmartModel;
 import mod.chiselsandbits.utils.Constants;
+import mod.chiselsandbits.utils.EnvExecutor;
 import mod.chiselsandbits.utils.LanguageHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
@@ -39,9 +38,10 @@ public class ChiselsAndBits {
     public ChiselsAndBits() {
         instance = this;
         config = new Configuration();
-        EnvExecutor.runWhenOn(
-                EnvType.CLIENT,
-                () -> () -> RegisterGeometryLoadersCallback.EVENT.register(ChiselsAndBitsClient::onModelRegistry));
+        //        EnvExecutor.runWhenOn(
+        //                EnvType.CLIENT,
+        //                () -> () ->
+        // RegisterGeometryLoadersCallback.EVENT.register(ChiselsAndBitsClient::onModelRegistry));
         EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> {
             ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
                 LanguageHandler.loadLangPath(

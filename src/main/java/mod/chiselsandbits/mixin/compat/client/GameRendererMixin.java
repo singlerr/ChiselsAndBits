@@ -1,4 +1,4 @@
-package mod.chiselsandbits.mixin;
+package mod.chiselsandbits.mixin.compat.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import mod.chiselsandbits.events.extra.RenderWorldLastEvent;
