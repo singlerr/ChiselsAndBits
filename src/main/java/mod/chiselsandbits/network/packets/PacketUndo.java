@@ -14,9 +14,12 @@ import mod.chiselsandbits.helpers.*;
 import mod.chiselsandbits.items.ItemBitBag;
 import mod.chiselsandbits.items.ItemChisel;
 import mod.chiselsandbits.network.ModPacket;
+import mod.chiselsandbits.utils.Constants;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -24,6 +27,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 public class PacketUndo extends ModPacket {
+
+    public static final PacketType<PacketUndo> PACKET_TYPE =
+            PacketType.create(new ResourceLocation(Constants.MOD_ID, "packet_undo"), PacketUndo::new);
 
     private BlockPos pos;
     private VoxelBlobStateReference before;
@@ -213,5 +219,10 @@ public class PacketUndo extends ModPacket {
 
         UndoTracker.getInstance().addError(player, "mod.chiselsandbits.result.out_of_range");
         return false;
+    }
+
+    @Override
+    public PacketType<?> getType() {
+        return PACKET_TYPE;
     }
 }

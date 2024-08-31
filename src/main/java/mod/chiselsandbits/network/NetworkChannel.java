@@ -1,6 +1,5 @@
 package mod.chiselsandbits.network;
 
-import java.util.function.Function;
 import mod.chiselsandbits.utils.Constants;
 import mod.chiselsandbits.utils.EnvExecutor;
 import net.fabricmc.api.EnvType;
@@ -8,7 +7,6 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -44,14 +42,9 @@ public class NetworkChannel {
      * Register a message into rawChannel.
      *
      * @param <MSG>      message class type
-     * @param id         network id
      * @param msgClazz   message class
-     * @param msgCreator supplier with new instance of msgClazz
      */
-    public <MSG extends ModPacket> void registerMessage(
-            int id, final Class<MSG> msgClazz, final Function<FriendlyByteBuf, MSG> msgCreator) {
-        ResourceLocation packetId = new ResourceLocation(Constants.MOD_ID, msgClazz.getSimpleName());
-        PacketType<MSG> packetType = PacketType.create(packetId, msgCreator);
+    public <MSG extends ModPacket> void registerMessage(final Class<MSG> msgClazz, PacketType<MSG> packetType) {
         EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> {
             ClientPlayNetworking.registerGlobalReceiver(
                     packetType, (packet, player, responseSender) -> packet.processPacket(null, false));

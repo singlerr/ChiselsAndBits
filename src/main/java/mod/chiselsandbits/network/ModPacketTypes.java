@@ -1,68 +1,65 @@
 package mod.chiselsandbits.network;
 
 import java.util.HashMap;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import mod.chiselsandbits.network.packets.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public enum ModPacketTypes {
-    CHISEL((channel, integer) -> {
-        channel.registerMessage(integer, PacketChisel.class, PacketChisel::new);
+    CHISEL((channel) -> {
+        channel.registerMessage(PacketChisel.class, PacketChisel.PACKET_TYPE);
     }),
-    OPEN_BAG_GUI((channel, integer) -> {
-        channel.registerMessage(integer, PacketOpenBagGui.class, PacketOpenBagGui::new);
+    OPEN_BAG_GUI((channel) -> {
+        channel.registerMessage(PacketOpenBagGui.class, PacketOpenBagGui.PACKET_TYPE);
     }),
-    SET_CHISEL_MODE((channel, integer) -> {
-        channel.registerMessage(integer, PacketSetChiselMode.class, PacketSetChiselMode::new);
+    SET_CHISEL_MODE((channel) -> {
+        channel.registerMessage(PacketSetChiselMode.class, PacketSetChiselMode.PACKET_TYPE);
     }),
-    ROTATE_VOXEL_BLOB(((channel, integer) -> {
-        channel.registerMessage(integer, PacketRotateVoxelBlob.class, PacketRotateVoxelBlob::new);
+    ROTATE_VOXEL_BLOB(((channel) -> {
+        channel.registerMessage(PacketRotateVoxelBlob.class, PacketRotateVoxelBlob.PACKET_TYPE);
     })),
-    BAG_GUI(((channel, integer) -> {
-        channel.registerMessage(integer, PacketBagGui.class, PacketBagGui::new);
+    BAG_GUI(((channel) -> {
+        channel.registerMessage(PacketBagGui.class, PacketBagGui.PACKET_TYPE);
     })),
-    BAG_GUI_STACK(((channel, integer) -> {
-        channel.registerMessage(integer, PacketBagGuiStack.class, PacketBagGuiStack::new);
+    BAG_GUI_STACK(((channel) -> {
+        channel.registerMessage(PacketBagGuiStack.class, PacketBagGuiStack.PACKET_TYPE);
     })),
-    UNDO(((channel, integer) -> {
-        channel.registerMessage(integer, PacketUndo.class, PacketUndo::new);
+    UNDO(((channel) -> {
+        channel.registerMessage(PacketUndo.class, PacketUndo.PACKET_TYPE);
     })),
-    CLEAR_BAG(((channel, integer) -> {
-        channel.registerMessage(integer, PacketClearBagGui.class, PacketClearBagGui::new);
+    CLEAR_BAG(((channel) -> {
+        channel.registerMessage(PacketClearBagGui.class, PacketClearBagGui.PACKET_TYPE);
     })),
-    SUPRESS_INTERACTION(((channel, integer) -> {
-        channel.registerMessage(integer, PacketSuppressInteraction.class, PacketSuppressInteraction::new);
+    SUPRESS_INTERACTION(((channel) -> {
+        channel.registerMessage(PacketSuppressInteraction.class, PacketSuppressInteraction.PACKET_TYPE);
     })),
-    SET_COLOR(((channel, integer) -> {
-        channel.registerMessage(integer, PacketSetColor.class, PacketSetColor::new);
+    SET_COLOR(((channel) -> {
+        channel.registerMessage(PacketSetColor.class, PacketSetColor.PACKET_TYPE);
     })),
-    ACCURATE_PLACEMENT(((channel, integer) -> {
-        channel.registerMessage(integer, PacketAccurateSneakPlace.class, PacketAccurateSneakPlace::new);
+    ACCURATE_PLACEMENT(((channel) -> {
+        channel.registerMessage(PacketAccurateSneakPlace.class, PacketAccurateSneakPlace.PACKET_TYPE);
     })),
-    SORT_BAG_GUI(((channel, integer) -> {
-        channel.registerMessage(integer, PacketSortBagGui.class, PacketSortBagGui::new);
+    SORT_BAG_GUI(((channel) -> {
+        channel.registerMessage(PacketSortBagGui.class, PacketSortBagGui.PACKET_TYPE);
     }));
 
     private static final Logger LOGGER = LogManager.getLogger(ModPacketTypes.class);
 
-    private final BiConsumer<NetworkChannel, Integer> registrationHandler;
+    private final Consumer<NetworkChannel> registrationHandler;
 
     private static HashMap<Class<? extends ModPacket>, Integer> fromClassToId =
             new HashMap<Class<? extends ModPacket>, Integer>();
     private static HashMap<Integer, Class<? extends ModPacket>> fromIdToClass =
             new HashMap<Integer, Class<? extends ModPacket>>();
 
-    ModPacketTypes(final BiConsumer<NetworkChannel, Integer> registrationHandler) {
+    ModPacketTypes(final Consumer<NetworkChannel> registrationHandler) {
         this.registrationHandler = registrationHandler;
     }
 
     public static void init(NetworkChannel channel) {
-        int idx = 0;
-
         for (final ModPacketTypes p : ModPacketTypes.values()) {
-            idx++;
-            p.registrationHandler.accept(channel, idx++);
+            p.registrationHandler.accept(channel);
         }
     }
 

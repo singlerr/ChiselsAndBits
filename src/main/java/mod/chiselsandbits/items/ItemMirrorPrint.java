@@ -134,7 +134,7 @@ public class ItemMirrorPrint extends Item implements IPatternItem {
         conv.readChisleData(tag, VoxelBlob.VERSION_ANY);
 
         final BlockState blk = conv.getPrimaryBlockState();
-        final ItemStack itemstack = new ItemStack(ModBlocks.convertGivenStateToChiseledBlock(blk), 1);
+        final ItemStack itemstack = new ItemStack(ModBlocks.getChiseledBlock(), 1);
 
         itemstack.addTagElement(ModUtil.NBT_BLOCKENTITYTAG, tag);
         return itemstack;

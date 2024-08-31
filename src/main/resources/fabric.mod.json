@@ -32,7 +32,8 @@
 		"java": ">=17",
 		"fabric-api": "*",
 		"modernkeybinding": "*",
-		"forgeconfigapiport": "*"
+		"forgeconfigapiport": "*",
+		"reach-entity-attributes": "*"
 	},
 	"suggests": {
 		"another-mod": "*"

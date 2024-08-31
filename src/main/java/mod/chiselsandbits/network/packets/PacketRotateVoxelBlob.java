@@ -2,13 +2,19 @@ package mod.chiselsandbits.network.packets;
 
 import mod.chiselsandbits.interfaces.IVoxelBlobItem;
 import mod.chiselsandbits.network.ModPacket;
+import mod.chiselsandbits.utils.Constants;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Rotation;
 
 public class PacketRotateVoxelBlob extends ModPacket {
+
+    public static final PacketType<PacketRotateVoxelBlob> PACKET_TYPE = PacketType.create(
+            new ResourceLocation(Constants.MOD_ID, "packet_rotate_voxel_blob"), PacketRotateVoxelBlob::new);
 
     private Direction.Axis axis;
     private Rotation rotation;
@@ -56,5 +62,10 @@ public class PacketRotateVoxelBlob extends ModPacket {
 
     public void setRotation(final Rotation rotation) {
         this.rotation = rotation;
+    }
+
+    @Override
+    public PacketType<?> getType() {
+        return PACKET_TYPE;
     }
 }

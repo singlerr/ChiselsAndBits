@@ -2,12 +2,19 @@ package mod.chiselsandbits.network.packets;
 
 import mod.chiselsandbits.bitbag.BagContainer;
 import mod.chiselsandbits.network.ModPacket;
+import mod.chiselsandbits.utils.Constants;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 
 public class PacketBagGui extends ModPacket {
+
+    public static final PacketType<PacketBagGui> PACKET_TYPE =
+            PacketType.create(new ResourceLocation(Constants.MOD_ID, "packet_bag_gui"), PacketBagGui::new);
+
     private int slotNumber = -1;
     private int mouseButton = -1;
     private boolean duplicateButton = false;
@@ -52,5 +59,10 @@ public class PacketBagGui extends ModPacket {
         mouseButton = buffer.readInt();
         duplicateButton = buffer.readBoolean();
         holdingShift = buffer.readBoolean();
+    }
+
+    @Override
+    public PacketType<?> getType() {
+        return PACKET_TYPE;
     }
 }

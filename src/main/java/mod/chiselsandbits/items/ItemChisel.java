@@ -94,15 +94,12 @@ public class ItemChisel extends DiggerItem implements IItemScrollWheel, IChiselM
     }
 
     @Override
-    /**
-     * alter digging behavior to chisel, uses packets to enable server to stay
-     * in-sync.
-     */
-    public boolean onBlockStartBreak(final ItemStack itemstack, final BlockPos pos, final Player player) {
+    public boolean canAttackBlock(BlockState blockState, Level level, BlockPos pos, Player player) {
+        ItemStack itemStack = player.getItemInHand(player.getUsedItemHand());
         return ItemChisel.fromBreakToChisel(
                 ChiselMode.castMode(
                         ChiselModeManager.getChiselMode(player, ChiselToolType.CHISEL, InteractionHand.MAIN_HAND)),
-                itemstack,
+                itemStack,
                 pos,
                 player,
                 InteractionHand.MAIN_HAND);

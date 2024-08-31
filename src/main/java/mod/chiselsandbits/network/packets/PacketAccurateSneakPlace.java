@@ -2,9 +2,12 @@ package mod.chiselsandbits.network.packets;
 
 import mod.chiselsandbits.helpers.ModUtil;
 import mod.chiselsandbits.network.ModPacket;
+import mod.chiselsandbits.utils.Constants;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -15,6 +18,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
 public class PacketAccurateSneakPlace extends ModPacket {
+
+    public static final PacketType<PacketAccurateSneakPlace> PACKET_TYPE = PacketType.create(
+            new ResourceLocation(Constants.MOD_ID, "packet_accurate_sneak_place"), PacketAccurateSneakPlace::new);
 
     public interface IItemBlockAccurate {
 
@@ -158,5 +164,10 @@ public class PacketAccurateSneakPlace extends ModPacket {
 
     public void setOffgrid(final boolean offgrid) {
         this.offgrid = offgrid;
+    }
+
+    @Override
+    public PacketType<?> getType() {
+        return PACKET_TYPE;
     }
 }

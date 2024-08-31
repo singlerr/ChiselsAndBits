@@ -73,13 +73,14 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	include modApi("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${config_api_version}")
-	include modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${reach_distance_api_version}")
-	include modImplementation("com.communi-suggestu.saecularia-caudices:saecularia-caudices-fabric:${saeculariaCaudicesVersion}")
-	include modImplementation("io.github.feltmc:fabricated-forge-caps:${forge_caps_version}")
+
+	modApi("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${config_api_version}")
+	modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${reach_distance_api_version}")
+	modImplementation("com.communi-suggestu.saecularia-caudices:saecularia-caudices-fabric:${saeculariaCaudicesVersion}")
 	modImplementation("maven.modrinth:modernkeybinding:1.20.4-1.3.0"){
 		transitive = false
 	}
+
 	include implementation(project(":api-layer"))
 	implementation 'javax.annotation:javax.annotation-api:1.3.2'
 	implementation 'com.google.code.findbugs:jsr305:3.0.2'

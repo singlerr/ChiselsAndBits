@@ -2,10 +2,16 @@ package mod.chiselsandbits.network.packets;
 
 import mod.chiselsandbits.events.EventPlayerInteract;
 import mod.chiselsandbits.network.ModPacket;
+import mod.chiselsandbits.utils.Constants;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
 public class PacketSuppressInteraction extends ModPacket {
+
+    public static final PacketType<PacketSuppressInteraction> PACKET_TYPE = PacketType.create(
+            new ResourceLocation(Constants.MOD_ID, "packet_suppress_interaction"), PacketSuppressInteraction::new);
 
     private boolean newSetting = false;
 
@@ -30,5 +36,10 @@ public class PacketSuppressInteraction extends ModPacket {
     @Override
     public void readPayload(final FriendlyByteBuf buffer) {
         newSetting = buffer.readBoolean();
+    }
+
+    @Override
+    public PacketType<?> getType() {
+        return PACKET_TYPE;
     }
 }

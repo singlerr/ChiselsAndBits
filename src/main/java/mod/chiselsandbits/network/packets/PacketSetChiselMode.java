@@ -7,12 +7,18 @@ import mod.chiselsandbits.modes.IToolMode;
 import mod.chiselsandbits.modes.PositivePatternMode;
 import mod.chiselsandbits.modes.TapeMeasureModes;
 import mod.chiselsandbits.network.ModPacket;
+import mod.chiselsandbits.utils.Constants;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
 public class PacketSetChiselMode extends ModPacket {
+
+    public static final PacketType<PacketSetChiselMode> PACKET_TYPE = PacketType.create(
+            new ResourceLocation(Constants.MOD_ID, "packet_set_chisel_mode"), PacketSetChiselMode::new);
 
     private IToolMode mode = ChiselMode.SINGLE;
     private ChiselToolType type = ChiselToolType.CHISEL;
@@ -70,7 +76,7 @@ public class PacketSetChiselMode extends ModPacket {
         this.mode = mode;
     }
 
-    public ChiselToolType getType() {
+    public ChiselToolType getToolType() {
         return type;
     }
 
@@ -84,5 +90,10 @@ public class PacketSetChiselMode extends ModPacket {
 
     public void setChatNotification(final boolean chatNotification) {
         this.chatNotification = chatNotification;
+    }
+
+    @Override
+    public PacketType<?> getType() {
+        return PACKET_TYPE;
     }
 }

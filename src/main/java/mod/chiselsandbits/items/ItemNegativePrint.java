@@ -235,7 +235,7 @@ public class ItemNegativePrint extends Item implements IVoxelBlobItem, IItemScro
         }
 
         final BlockState state = conv.getPrimaryBlockState();
-        final ItemStack itemstack = new ItemStack(ModBlocks.convertGivenStateToChiseledBlock(state), 1);
+        final ItemStack itemstack = new ItemStack(ModBlocks.getChiseledBlock(), 1);
 
         itemstack.addTagElement(ModUtil.NBT_BLOCKENTITYTAG, tag);
         return itemstack;
