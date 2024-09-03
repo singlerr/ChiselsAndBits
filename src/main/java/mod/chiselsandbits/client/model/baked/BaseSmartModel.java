@@ -46,7 +46,6 @@ public abstract class BaseSmartModel implements DataAwareBakedModel {
             return parent.resolve(bakedModel, itemStack, clientLevel, livingEntity);
         }
     }
-    ;
 
     public BaseSmartModel() {
         overrides = new OverrideHelper(this);

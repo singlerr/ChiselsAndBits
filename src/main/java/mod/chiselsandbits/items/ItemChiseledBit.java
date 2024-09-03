@@ -25,6 +25,7 @@ import mod.chiselsandbits.modes.ChiselMode;
 import mod.chiselsandbits.modes.IToolMode;
 import mod.chiselsandbits.network.packets.PacketChisel;
 import mod.chiselsandbits.registry.ModItems;
+import mod.chiselsandbits.utils.FluidUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;

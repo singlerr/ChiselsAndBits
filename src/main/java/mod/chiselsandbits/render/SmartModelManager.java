@@ -105,7 +105,6 @@ public class SmartModelManager {
                     return model;
                 }
             });
-            ;
         }
     }
 

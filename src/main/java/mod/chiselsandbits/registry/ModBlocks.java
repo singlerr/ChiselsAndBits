@@ -66,7 +66,7 @@ public final class ModBlocks {
         Registry.register(
                 BuiltInRegistries.BLOCK,
                 new ResourceLocation(Constants.MOD_ID, "chiseled_printer"),
-                BIT_STORAGE_BLOCK.get());
+                CHISEL_PRINTER_BLOCK.get());
         Registry.register(
                 BuiltInRegistries.BLOCK,
                 new ResourceLocation(Constants.MOD_ID, "chiseled_block"),

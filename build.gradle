@@ -23,12 +23,9 @@ repositories {
 			includeGroup "com.github.Chocohead" // Fixes extremely slowing down Gradle configuration
 		}
 	}
-	maven{
-		url = "file:///${project.projectDir}/libs"
-		content {
-			includeGroup "io.github.feltmc"
-			includeGroup "io.github.fabricators_of_create.Porting-Lib"
-		}
+	maven {
+		name = "singlerr's repo"
+		url = "https://github.com/singlerr/mvn-repo/raw/maven2/"
 	}
 	maven {
 		name = "Fuzs Mod Resources"
@@ -64,6 +61,21 @@ fabricApi {
 
 loom{
 	accessWidenerPath = file('src/main/resources/chiselsandbits.accesswidener')
+
+	runs {
+		client{
+
+			property 'mixin.debug', 'true'
+			programArgs '--username', 'Dev'
+
+			runDir = 'run'
+		}
+		server{
+
+			property 'mixin.debug', 'true'
+			runDir = 'run-server'
+		}
+	}
 }
 
 
@@ -77,11 +89,10 @@ dependencies {
 	modApi("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${config_api_version}")
 	modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${reach_distance_api_version}")
 	modImplementation("com.communi-suggestu.saecularia-caudices:saecularia-caudices-fabric:${saeculariaCaudicesVersion}")
+	modImplementation("io.github.feltmc:fabricated-forge-caps:${forge_caps_version}")
 	modImplementation("maven.modrinth:modernkeybinding:1.20.4-1.3.0"){
 		transitive = false
 	}
-
-	include implementation(project(":api-layer"))
 	implementation 'javax.annotation:javax.annotation-api:1.3.2'
 	implementation 'com.google.code.findbugs:jsr305:3.0.2'
 }

@@ -15,4 +15,10 @@ public final class EnvExecutor {
             return callable.get().get();
         return null;
     }
+
+    public static <T> T unsafeRunForDist(Supplier<Supplier<T>> client, Supplier<Supplier<T>> server) {
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT)
+            return client.get().get();
+        else return server.get().get();
+    }
 }

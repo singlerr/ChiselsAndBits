@@ -8,8 +8,9 @@
 		"StructureTemplateMixin"
 	],
 	"client": [
-      "compat.client.GuiMixin",
+		"compat.client.GuiMixin",
 		"compat.client.MouseHandlerMixin",
+		"compat.client.TextureAtlasMixin",
 		"PaintingTextureManagerMixin",
 		"SectionRenderDispatcherMixin",
 		"ItemRendererMixin"

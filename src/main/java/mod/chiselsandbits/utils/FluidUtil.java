@@ -4,7 +4,9 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nonnull;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.minecraft.Util;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
@@ -20,6 +22,25 @@ import net.minecraftforge.items.CapabilityItemHandler;
 public final class FluidUtil {
 
     private FluidUtil() {}
+
+    public static String getTranslationKey(Fluid fluid) {
+        String translationKey;
+
+        if (fluid == Fluids.EMPTY) {
+            translationKey = "";
+        } else if (fluid == Fluids.WATER) {
+            translationKey = "block.minecraft.water";
+        } else if (fluid == Fluids.LAVA) {
+            translationKey = "block.minecraft.lava";
+        } else {
+            ResourceLocation id = BuiltInRegistries.FLUID.getKey(fluid);
+            String key = Util.makeDescriptionId("block", id);
+            String translated = I18n.get(key);
+            translationKey = translated.equals(key) ? Util.makeDescriptionId("fluid", id) : key;
+        }
+
+        return translationKey;
+    }
 
     public static ResourceLocation getRegistryName(Fluid fluid) {
         return BuiltInRegistries.FLUID.getKey(fluid);

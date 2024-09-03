@@ -1,8 +1,6 @@
 package mod.chiselsandbits.network;
 
 import mod.chiselsandbits.utils.Constants;
-import mod.chiselsandbits.utils.EnvExecutor;
-import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
@@ -45,18 +43,11 @@ public class NetworkChannel {
      * @param msgClazz   message class
      */
     public <MSG extends ModPacket> void registerMessage(final Class<MSG> msgClazz, PacketType<MSG> packetType) {
-        EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> {
-            ClientPlayNetworking.registerGlobalReceiver(
-                    packetType, (packet, player, responseSender) -> packet.processPacket(null, false));
-        });
-        EnvExecutor.runWhenOn(EnvType.SERVER, () -> () -> {
-            ServerPlayNetworking.registerGlobalReceiver(packetType, new ServerPlayNetworking.PlayPacketHandler<MSG>() {
-                @Override
-                public void receive(MSG packet, ServerPlayer player, PacketSender responseSender) {
-                    packet.processPacket(new Context(player, responseSender), true);
-                }
-            });
-        });
+        ClientPlayNetworking.registerGlobalReceiver(
+                packetType, (packet, player, responseSender) -> packet.processPacket(null, false));
+        ServerPlayNetworking.registerGlobalReceiver(
+                packetType,
+                (packet, player, responseSender) -> packet.processPacket(new Context(player, responseSender), true));
     }
     /**
      * Sends to server.

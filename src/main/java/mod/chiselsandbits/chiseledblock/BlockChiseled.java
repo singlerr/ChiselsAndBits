@@ -3,7 +3,6 @@ package mod.chiselsandbits.chiseledblock;
 import com.communi.suggestu.saecularia.caudices.core.block.IBlockWithWorldlyProperties;
 import javax.annotation.Nonnull;
 import mod.chiselsandbits.api.BoxType;
-import mod.chiselsandbits.api.ChiseledBlock;
 import mod.chiselsandbits.api.IMultiStateBlock;
 import mod.chiselsandbits.chiseledblock.data.BitLocation;
 import mod.chiselsandbits.chiseledblock.data.VoxelBlob;
@@ -49,8 +48,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockChiseled extends Block
-        implements EntityBlock, IMultiStateBlock, IBlockWithWorldlyProperties, ChiseledBlock {
+public class BlockChiseled extends Block implements EntityBlock, IMultiStateBlock, IBlockWithWorldlyProperties {
 
     public static final BlockPos ZERO = BlockPos.ZERO;
 

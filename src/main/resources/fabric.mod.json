@@ -31,9 +31,10 @@
 		"minecraft": "~1.20.4",
 		"java": ">=17",
 		"fabric-api": "*",
-		"modernkeybinding": "*",
+		"mkb": "*",
 		"forgeconfigapiport": "*",
-		"reach-entity-attributes": "*"
+		"reach-entity-attributes": "*",
+		"fabricated-forge-caps": "*"
 	},
 	"suggests": {
 		"another-mod": "*"
