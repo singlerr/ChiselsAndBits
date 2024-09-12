@@ -37,6 +37,6 @@
 		"fabricated-forge-caps": "*"
 	},
 	"suggests": {
-		"another-mod": "*"
+
 	}
 }

@@ -63,17 +63,22 @@ loom{
 	accessWidenerPath = file('src/main/resources/chiselsandbits.accesswidener')
 
 	runs {
+
 		client{
 
 			property 'mixin.debug', 'true'
 			programArgs '--username', 'Dev'
 
-			runDir = 'run'
+			ideConfigGenerated = true
+			runDir = 'run-client'
 		}
+
 		server{
 
 			property 'mixin.debug', 'true'
 			runDir = 'run-server'
+
+			ideConfigGenerated = true
 		}
 	}
 }
@@ -129,6 +134,10 @@ publishing {
 		}
 	}
 	repositories {
+		maven{
+			name = "singlerrs_repo"
+			url = uri(localMvnRepo)
+		}
 	}
 }
 
