@@ -136,7 +136,7 @@ publishing {
 	repositories {
 		maven{
 			name = "singlerrs_repo"
-			url = uri(localMvnRepo)
+			url = uri(project.findProperty("localMvnRepo") == null ? "" : project.findProperty("localMvnRepo"))
 		}
 	}
 }
