@@ -60,6 +60,10 @@ public final class VoxelBlob implements IVoxelSrc {
                 final int stateId = ModUtil.getStateId(blockState);
                 if (BlockBitInfo.getTypeFromStateID(stateId) == VoxelType.FLUID) {
                     fluidFilterState.set(stateId);
+                    return;
+                }
+                if (blockState.getBlock() instanceof SimpleWaterloggedBlock) {
+                    fluidFilterState.set(stateId);
                 }
             });
         }
@@ -91,10 +95,12 @@ public final class VoxelBlob implements IVoxelSrc {
                     continue;
                 }
 
-                if (state.getBlock() instanceof SimpleWaterloggedBlock) {
+                if (!state.getFluidState().isEmpty() || state.getFluidState().isSource()) {
+                    final int fluidId = ModUtil.getStateId(state.getFluidState().createLegacyBlock());
                     layerFilters
                             .get(ItemBlockRenderTypes.getRenderLayer(state.getFluidState()))
-                            .set(id);
+                            .set(fluidId);
+                    continue;
                 }
 
                 layerFilters.get(ItemBlockRenderTypes.getChunkRenderType(state)).set(id);

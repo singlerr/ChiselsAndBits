@@ -24,6 +24,7 @@ import mod.chiselsandbits.chiseledblock.iterators.ChiselTypeIterator;
 import mod.chiselsandbits.client.*;
 import mod.chiselsandbits.client.gui.ChiselsAndBitsMenu;
 import mod.chiselsandbits.client.gui.SpriteIconPositioning;
+import mod.chiselsandbits.compat.client.DrawSelectionEvents;
 import mod.chiselsandbits.compat.client.GameMouseEvents;
 import mod.chiselsandbits.compat.client.OverlayRenderCallback;
 import mod.chiselsandbits.helpers.*;
@@ -51,6 +52,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.minecraft.client.Camera;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -60,6 +62,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.TerrainParticle;
 import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -136,7 +139,7 @@ public class ClientSide {
         ClientTickEvents.END_CLIENT_TICK.register(this::interaction);
         WorldRenderEvents.LAST.register(this::drawLast);
         WorldRenderEvents.LAST.register(this::drawHighlight);
-        WorldRenderEvents.BLOCK_OUTLINE.register(this::drawHighlight);
+        DrawSelectionEvents.BLOCK.register(this::drawHighlight);
 
         GameMouseEvents.BEFORE_SCROLL.register(this::wheelEvent);
     }
@@ -720,9 +723,12 @@ public class ClientSide {
 
     @Environment(EnvType.CLIENT)
     public boolean drawHighlight(
-            WorldRenderContext context, WorldRenderContext.BlockOutlineContext blockOutlineContext) {
-        PoseStack stack = context.matrixStack();
-        float partialTicks = context.tickDelta();
+            LevelRenderer context,
+            Camera info,
+            HitResult target,
+            float partialTicks,
+            PoseStack stack,
+            MultiBufferSource buffers) {
         try {
             stack.pushPose();
             Vec3 renderView =

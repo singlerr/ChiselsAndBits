@@ -30,8 +30,11 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
+    private static final Logger log = LoggerFactory.getLogger(FabricBakedModelDelegate.class);
     private final BakedModel delegate;
 
     private boolean cached = false;
@@ -102,11 +105,6 @@ public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
             return;
         }
 
-        if (!cached) {
-            VoxelBlob.clearCache();
-            cached = true;
-        }
-
         Object attachmentData = blockAndTintGetter.getBlockEntityRenderData(blockPos);
 
         if (attachmentData instanceof IModelData modelData) {
@@ -124,13 +122,21 @@ public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
             final BlockPos blockPos,
             final Supplier<RandomSource> supplier,
             final RenderContext renderContext) {
+        if (!cached) {
+            VoxelBlob.clearCache();
+            cached = true;
+        }
 
         Set<ChiselRenderType> renderTypes =
                 dataAwareBakedModel.getRenderTypes(world, blockPos, blockState, blockModelData);
 
+        log.info("{},{}", blockPos, renderTypes);
+
         MaterialFinder materialFinder = RendererAccess.INSTANCE.getRenderer().materialFinder();
 
-        renderTypes.forEach(r -> materialFinder.blendMode(BlendMode.fromRenderLayer(r.layer)));
+        for (ChiselRenderType renderType : renderTypes) {
+            materialFinder.blendMode(BlendMode.fromRenderLayer(renderType.layer));
+        }
 
         RenderMaterial renderMaterial = materialFinder.find();
 

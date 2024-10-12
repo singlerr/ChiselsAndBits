@@ -11,6 +11,7 @@
 		"compat.client.GuiMixin",
 		"compat.client.MouseHandlerMixin",
 		"compat.client.TextureAtlasMixin",
+		"compat.client.LevelRendererMixin",
 		"PaintingTextureManagerMixin",
 		"SectionRenderDispatcherMixin",
 		"ItemRendererMixin"

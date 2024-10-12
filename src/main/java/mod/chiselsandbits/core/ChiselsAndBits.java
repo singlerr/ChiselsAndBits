@@ -64,7 +64,8 @@ public class ChiselsAndBits {
         networkChannel.registerCommonMessages();
         ForgeModConfigEvents.loading(Constants.MOD_ID).register(this::setupClipboard);
         ForgeModConfigEvents.loading(Constants.MOD_ID).register(c -> handleIdMapping(Minecraft.getInstance()));
-        ForgeModConfigEvents.reloading(Constants.MOD_ID).register(c -> handleIdMapping(Minecraft.getInstance()));
+        //        ForgeModConfigEvents.reloading(Constants.MOD_ID).register(c ->
+        // handleIdMapping(Minecraft.getInstance()));
     }
 
     private void setupClipboard(ModConfig modConfig) {
@@ -106,7 +107,9 @@ public class ChiselsAndBits {
     boolean idsHaveBeenMapped = false;
 
     public void handleIdMapping(Minecraft inst) {
+        if (idsHaveBeenMapped) return;
         idsHaveBeenMapped = true;
+
         BlockBitInfo.recalculate();
         clearCache();
     }

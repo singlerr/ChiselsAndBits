@@ -300,8 +300,8 @@ public class TileEntityBlockChiseled extends BlockEntity
 
     @Override
     public @Nullable Object getRenderData() {
-        modelData.setData(MP_VBSR, getBlobStateReference());
-        modelData.setData(MP_PBSI, getPrimaryBlockStateId());
+        //        modelData.setData(MP_VBSR, getBlobStateReference());
+        //        modelData.setData(MP_PBSI, getPrimaryBlockStateId());
         return modelData;
     }
 
