@@ -6,7 +6,6 @@ import java.awt.*;
 import java.util.List;
 import mod.chiselsandbits.registry.ModBlocks;
 import mod.chiselsandbits.utils.Constants;
-import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderStateShard;
@@ -37,7 +36,7 @@ public class RenderHelper {
                 .setLayeringState(RenderType.VIEW_OFFSET_Z_LAYERING)
                 .setWriteMaskState(RenderType.COLOR_WRITE)
                 .setCullState(RenderType.NO_CULL)
-                .setDepthTestState(RenderStateShard.NO_DEPTH_TEST)
+                .setDepthTestState(RenderStateShard.LEQUAL_DEPTH_TEST)
                 .setOverlayState(RenderType.NO_OVERLAY)
                 .createCompositeState(true);
         return RenderType.create(
@@ -349,7 +348,6 @@ public class RenderHelper {
             final int combinedLightmap,
             final int combinedOverlay) {
 
-        if (Minecraft.getInstance().options.getCameraType() == CameraType.THIRD_PERSON_BACK) return;
         final int alpha = isUnplaceable ? 0x22000000 : 0xaa000000;
         RenderHelper.renderModel(matrixStack, baked, worldObj, blockPos, alpha, combinedLightmap, combinedOverlay);
     }

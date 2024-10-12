@@ -776,6 +776,7 @@ public class ClientSide {
                         }
 
                         final BitLocation other = getStartPos();
+
                         if (chMode == ChiselMode.DRAWN_REGION && other != null) {
                             final ChiselIterator oneEnd = ChiselTypeIterator.create(
                                     VoxelBlob.dim,
@@ -808,6 +809,7 @@ public class ClientSide {
                                             .maxDrawnRegionSize
                                             .get()
                                     + 0.001;
+
                             if (bb.maxX - bb.minX <= maxChiseSize
                                     && bb.maxY - bb.minY <= maxChiseSize
                                     && bb.maxZ - bb.minZ <= maxChiseSize) {
@@ -1283,13 +1285,18 @@ public class ClientSide {
         }
 
         matrixStack.pushPose();
-        matrixStack.translate(blockPos.getX() - x, blockPos.getY() - y - player.getEyeHeight(), blockPos.getZ() - z);
+
         if (partial != null) {
             final BlockPos t = ModUtil.getPartialOffset(side, partial, modelBounds);
             final double fullScale = 1.0 / VoxelBlob.dim;
             matrixStack.translate(t.getX() * fullScale, t.getY() * fullScale, t.getZ() * fullScale);
         }
-
+        final Vec3 camera = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+        matrixStack.translate(
+                blockPos.getX() - camera.x - 0.000125,
+                blockPos.getY() - camera.y + 0.000125,
+                blockPos.getZ() - camera.z - 0.000125);
+        matrixStack.scale(1.001F, 1.001F, 1.001F);
         RenderHelper.renderGhostModel(
                 matrixStack,
                 baked,
@@ -1337,7 +1344,6 @@ public class ClientSide {
                 .getBlock()
                 .getShape(state, world, pos, CollisionContext.empty())
                 .bounds();
-        ;
 
         double x = RANDOM.nextDouble() * (bb.maxX - bb.minX - boxOffset * 2.0F) + boxOffset + bb.minX;
         double y = RANDOM.nextDouble() * (bb.maxY - bb.minY - boxOffset * 2.0F) + boxOffset + bb.minY;
