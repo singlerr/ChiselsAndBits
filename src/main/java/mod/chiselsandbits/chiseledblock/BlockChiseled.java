@@ -149,9 +149,10 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
     public boolean canBeReplaced(final BlockState state, final BlockPlaceContext useContext) {
         try {
             BlockPos target = useContext.getClickedPos();
-            if (!(useContext instanceof DirectionalPlaceContext) && !useContext.replacingClickedOnBlock()) {
-                target = target.relative(useContext.getClickedFace().getOpposite());
-            }
+            //            if (!(useContext instanceof DirectionalPlaceContext) && !useContext.replacingClickedOnBlock())
+            // {
+            //                target = target.relative(useContext.getClickedFace());
+            //            }
 
             return getTileEntity(useContext.getLevel(), target).getBlob().filled() == 0;
         } catch (final ExceptionNoTileEntity e) {
