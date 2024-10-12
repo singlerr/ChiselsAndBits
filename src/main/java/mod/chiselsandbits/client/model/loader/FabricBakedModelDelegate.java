@@ -129,8 +129,6 @@ public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
         Set<ChiselRenderType> renderTypes =
                 dataAwareBakedModel.getRenderTypes(world, blockPos, blockState, blockModelData);
 
-        log.info("{},{}", blockPos, renderTypes);
-
         for (Direction direction : Direction.values()) {
             renderTypes.forEach(renderType -> emitBlockQuads(
                     dataAwareBakedModel,

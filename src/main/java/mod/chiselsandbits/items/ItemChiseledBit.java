@@ -219,7 +219,7 @@ public class ItemChiseledBit extends Item implements IItemScrollWheel, IChiselMo
         final Vec3 ray_from = PlayerRay.getLeft();
         final Vec3 ray_to = PlayerRay.getRight();
         final ClipContext rtc = new ClipContext(
-                ray_from, ray_to, ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, context.getPlayer());
+                ray_from, ray_to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, context.getPlayer());
 
         final HitResult mop = context.getLevel().clip(rtc);
         if (mop != null) {
