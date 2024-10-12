@@ -11,7 +11,7 @@ public enum ChiselRenderType {
     SOLID(RenderType.solid(), VoxelType.SOLID),
     SOLID_FLUID(RenderType.solid(), VoxelType.FLUID),
     CUTOUT(RenderType.cutout(), null),
-    CUTOUT_MIPPED(RenderType.cutoutMipped(), VoxelType.FLUID),
+    CUTOUT_MIPPED(RenderType.cutoutMipped(), null),
     TRANSLUCENT(RenderType.translucent(), null),
     TRANSLUCENT_FLUID(RenderType.translucent(), VoxelType.FLUID),
     TRIPWIRE(RenderType.tripwire(), null);

@@ -10,7 +10,6 @@ import mod.chiselsandbits.interfaces.ICacheClearable;
 import mod.chiselsandbits.render.chiseledblock.ChiselRenderType;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
-import net.fabricmc.fabric.api.renderer.v1.material.MaterialFinder;
 import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
@@ -132,14 +131,6 @@ public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
 
         log.info("{},{}", blockPos, renderTypes);
 
-        MaterialFinder materialFinder = RendererAccess.INSTANCE.getRenderer().materialFinder();
-
-        for (ChiselRenderType renderType : renderTypes) {
-            materialFinder.blendMode(BlendMode.fromRenderLayer(renderType.layer));
-        }
-
-        RenderMaterial renderMaterial = materialFinder.find();
-
         for (Direction direction : Direction.values()) {
             renderTypes.forEach(renderType -> emitBlockQuads(
                     dataAwareBakedModel,
@@ -150,7 +141,11 @@ public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
                     supplier,
                     renderContext,
                     renderType,
-                    renderMaterial));
+                    RendererAccess.INSTANCE
+                            .getRenderer()
+                            .materialFinder()
+                            .blendMode(BlendMode.fromRenderLayer(renderType.layer))
+                            .find()));
         }
 
         renderTypes.forEach(renderType -> emitBlockQuads(
@@ -162,7 +157,11 @@ public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
                 supplier,
                 renderContext,
                 renderType,
-                renderMaterial));
+                RendererAccess.INSTANCE
+                        .getRenderer()
+                        .materialFinder()
+                        .blendMode(BlendMode.fromRenderLayer(renderType.layer))
+                        .find()));
     }
 
     public void emitBlockQuads(

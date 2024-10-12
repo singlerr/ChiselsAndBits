@@ -15,8 +15,8 @@ import mod.chiselsandbits.render.chiseledblock.ChiseledBlockBakedModel;
 import mod.chiselsandbits.render.helpers.ModelQuadLayer.ModelQuadLayerBuilder;
 import mod.chiselsandbits.utils.FluidUtil;
 import mod.chiselsandbits.utils.LightUtil;
-import mod.chiselsandbits.utils.ModClientHooks;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
@@ -60,6 +60,11 @@ public class ModelUtil implements ICacheClearable {
             return null;
         }
 
+        BlockState state = ModUtil.getStateById(stateID);
+        if (!state.getFluidState().isEmpty() || state.getFluidState().isSource()) {
+            if (!ItemBlockRenderTypes.getRenderLayer(state.getFluidState()).equals(layer)) return null;
+        } else if (!ItemBlockRenderTypes.getChunkRenderType(state).equals(layer)) return null;
+
         final Triple<Integer, RenderType, Direction> cacheVal = Triple.of(stateID, layer, face);
 
         final ModelQuadLayer[] mpc = cache.get(cacheVal);
@@ -67,7 +72,6 @@ public class ModelUtil implements ICacheClearable {
             return mpc;
         }
 
-        final RenderType original = ModClientHooks.getRenderType();
         try {
             return getInnerCachedFace(cacheVal, stateID, weight, face, layer);
         } finally {
