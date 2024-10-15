@@ -7,17 +7,17 @@ import net.minecraft.world.phys.AABB;
 
 public interface ChiselIterator {
 
-    IntegerBox getVoxelBox(VoxelBlob blobAt, boolean b);
+  IntegerBox getVoxelBox(VoxelBlob blobAt, boolean b);
 
-    AABB getBoundingBox(VoxelBlob nULL_BLOB, boolean b);
+  AABB getBoundingBox(VoxelBlob nULL_BLOB, boolean b);
 
-    boolean hasNext();
+  boolean hasNext();
 
-    Direction side();
+  Direction side();
 
-    int x();
+  int x();
 
-    int y();
+  int y();
 
-    int z();
+  int z();
 }

@@ -5,84 +5,84 @@ import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 
 public class ItemStackSlot implements IItemInInventory {
-    private final Container inv;
-    private final int slot;
-    private @Nonnull ItemStack stack;
-    private final @Nonnull ItemStack originalStack;
-    private final boolean isCreative;
-    private final boolean isEditable;
-    private final int toolSlot;
+  private final Container inv;
+  private final int slot;
+  private final @Nonnull ItemStack originalStack;
+  private final boolean isCreative;
+  private final boolean isEditable;
+  private final int toolSlot;
+  private @Nonnull ItemStack stack;
 
-    ItemStackSlot(
-            final Container i,
-            final int s,
-            final @Nonnull ItemStack st,
-            final ActingPlayer player,
-            final boolean canEdit) {
-        inv = i;
-        slot = s;
-        stack = st;
-        originalStack = ModUtil.copy(st);
-        toolSlot = player.getCurrentItem();
-        isCreative = player.isCreative();
-        isEditable = canEdit;
+  ItemStackSlot(
+      final Container i,
+      final int s,
+      final @Nonnull ItemStack st,
+      final ActingPlayer player,
+      final boolean canEdit) {
+    inv = i;
+    slot = s;
+    stack = st;
+    originalStack = ModUtil.copy(st);
+    toolSlot = player.getCurrentItem();
+    isCreative = player.isCreative();
+    isEditable = canEdit;
+  }
+
+  @Override
+  public boolean isValid() {
+    return isEditable && (isCreative || !ModUtil.isEmpty(stack) && ModUtil.getStackSize(stack) > 0);
+  }
+
+  @Override
+  public void damage(final ActingPlayer who) {
+    if (isCreative) {
+      return;
     }
 
-    @Override
-    public boolean isValid() {
-        return isEditable && (isCreative || !ModUtil.isEmpty(stack) && ModUtil.getStackSize(stack) > 0);
+    who.damageItem(stack, 1);
+    if (ModUtil.getStackSize(stack) <= 0) {
+      who.playerDestroyItem(stack, who.getHand());
+      inv.setItem(slot, ModUtil.getEmptyStack());
+    }
+  }
+
+  @Override
+  public boolean consume() {
+    if (isCreative) {
+      return true;
     }
 
-    @Override
-    public void damage(final ActingPlayer who) {
-        if (isCreative) {
-            return;
-        }
+    if (ModUtil.getStackSize(stack) > 0) {
+      ModUtil.adjustStackSize(stack, -1);
+      if (ModUtil.getStackSize(stack) <= 0) {
+        inv.setItem(slot, ModUtil.getEmptyStack());
+      }
 
-        who.damageItem(stack, 1);
-        if (ModUtil.getStackSize(stack) <= 0) {
-            who.playerDestroyItem(stack, who.getHand());
-            inv.setItem(slot, ModUtil.getEmptyStack());
-        }
+      return true;
     }
 
-    @Override
-    public boolean consume() {
-        if (isCreative) {
-            return true;
-        }
+    return false;
+  }
 
-        if (ModUtil.getStackSize(stack) > 0) {
-            ModUtil.adjustStackSize(stack, -1);
-            if (ModUtil.getStackSize(stack) <= 0) {
-                inv.setItem(slot, ModUtil.getEmptyStack());
-            }
+  @Override
+  public ItemStack getStack() {
+    return stack;
+  }
 
-            return true;
-        }
+  @Override
+  public void swapWithWeapon() {
+    final ItemStack it = inv.getItem(toolSlot);
+    inv.setItem(toolSlot, inv.getItem(slot));
+    inv.setItem(slot, it);
+  }
 
-        return false;
-    }
+  @Override
+  public ItemStack getStackType() {
+    return originalStack;
+  }
 
-    @Override
-    public ItemStack getStack() {
-        return stack;
-    }
-
-    @Override
-    public void swapWithWeapon() {
-        final ItemStack it = inv.getItem(toolSlot);
-        inv.setItem(toolSlot, inv.getItem(slot));
-        inv.setItem(slot, it);
-    }
-
-    @Override
-    public ItemStack getStackType() {
-        return originalStack;
-    }
-
-    public void replaceStack(final @Nonnull ItemStack restockItem) {
-        stack = restockItem;
-        inv.setItem(slot, restockItem);
-    }
+  public void replaceStack(final @Nonnull ItemStack restockItem) {
+    stack = restockItem;
+    inv.setItem(slot, restockItem);
+  }
 }

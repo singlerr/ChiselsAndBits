@@ -14,46 +14,46 @@ import org.jetbrains.annotations.Nullable;
 
 public class NullBakedModel implements BakedModel {
 
-    public static final NullBakedModel instance = new NullBakedModel();
+  public static final NullBakedModel instance = new NullBakedModel();
 
-    @Override
-    public List<BakedQuad> getQuads(
-            @Nullable BlockState blockState, @Nullable Direction direction, RandomSource randomSource) {
-        return List.of();
-    }
+  @Override
+  public List<BakedQuad> getQuads(
+      @Nullable BlockState blockState, @Nullable Direction direction, RandomSource randomSource) {
+    return List.of();
+  }
 
-    @Override
-    public boolean useAmbientOcclusion() {
-        return false;
-    }
+  @Override
+  public boolean useAmbientOcclusion() {
+    return false;
+  }
 
-    @Override
-    public boolean isGui3d() {
-        return false;
-    }
+  @Override
+  public boolean isGui3d() {
+    return false;
+  }
 
-    @Override
-    public boolean usesBlockLight() {
-        return false;
-    }
+  @Override
+  public boolean usesBlockLight() {
+    return false;
+  }
 
-    @Override
-    public boolean isCustomRenderer() {
-        return false;
-    }
+  @Override
+  public boolean isCustomRenderer() {
+    return false;
+  }
 
-    @Override
-    public TextureAtlasSprite getParticleIcon() {
-        return ClientSide.instance.getMissingIcon();
-    }
+  @Override
+  public TextureAtlasSprite getParticleIcon() {
+    return ClientSide.instance.getMissingIcon();
+  }
 
-    @Override
-    public ItemTransforms getTransforms() {
-        return ItemTransforms.NO_TRANSFORMS;
-    }
+  @Override
+  public ItemTransforms getTransforms() {
+    return ItemTransforms.NO_TRANSFORMS;
+  }
 
-    @Override
-    public ItemOverrides getOverrides() {
-        return ItemOverrides.EMPTY;
-    }
+  @Override
+  public ItemOverrides getOverrides() {
+    return ItemOverrides.EMPTY;
+  }
 }

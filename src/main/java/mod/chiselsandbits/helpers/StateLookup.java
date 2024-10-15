@@ -8,42 +8,42 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class StateLookup {
 
-    public static class CachedStateLookup extends StateLookup {
+  public int getStateId(final BlockState state) {
+    return Block.getId(state);
+  }
 
-        private final BlockState[] states;
+  public BlockState getStateById(final int blockStateID) {
+    return Block.stateById(blockStateID);
+  }
 
-        public CachedStateLookup() {
-            final ArrayList<BlockState> list = new ArrayList<>();
+  public static class CachedStateLookup extends StateLookup {
 
-            for (final Block blk : BuiltInRegistries.BLOCK) {
-                for (final BlockState state : blk.getStateDefinition().getPossibleStates()) {
-                    final int id = ModUtil.getStateId(state);
+    private final BlockState[] states;
 
-                    list.ensureCapacity(id);
-                    while (list.size() <= id) {
-                        list.add(null);
-                    }
+    public CachedStateLookup() {
+      final ArrayList<BlockState> list = new ArrayList<>();
 
-                    list.set(id, state);
-                }
-            }
+      for (final Block blk : BuiltInRegistries.BLOCK) {
+        for (final BlockState state : blk.getStateDefinition().getPossibleStates()) {
+          final int id = ModUtil.getStateId(state);
 
-            states = list.toArray(new BlockState[list.size()]);
+          list.ensureCapacity(id);
+          while (list.size() <= id) {
+            list.add(null);
+          }
+
+          list.set(id, state);
         }
+      }
 
-        @Override
-        public BlockState getStateById(final int blockStateID) {
-            return blockStateID >= 0 && blockStateID < states.length
-                    ? states[blockStateID] == null ? Blocks.AIR.defaultBlockState() : states[blockStateID]
-                    : Blocks.AIR.defaultBlockState();
-        }
+      states = list.toArray(new BlockState[list.size()]);
     }
 
-    public int getStateId(final BlockState state) {
-        return Block.getId(state);
-    }
-
+    @Override
     public BlockState getStateById(final int blockStateID) {
-        return Block.stateById(blockStateID);
+      return blockStateID >= 0 && blockStateID < states.length
+          ? states[blockStateID] == null ? Blocks.AIR.defaultBlockState() : states[blockStateID]
+          : Blocks.AIR.defaultBlockState();
     }
+  }
 }

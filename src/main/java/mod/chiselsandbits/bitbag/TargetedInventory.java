@@ -6,82 +6,82 @@ import net.minecraft.world.item.ItemStack;
 
 public class TargetedInventory implements Container {
 
-    private Container src;
+  private Container src;
 
-    public TargetedInventory() {
-        src = null;
-    }
+  public TargetedInventory() {
+    src = null;
+  }
 
-    public void setInventory(final Container a) {
-        src = a;
-    }
+  public void setInventory(final Container a) {
+    src = a;
+  }
 
-    @Override
-    public int getContainerSize() {
-        return src.getContainerSize();
-    }
+  @Override
+  public int getContainerSize() {
+    return src.getContainerSize();
+  }
 
-    @Override
-    public ItemStack getItem(final int index) {
-        return src.getItem(index);
-    }
+  @Override
+  public ItemStack getItem(final int index) {
+    return src.getItem(index);
+  }
 
-    @Override
-    public ItemStack removeItem(final int index, final int count) {
-        return src.removeItem(index, count);
-    }
+  @Override
+  public ItemStack removeItem(final int index, final int count) {
+    return src.removeItem(index, count);
+  }
 
-    @Override
-    public ItemStack removeItemNoUpdate(final int index) {
-        return src.removeItemNoUpdate(index);
-    }
+  @Override
+  public ItemStack removeItemNoUpdate(final int index) {
+    return src.removeItemNoUpdate(index);
+  }
 
-    @Override
-    public void setItem(final int index, final ItemStack stack) {
-        src.setItem(index, stack);
-    }
+  @Override
+  public void setItem(final int index, final ItemStack stack) {
+    src.setItem(index, stack);
+  }
 
-    @Override
-    public int getMaxStackSize() {
-        return src.getMaxStackSize();
-    }
+  @Override
+  public int getMaxStackSize() {
+    return src.getMaxStackSize();
+  }
 
-    @Override
-    public void setChanged() {
-        src.setChanged();
-    }
+  @Override
+  public void setChanged() {
+    src.setChanged();
+  }
 
-    @Override
-    public boolean stillValid(final Player player) {
-        return src.stillValid(player);
-    }
+  @Override
+  public boolean stillValid(final Player player) {
+    return src.stillValid(player);
+  }
 
-    @Override
-    public void startOpen(final Player player) {
-        src.startOpen(player);
-    }
+  @Override
+  public void startOpen(final Player player) {
+    src.startOpen(player);
+  }
 
-    @Override
-    public void stopOpen(final Player player) {
-        src.stopOpen(player);
-    }
+  @Override
+  public void stopOpen(final Player player) {
+    src.stopOpen(player);
+  }
 
-    @Override
-    public boolean canPlaceItem(final int index, final ItemStack stack) {
-        return src.canPlaceItem(index, stack);
-    }
+  @Override
+  public boolean canPlaceItem(final int index, final ItemStack stack) {
+    return src.canPlaceItem(index, stack);
+  }
 
-    @Override
-    public void clearContent() {
-        src.clearContent();
-    }
+  @Override
+  public void clearContent() {
+    src.clearContent();
+  }
 
-    @Override
-    public boolean isEmpty() {
-        return src.isEmpty();
-    }
+  @Override
+  public boolean isEmpty() {
+    return src.isEmpty();
+  }
 
-    public Container getSrc() {
-        return src;
-    }
+  public Container getSrc() {
+    return src;
+  }
 }

@@ -10,20 +10,21 @@ import net.minecraft.core.Direction;
  * or to read a single piece of information from a packet vertex.
  */
 public interface IVertexConsumer {
-    /**
-     * @return the format that should be used for passed data.
-     */
-    VertexFormat getVertexFormat();
+  /**
+   * @return the format that should be used for passed data.
+   */
+  VertexFormat getVertexFormat();
 
-    void setQuadTint(int tint);
+  void setQuadTint(int tint);
 
-    void setQuadOrientation(Direction orientation);
+  void setQuadOrientation(Direction orientation);
 
-    void setApplyDiffuseLighting(boolean diffuse);
+  void setApplyDiffuseLighting(boolean diffuse);
 
-    void setTexture(TextureAtlasSprite texture);
+  void setTexture(TextureAtlasSprite texture);
 
-    void put(int vertexIndex, int element, float... data);
+  void put(int vertexIndex, int element, float... data);
 
-    default void onComplete() {}
+  default void onComplete() {
+  }
 }

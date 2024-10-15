@@ -1,6 +1,6 @@
 package mod.chiselsandbits.chiseledblock;
 
 public enum EnumTESRRenderState {
-    SKIP,
-    RENDER
+  SKIP,
+  RENDER
 }

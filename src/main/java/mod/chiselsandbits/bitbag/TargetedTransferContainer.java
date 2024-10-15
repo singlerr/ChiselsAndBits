@@ -6,22 +6,23 @@ import net.minecraft.world.item.ItemStack;
 
 public class TargetedTransferContainer extends AbstractContainerMenu {
 
-    protected TargetedTransferContainer() {
-        super(null, 0);
-    }
+  protected TargetedTransferContainer() {
+    super(null, 0);
+  }
 
-    @Override
-    public ItemStack quickMoveStack(Player player, int i) {
-        return null;
-    }
+  @Override
+  public ItemStack quickMoveStack(Player player, int i) {
+    return null;
+  }
 
-    @Override
-    public boolean stillValid(final Player playerIn) {
-        return true;
-    }
+  @Override
+  public boolean stillValid(final Player playerIn) {
+    return true;
+  }
 
-    public boolean doMergeItemStack(
-            final ItemStack stack, final int startIndex, final int endIndex, final boolean reverseDirection) {
-        return moveItemStackTo(stack, startIndex, endIndex, reverseDirection);
-    }
+  public boolean doMergeItemStack(
+      final ItemStack stack, final int startIndex, final int endIndex,
+      final boolean reverseDirection) {
+    return moveItemStackTo(stack, startIndex, endIndex, reverseDirection);
+  }
 }

@@ -13,33 +13,33 @@ import net.minecraft.world.item.ItemStack;
 
 public class PrintBaked extends BaseBakedItemModel {
 
-    final String itemName;
+  final String itemName;
 
-    public PrintBaked(final String itname, final IPatternItem item, final ItemStack stack) {
-        itemName = itname;
+  public PrintBaked(final String itname, final IPatternItem item, final ItemStack stack) {
+    itemName = itname;
 
-        final ItemStack blockItem = item.getPatternedItem(stack, false);
-        BakedModel model =
-                Minecraft.getInstance().getItemRenderer().getItemModelShaper().getItemModel(blockItem);
+    final ItemStack blockItem = item.getPatternedItem(stack, false);
+    BakedModel model =
+        Minecraft.getInstance().getItemRenderer().getItemModelShaper().getItemModel(blockItem);
 
-        model = model.getOverrides().resolve(model, blockItem, null, null, 0);
+    model = model.getOverrides().resolve(model, blockItem, null, null, 0);
 
-        for (final Direction face : Direction.values()) {
-            list.addAll(model.getQuads(null, face, RANDOM));
-        }
-
-        list.addAll(model.getQuads(null, null, RANDOM));
+    for (final Direction face : Direction.values()) {
+      list.addAll(model.getQuads(null, face, RANDOM));
     }
 
-    @Override
-    public boolean usesBlockLight() {
-        return false;
-    }
+    list.addAll(model.getQuads(null, null, RANDOM));
+  }
 
-    @Override
-    public TextureAtlasSprite getParticleIcon() {
-        return Minecraft.getInstance()
-                .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                .apply(new ResourceLocation(ChiselsAndBits.MODID, "item/" + itemName));
-    }
+  @Override
+  public boolean usesBlockLight() {
+    return false;
+  }
+
+  @Override
+  public TextureAtlasSprite getParticleIcon() {
+    return Minecraft.getInstance()
+        .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
+        .apply(new ResourceLocation(ChiselsAndBits.MODID, "item/" + itemName));
+  }
 }

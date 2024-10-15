@@ -16,23 +16,23 @@ import org.jetbrains.annotations.Nullable;
 
 public interface DataAwareBakedModel extends BakedModel {
 
-    List<BakedQuad> getQuads(
-            @Nullable final BlockState state,
-            @Nullable final Direction side,
-            @NotNull final RandomSource rand,
-            @NotNull final IModelData extraData,
-            @NotNull final ChiselRenderType renderType);
+  List<BakedQuad> getQuads(
+      @Nullable final BlockState state,
+      @Nullable final Direction side,
+      @NotNull final RandomSource rand,
+      @NotNull final IModelData extraData,
+      @NotNull final ChiselRenderType renderType);
 
-    @Deprecated
-    void updateModelData(
-            @NotNull final BlockAndTintGetter world,
-            @NotNull final BlockPos pos,
-            @NotNull final BlockState state,
-            @NotNull final IModelData modelData);
+  @Deprecated
+  void updateModelData(
+      @NotNull final BlockAndTintGetter world,
+      @NotNull final BlockPos pos,
+      @NotNull final BlockState state,
+      @NotNull final IModelData modelData);
 
-    Set<ChiselRenderType> getRenderTypes(
-            @NotNull final BlockAndTintGetter world,
-            @NotNull final BlockPos pos,
-            @NotNull final BlockState state,
-            @NotNull IModelData modelData);
+  Set<ChiselRenderType> getRenderTypes(
+      @NotNull final BlockAndTintGetter world,
+      @NotNull final BlockPos pos,
+      @NotNull final BlockState state,
+      @NotNull IModelData modelData);
 }

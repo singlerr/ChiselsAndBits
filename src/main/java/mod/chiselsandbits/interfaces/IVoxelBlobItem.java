@@ -6,5 +6,5 @@ import net.minecraft.world.level.block.Rotation;
 
 public interface IVoxelBlobItem {
 
-    void rotate(final ItemStack is, final Direction.Axis axis, final Rotation rotation);
+  void rotate(final ItemStack is, final Direction.Axis axis, final Rotation rotation);
 }

@@ -17,26 +17,28 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(StructurePiece.class)
 public abstract class StructurePieceMixin {
 
-    @Shadow
-    private Mirror mirror;
+  @Shadow
+  private Mirror mirror;
 
-    @Inject(
-            method = "placeBlock",
-            at =
-                    @At(
-                            value = "INVOKE_ASSIGN",
-                            target =
-                                    "Lnet/minecraft/world/level/block/state/BlockState;mirror(Lnet/minecraft/world/level/block/Mirror;)Lnet/minecraft/world/level/block/state/BlockState;"))
-    private void mod$invokeMirror(
-            WorldGenLevel worldGenLevel,
-            BlockState blockState,
-            int i,
-            int j,
-            int k,
-            BoundingBox boundingBox,
-            CallbackInfo ci,
-            @Local(ordinal = 0) BlockPos pos) {
-        if (!(worldGenLevel.getBlockEntity(pos) instanceof LegacyBlockEntityProperties properties)) return;
-        properties.mirror(worldGenLevel, pos, blockState, mirror);
+  @Inject(
+      method = "placeBlock",
+      at =
+      @At(
+          value = "INVOKE_ASSIGN",
+          target =
+              "Lnet/minecraft/world/level/block/state/BlockState;mirror(Lnet/minecraft/world/level/block/Mirror;)Lnet/minecraft/world/level/block/state/BlockState;"))
+  private void mod$invokeMirror(
+      WorldGenLevel worldGenLevel,
+      BlockState blockState,
+      int i,
+      int j,
+      int k,
+      BoundingBox boundingBox,
+      CallbackInfo ci,
+      @Local(ordinal = 0) BlockPos pos) {
+    if (!(worldGenLevel.getBlockEntity(pos) instanceof LegacyBlockEntityProperties properties)) {
+      return;
     }
+    properties.mirror(worldGenLevel, pos, blockState, mirror);
+  }
 }

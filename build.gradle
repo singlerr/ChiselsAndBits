@@ -1,165 +1,165 @@
 plugins {
-	id 'fabric-loom' version '1.7.3'
-	id 'maven-publish'
-	id 'com.diffplug.spotless' version '6.25.0'
+    id 'fabric-loom' version '1.7.3'
+    id 'maven-publish'
+    id 'com.diffplug.spotless' version '6.25.0'
 }
 
 version = "${project.mod_version}+${project.minecraft_version}"
 group = project.maven_group
 
 base {
-	archivesName = project.archives_base_name
+    archivesName = project.archives_base_name
 }
 
 repositories {
-	mavenCentral()
-	maven {
-		name = 'Fabric'
-		url = 'https://maven.fabricmc.net/'
-	}
-	maven {
-		url = 'https://jitpack.io'
-		content {
-			includeGroup "com.github.Chocohead" // Fixes extremely slowing down Gradle configuration
-		}
-	}
-	maven {
-		name = "singlerr's repo"
-		url = "https://github.com/singlerr/mvn-repo/raw/maven2/"
-	}
-	maven {
-		name = "Fuzs Mod Resources"
-		url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
-	}
-	maven {
-		url = "https://maven.jamieswhiteshirt.com/libs-release"
-		content {
-			includeGroup "com.jamieswhiteshirt"
-		}
-	}
-	maven{
-		name = 'LDTTeam - Modding'
-		url = 'https://ldtteam.jfrog.io/ldtteam/modding/'
-	}
-	maven { url = "https://mvn.devos.one/releases/" }
-	exclusiveContent {
-		forRepository {
-			maven {
-				name = "Modrinth"
-				url = "https://api.modrinth.com/maven"
-			}
-		}
-		filter {
-			includeGroup "maven.modrinth"
-		}
-	}
+    mavenCentral()
+    maven {
+        name = 'Fabric'
+        url = 'https://maven.fabricmc.net/'
+    }
+    maven {
+        url = 'https://jitpack.io'
+        content {
+            includeGroup "com.github.Chocohead" // Fixes extremely slowing down Gradle configuration
+        }
+    }
+    maven {
+        name = "singlerr's repo"
+        url = "https://github.com/singlerr/mvn-repo/raw/maven2/"
+    }
+    maven {
+        name = "Fuzs Mod Resources"
+        url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+    }
+    maven {
+        url = "https://maven.jamieswhiteshirt.com/libs-release"
+        content {
+            includeGroup "com.jamieswhiteshirt"
+        }
+    }
+    maven {
+        name = 'LDTTeam - Modding'
+        url = 'https://ldtteam.jfrog.io/ldtteam/modding/'
+    }
+    maven { url = "https://mvn.devos.one/releases/" }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
 }
 
 fabricApi {
-	configureDataGeneration()
+    configureDataGeneration()
 }
 
-loom{
-	accessWidenerPath = file('src/main/resources/chiselsandbits.accesswidener')
+loom {
+    accessWidenerPath = file('src/main/resources/chiselsandbits.accesswidener')
 
-	runs {
+    runs {
 
-		client{
+        client {
 
-			property 'mixin.debug', 'true'
-			programArgs '--username', 'Dev'
+            property 'mixin.debug', 'true'
+            programArgs '--username', 'Dev'
 
-			ideConfigGenerated = true
-			runDir = 'run-client'
-		}
+            ideConfigGenerated = true
+            runDir = 'run-client'
+        }
 
-		server{
+        server {
 
-			property 'mixin.debug', 'true'
-			runDir = 'run-server'
+            property 'mixin.debug', 'true'
+            runDir = 'run-server'
 
-			ideConfigGenerated = true
-		}
-	}
+            ideConfigGenerated = true
+        }
+    }
 }
 
 
 dependencies {
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings loom.officialMojangMappings()
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 
-	modApi("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${config_api_version}")
-	modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${reach_distance_api_version}")
-	modImplementation("com.communi-suggestu.saecularia-caudices:saecularia-caudices-fabric:${saeculariaCaudicesVersion}")
-	modImplementation("io.github.feltmc:fabricated-forge-caps:${forge_caps_version}")
-	modImplementation("maven.modrinth:modernkeybinding:1.20.4-1.3.0"){
-		transitive = false
-	}
-	implementation 'javax.annotation:javax.annotation-api:1.3.2'
-	implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    modApi("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${config_api_version}")
+    include(modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${reach_distance_api_version}"))
+    include(modImplementation("com.communi-suggestu.saecularia-caudices:saecularia-caudices-fabric:${saeculariaCaudicesVersion}"))
+    include(modImplementation("io.github.feltmc:fabricated-forge-caps:${forge_caps_version}"))
+    modImplementation("maven.modrinth:modernkeybinding:1.20.4-1.3.0") {
+        transitive = false
+    }
+    implementation 'javax.annotation:javax.annotation-api:1.3.2'
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
 }
 
 processResources {
-	inputs.property "version", project.version
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
+    inputs.property "version", project.version
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 17
+    it.options.release = 17
 }
 
 java {
-	withSourcesJar()
+    withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 jar {
-	from("LICENSE") {
-		rename { "${it}_${project.base.archivesName.get()}"}
-	}
+    from("LICENSE") {
+        rename { "${it}_${project.base.archivesName.get()}" }
+    }
 }
 
 publishing {
-	publications {
-		create("mavenJava", MavenPublication) {
-			artifactId = project.archives_base_name
-			from components.java
-		}
-	}
-	repositories {
-		maven{
-			name = "singlerrs_repo"
-			url = uri(project.findProperty("localMvnRepo") == null ? "" : project.findProperty("localMvnRepo"))
-		}
-	}
+    publications {
+        create("mavenJava", MavenPublication) {
+            artifactId = project.archives_base_name
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            name = "singlerrs_repo"
+            url = uri(project.findProperty("localMvnRepo") == null ? "" : project.findProperty("localMvnRepo"))
+        }
+    }
 }
 
 spotless {
-	java{
-		palantirJavaFormat()
-	}
+    java {
+        palantirJavaFormat()
+    }
 
-	groovyGradle {
-		greclipse()
-	}
+    groovyGradle {
+        greclipse()
+    }
 }
 
 subprojects {
-	tasks.withType(JavaCompile).configureEach {
-		it.options.release = 17
-	}
+    tasks.withType(JavaCompile).configureEach {
+        it.options.release = 17
+    }
 
-	java {
-		withSourcesJar()
+    java {
+        withSourcesJar()
 
-		sourceCompatibility = JavaVersion.VERSION_17
-		targetCompatibility = JavaVersion.VERSION_17
-	}
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
 }

@@ -2,35 +2,35 @@ package mod.chiselsandbits.render.helpers;
 
 public class SimpleInstanceCache<X, Y> {
 
-    X equalityValue;
-    Y cacheInstance;
+  X equalityValue;
+  Y cacheInstance;
 
-    public SimpleInstanceCache(final X defaultEquality, final Y defaultValue) {
-        equalityValue = defaultEquality;
-        cacheInstance = defaultValue;
+  public SimpleInstanceCache(final X defaultEquality, final Y defaultValue) {
+    equalityValue = defaultEquality;
+    cacheInstance = defaultValue;
+  }
+
+  public boolean needsUpdate(final X testValue) {
+    try {
+      if (equalityValue == null != (testValue == null)) {
+        return true;
+      }
+
+      return !isEqual(equalityValue, testValue);
+    } finally {
+      equalityValue = testValue;
     }
+  }
 
-    public boolean needsUpdate(final X testValue) {
-        try {
-            if (equalityValue == null != (testValue == null)) {
-                return true;
-            }
+  private boolean isEqual(final X a, final X b) {
+    return a == b;
+  }
 
-            return !isEqual(equalityValue, testValue);
-        } finally {
-            equalityValue = testValue;
-        }
-    }
+  public Y getCached() {
+    return cacheInstance;
+  }
 
-    private boolean isEqual(final X a, final X b) {
-        return a == b;
-    }
-
-    public Y getCached() {
-        return cacheInstance;
-    }
-
-    public void updateCachedValue(final Y value) {
-        cacheInstance = value;
-    }
+  public void updateCachedValue(final Y value) {
+    cacheInstance = value;
+  }
 }

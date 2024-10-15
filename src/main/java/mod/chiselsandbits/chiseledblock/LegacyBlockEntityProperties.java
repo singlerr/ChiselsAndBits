@@ -7,7 +7,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public interface LegacyBlockEntityProperties {
 
-    default BlockState mirror(LevelAccessor level, BlockPos pos, BlockState blockState, Mirror mirror) {
-        return blockState;
-    }
+  default BlockState mirror(LevelAccessor level, BlockPos pos, BlockState blockState,
+                            Mirror mirror) {
+    return blockState;
+  }
 }

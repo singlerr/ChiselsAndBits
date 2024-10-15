@@ -12,34 +12,36 @@ import net.minecraft.world.SimpleMenuProvider;
 
 public class PacketOpenBagGui extends ModPacket {
 
-    public static final PacketType<PacketOpenBagGui> PACKET_TYPE =
-            PacketType.create(new ResourceLocation(Constants.MOD_ID, "packet_open_bag_gui"), PacketOpenBagGui::new);
+  public static final PacketType<PacketOpenBagGui> PACKET_TYPE =
+      PacketType.create(new ResourceLocation(Constants.MOD_ID, "packet_open_bag_gui"),
+          PacketOpenBagGui::new);
 
-    public PacketOpenBagGui(FriendlyByteBuf buffer) {
-        readPayload(buffer);
-    }
+  public PacketOpenBagGui(FriendlyByteBuf buffer) {
+    readPayload(buffer);
+  }
 
-    public PacketOpenBagGui() {}
+  public PacketOpenBagGui() {
+  }
 
-    @Override
-    public void server(final ServerPlayer player) {
-        player.openMenu(new SimpleMenuProvider(
-                (id, playerInventory, playerEntity) -> new BagContainer(id, playerInventory),
-                Component.literal("Bitbag")));
-    }
+  @Override
+  public void server(final ServerPlayer player) {
+    player.openMenu(new SimpleMenuProvider(
+        (id, playerInventory, playerEntity) -> new BagContainer(id, playerInventory),
+        Component.literal("Bitbag")));
+  }
 
-    @Override
-    public void getPayload(final FriendlyByteBuf buffer) {
-        // no data...
-    }
+  @Override
+  public void getPayload(final FriendlyByteBuf buffer) {
+    // no data...
+  }
 
-    @Override
-    public void readPayload(final FriendlyByteBuf buffer) {
-        // no data..
-    }
+  @Override
+  public void readPayload(final FriendlyByteBuf buffer) {
+    // no data..
+  }
 
-    @Override
-    public PacketType<?> getType() {
-        return PACKET_TYPE;
-    }
+  @Override
+  public PacketType<?> getType() {
+    return PACKET_TYPE;
+  }
 }

@@ -6,158 +6,159 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import org.joml.Matrix4f;
 
 public class GuiBagFontRenderer extends Font {
-    Font talkto;
+  Font talkto;
 
-    int offsetX, offsetY;
-    float scale;
+  int offsetX, offsetY;
+  float scale;
 
-    public GuiBagFontRenderer(final Font src, final int bagStackSize) {
-        super(src.fonts, false);
-        talkto = src;
+  public GuiBagFontRenderer(final Font src, final int bagStackSize) {
+    super(src.fonts, false);
+    talkto = src;
 
-        if (bagStackSize < 100) {
-            scale = 1f;
-        } else if (bagStackSize >= 100) {
-            scale = 0.75f;
-            offsetX = 3;
-            offsetY = 2;
-        }
+    if (bagStackSize < 100) {
+      scale = 1f;
+    } else if (bagStackSize >= 100) {
+      scale = 0.75f;
+      offsetX = 3;
+      offsetY = 2;
     }
+  }
 
-    @Override
-    public int width(String text) {
-        text = convertText(text);
-        return talkto.width(text);
+  @Override
+  public int width(String text) {
+    text = convertText(text);
+    return talkto.width(text);
+  }
+
+  @Override
+  protected int drawInternal(
+      String text,
+      float x,
+      float y,
+      int color,
+      boolean dropShadow,
+      Matrix4f matrix,
+      MultiBufferSource multiBufferSource,
+      DisplayMode displayMode,
+      int j,
+      int k,
+      boolean bl2) {
+    final PoseStack stack = new PoseStack();
+    final Matrix4f original = new Matrix4f(matrix);
+
+    try {
+      stack.last().pose().mul(matrix);
+      stack.scale(scale, scale, scale);
+
+      x /= scale;
+      y /= scale;
+      x += offsetX;
+      y += offsetY;
+
+      return super.drawInternal(text, x, y, color, dropShadow, matrix, multiBufferSource,
+          displayMode, j, k, bl2);
+    } finally {
+      matrix.set(original);
     }
+  }
 
-    @Override
-    protected int drawInternal(
-            String text,
-            float x,
-            float y,
-            int color,
-            boolean dropShadow,
-            Matrix4f matrix,
-            MultiBufferSource multiBufferSource,
-            DisplayMode displayMode,
-            int j,
-            int k,
-            boolean bl2) {
-        final PoseStack stack = new PoseStack();
-        final Matrix4f original = new Matrix4f(matrix);
+  @Override
+  public int drawInBatch(
+      String text,
+      float x,
+      float y,
+      int color,
+      boolean dropShadow,
+      Matrix4f matrix,
+      MultiBufferSource buffer,
+      DisplayMode displayMode,
+      int colorBackgroundIn,
+      int packedLight,
+      boolean transparentIn) {
+    final PoseStack stack = new PoseStack();
+    final Matrix4f original = new Matrix4f(matrix);
 
-        try {
-            stack.last().pose().mul(matrix);
-            stack.scale(scale, scale, scale);
+    try {
+      stack.last().pose().mul(matrix);
+      stack.scale(scale, scale, scale);
 
-            x /= scale;
-            y /= scale;
-            x += offsetX;
-            y += offsetY;
+      x /= scale;
+      y /= scale;
+      x += offsetX;
+      y += offsetY;
 
-            return super.drawInternal(text, x, y, color, dropShadow, matrix, multiBufferSource, displayMode, j, k, bl2);
-        } finally {
-            matrix.set(original);
-        }
+      return super.drawInBatch(
+          text,
+          x,
+          y,
+          color,
+          dropShadow,
+          matrix,
+          buffer,
+          displayMode,
+          colorBackgroundIn,
+          packedLight,
+          transparentIn);
+    } finally {
+      matrix.set(original);
     }
+  }
 
-    @Override
-    public int drawInBatch(
-            String text,
-            float x,
-            float y,
-            int color,
-            boolean dropShadow,
-            Matrix4f matrix,
-            MultiBufferSource buffer,
-            DisplayMode displayMode,
-            int colorBackgroundIn,
-            int packedLight,
-            boolean transparentIn) {
-        final PoseStack stack = new PoseStack();
-        final Matrix4f original = new Matrix4f(matrix);
+  //    @Override
+  //    public int draw(PoseStack matrixStack, String text, float x, float y, int color)
+  //    {
+  //        try
+  //        {
+  //            text = convertText( text );
+  //            matrixStack.pushPose();
+  //            matrixStack.scale( scale, scale, scale );
+  //
+  //            x /= scale;
+  //            y /= scale;
+  //            x += offsetX;
+  //            y += offsetY;
+  //
+  //            return talkto.draw(matrixStack, text, x, y, color );
+  //        }
+  //        finally
+  //        {
+  //            matrixStack.popPose();
+  //        }
+  //    }
+  //
+  //    @Override
+  //    public int drawShadow(PoseStack matrixStack, String text, float x, float y, int color)
+  //    {
+  //        try
+  //        {
+  //            text = convertText( text );
+  //            matrixStack.pushPose();
+  //            matrixStack.scale( scale, scale, scale );
+  //
+  //            x /= scale;
+  //            y /= scale;
+  //            x += offsetX;
+  //            y += offsetY;
+  //
+  //            return talkto.drawShadow(matrixStack, text, x, y, color );
+  //        }
+  //        finally
+  //        {
+  //            matrixStack.popPose();
+  //        }
+  //    }
 
-        try {
-            stack.last().pose().mul(matrix);
-            stack.scale(scale, scale, scale);
+  private String convertText(final String text) {
+    try {
+      final int value = Integer.parseInt(text);
 
-            x /= scale;
-            y /= scale;
-            x += offsetX;
-            y += offsetY;
+      if (value >= 1000) {
+        return value / 1000 + "k";
+      }
 
-            return super.drawInBatch(
-                    text,
-                    x,
-                    y,
-                    color,
-                    dropShadow,
-                    matrix,
-                    buffer,
-                    displayMode,
-                    colorBackgroundIn,
-                    packedLight,
-                    transparentIn);
-        } finally {
-            matrix.set(original);
-        }
+      return text;
+    } catch (final NumberFormatException e) {
+      return text;
     }
-
-    //    @Override
-    //    public int draw(PoseStack matrixStack, String text, float x, float y, int color)
-    //    {
-    //        try
-    //        {
-    //            text = convertText( text );
-    //            matrixStack.pushPose();
-    //            matrixStack.scale( scale, scale, scale );
-    //
-    //            x /= scale;
-    //            y /= scale;
-    //            x += offsetX;
-    //            y += offsetY;
-    //
-    //            return talkto.draw(matrixStack, text, x, y, color );
-    //        }
-    //        finally
-    //        {
-    //            matrixStack.popPose();
-    //        }
-    //    }
-    //
-    //    @Override
-    //    public int drawShadow(PoseStack matrixStack, String text, float x, float y, int color)
-    //    {
-    //        try
-    //        {
-    //            text = convertText( text );
-    //            matrixStack.pushPose();
-    //            matrixStack.scale( scale, scale, scale );
-    //
-    //            x /= scale;
-    //            y /= scale;
-    //            x += offsetX;
-    //            y += offsetY;
-    //
-    //            return talkto.drawShadow(matrixStack, text, x, y, color );
-    //        }
-    //        finally
-    //        {
-    //            matrixStack.popPose();
-    //        }
-    //    }
-
-    private String convertText(final String text) {
-        try {
-            final int value = Integer.parseInt(text);
-
-            if (value >= 1000) {
-                return value / 1000 + "k";
-            }
-
-            return text;
-        } catch (final NumberFormatException e) {
-            return text;
-        }
-    }
+  }
 }

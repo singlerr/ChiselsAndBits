@@ -1,6 +1,10 @@
 package mod.chiselsandbits.items;
 
-import static net.minecraft.world.item.Tiers.*;
+import static net.minecraft.world.item.Tiers.DIAMOND;
+import static net.minecraft.world.item.Tiers.GOLD;
+import static net.minecraft.world.item.Tiers.IRON;
+import static net.minecraft.world.item.Tiers.NETHERITE;
+import static net.minecraft.world.item.Tiers.STONE;
 
 import java.util.List;
 import mod.chiselsandbits.core.ChiselsAndBits;
@@ -16,44 +20,45 @@ import net.minecraft.world.level.Level;
 
 public class ItemBitSaw extends Item {
 
-    public ItemBitSaw(Tier tier, Item.Properties properties) {
-        super(properties);
+  public ItemBitSaw(Tier tier, Item.Properties properties) {
+    super(properties);
+  }
+
+  private static Item.Properties setupDamageStack(Tier material, Item.Properties properties) {
+    long uses = 1;
+    if (DIAMOND.equals(material)) {
+      uses = ChiselsAndBits.getConfig().getServer().diamondSawUses.get();
+    } else if (GOLD.equals(material)) {
+      uses = ChiselsAndBits.getConfig().getServer().goldSawUses.get();
+    } else if (IRON.equals(material)) {
+      uses = ChiselsAndBits.getConfig().getServer().ironSawUses.get();
+    } else if (STONE.equals(material)) {
+      uses = ChiselsAndBits.getConfig().getServer().stoneSawUses.get();
+    } else if (NETHERITE.equals(material)) {
+      uses = ChiselsAndBits.getConfig().getServer().netheriteSawUses.get();
     }
 
-    private static Item.Properties setupDamageStack(Tier material, Item.Properties properties) {
-        long uses = 1;
-        if (DIAMOND.equals(material)) {
-            uses = ChiselsAndBits.getConfig().getServer().diamondSawUses.get();
-        } else if (GOLD.equals(material)) {
-            uses = ChiselsAndBits.getConfig().getServer().goldSawUses.get();
-        } else if (IRON.equals(material)) {
-            uses = ChiselsAndBits.getConfig().getServer().ironSawUses.get();
-        } else if (STONE.equals(material)) {
-            uses = ChiselsAndBits.getConfig().getServer().stoneSawUses.get();
-        } else if (NETHERITE.equals(material)) {
-            uses = ChiselsAndBits.getConfig().getServer().netheriteSawUses.get();
-        }
+    return properties.durability(
+        ChiselsAndBits.getConfig().getServer().damageTools.get() ? (int) Math.max(0, uses) : 0);
+  }
 
-        return properties.durability(
-                ChiselsAndBits.getConfig().getServer().damageTools.get() ? (int) Math.max(0, uses) : 0);
+  @Override
+  @Environment(EnvType.CLIENT)
+  public void appendHoverText(
+      final ItemStack stack, final Level worldIn, final List<Component> tooltip,
+      final TooltipFlag advanced) {
+    super.appendHoverText(stack, worldIn, tooltip, advanced);
+    ChiselsAndBits.getConfig().getCommon().helpText(LocalStrings.HelpBitSaw, tooltip);
+  }
+
+  public ItemStack getContainerItem(final ItemStack itemStack) {
+    if (ChiselsAndBits.getConfig().getServer().damageTools.get()) {
+      itemStack.setDamageValue(itemStack.getDamageValue() + 1);
+      if (itemStack.getDamageValue() == itemStack.getMaxDamage()) {
+        return ItemStack.EMPTY;
+      }
     }
 
-    @Override
-    @Environment(EnvType.CLIENT)
-    public void appendHoverText(
-            final ItemStack stack, final Level worldIn, final List<Component> tooltip, final TooltipFlag advanced) {
-        super.appendHoverText(stack, worldIn, tooltip, advanced);
-        ChiselsAndBits.getConfig().getCommon().helpText(LocalStrings.HelpBitSaw, tooltip);
-    }
-
-    public ItemStack getContainerItem(final ItemStack itemStack) {
-        if (ChiselsAndBits.getConfig().getServer().damageTools.get()) {
-            itemStack.setDamageValue(itemStack.getDamageValue() + 1);
-            if (itemStack.getDamageValue() == itemStack.getMaxDamage()) {
-                return ItemStack.EMPTY;
-            }
-        }
-
-        return itemStack.copy();
-    }
+    return itemStack.copy();
+  }
 }

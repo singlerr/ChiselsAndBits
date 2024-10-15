@@ -1,6 +1,6 @@
 {
-    "parent":"chiselsandbits:item/tool",
-    "textures": {
-        "layer0":"chiselsandbits:item/chisel_stone"
-    }
+  "parent": "chiselsandbits:item/tool",
+  "textures": {
+    "layer0": "chiselsandbits:item/chisel_stone"
+  }
 }

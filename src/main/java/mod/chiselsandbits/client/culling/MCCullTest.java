@@ -20,93 +20,97 @@ import net.minecraft.world.level.material.Fluids;
  */
 public class MCCullTest implements ICullTest, BlockGetter {
 
-    private BlockState a;
-    private BlockState b;
+  private BlockState a;
+  private BlockState b;
 
-    @Override
-    public boolean isVisible(final int mySpot, final int secondSpot) {
-        if (mySpot == 0 || mySpot == secondSpot) {
-            return false;
-        }
-
-        a = ModUtil.getStateById(mySpot);
-        if (a == null) {
-            a = Blocks.AIR.defaultBlockState();
-        }
-        b = ModUtil.getStateById(secondSpot);
-        if (b == null) {
-            b = Blocks.AIR.defaultBlockState();
-        }
-
-        if (a.getBlock().getClass() == StainedGlassBlock.class && a.getBlock() == b.getBlock()) {
-            return false;
-        }
-
-        if (a.getBlock() instanceof LiquidBlock) {
-            return true;
-        }
-
-        try {
-            return !a.skipRendering(b, Direction.NORTH);
-        } catch (final Throwable t) {
-            // revert to older logic in the event of some sort of issue.
-            return BlockBitInfo.getTypeFromStateID(mySpot).shouldShow(BlockBitInfo.getTypeFromStateID(secondSpot));
-        }
+  @Override
+  public boolean isVisible(final int mySpot, final int secondSpot) {
+    if (mySpot == 0 || mySpot == secondSpot) {
+      return false;
     }
 
-    public boolean isVisible(final int mySpot, final int secondSpot, Direction face) {
-        if (mySpot == 0 || mySpot == secondSpot) {
-            return false;
-        }
-
-        a = ModUtil.getStateById(mySpot);
-        if (a == null) {
-            a = Blocks.AIR.defaultBlockState();
-        }
-        b = ModUtil.getStateById(secondSpot);
-        if (b == null) {
-            b = Blocks.AIR.defaultBlockState();
-        }
-        if (!a.skipRendering(b, face)) return false;
-
-        if (a.getBlock().getClass() == StainedGlassBlock.class && a.getBlock() == b.getBlock()) {
-            return false;
-        }
-
-        if (a.getBlock() instanceof LiquidBlock) {
-            return true;
-        }
-
-        try {
-            return !a.skipRendering(b, Direction.NORTH);
-        } catch (final Throwable t) {
-            // revert to older logic in the event of some sort of issue.
-            return BlockBitInfo.getTypeFromStateID(mySpot).shouldShow(BlockBitInfo.getTypeFromStateID(secondSpot));
-        }
+    a = ModUtil.getStateById(mySpot);
+    if (a == null) {
+      a = Blocks.AIR.defaultBlockState();
+    }
+    b = ModUtil.getStateById(secondSpot);
+    if (b == null) {
+      b = Blocks.AIR.defaultBlockState();
     }
 
-    @Override
-    public BlockEntity getBlockEntity(final BlockPos pos) {
-        return null;
+    if (a.getBlock().getClass() == StainedGlassBlock.class && a.getBlock() == b.getBlock()) {
+      return false;
     }
 
-    @Override
-    public BlockState getBlockState(final BlockPos pos) {
-        return pos.equals(BlockPos.ZERO) ? a : b;
+    if (a.getBlock() instanceof LiquidBlock) {
+      return true;
     }
 
-    @Override
-    public FluidState getFluidState(final BlockPos pos) {
-        return Fluids.EMPTY.defaultFluidState();
+    try {
+      return !a.skipRendering(b, Direction.NORTH);
+    } catch (final Throwable t) {
+      // revert to older logic in the event of some sort of issue.
+      return BlockBitInfo.getTypeFromStateID(mySpot)
+          .shouldShow(BlockBitInfo.getTypeFromStateID(secondSpot));
+    }
+  }
+
+  public boolean isVisible(final int mySpot, final int secondSpot, Direction face) {
+    if (mySpot == 0 || mySpot == secondSpot) {
+      return false;
     }
 
-    @Override
-    public int getHeight() {
-        return 0;
+    a = ModUtil.getStateById(mySpot);
+    if (a == null) {
+      a = Blocks.AIR.defaultBlockState();
+    }
+    b = ModUtil.getStateById(secondSpot);
+    if (b == null) {
+      b = Blocks.AIR.defaultBlockState();
+    }
+    if (!a.skipRendering(b, face)) {
+      return false;
     }
 
-    @Override
-    public int getMinBuildHeight() {
-        return 0;
+    if (a.getBlock().getClass() == StainedGlassBlock.class && a.getBlock() == b.getBlock()) {
+      return false;
     }
+
+    if (a.getBlock() instanceof LiquidBlock) {
+      return true;
+    }
+
+    try {
+      return !a.skipRendering(b, Direction.NORTH);
+    } catch (final Throwable t) {
+      // revert to older logic in the event of some sort of issue.
+      return BlockBitInfo.getTypeFromStateID(mySpot)
+          .shouldShow(BlockBitInfo.getTypeFromStateID(secondSpot));
+    }
+  }
+
+  @Override
+  public BlockEntity getBlockEntity(final BlockPos pos) {
+    return null;
+  }
+
+  @Override
+  public BlockState getBlockState(final BlockPos pos) {
+    return pos.equals(BlockPos.ZERO) ? a : b;
+  }
+
+  @Override
+  public FluidState getFluidState(final BlockPos pos) {
+    return Fluids.EMPTY.defaultFluidState();
+  }
+
+  @Override
+  public int getHeight() {
+    return 0;
+  }
+
+  @Override
+  public int getMinBuildHeight() {
+    return 0;
+  }
 }

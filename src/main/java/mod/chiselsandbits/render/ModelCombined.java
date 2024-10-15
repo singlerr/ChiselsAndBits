@@ -21,114 +21,115 @@ import org.jetbrains.annotations.Nullable;
 
 public class ModelCombined extends BaseBakedBlockModel {
 
-    private static final RandomSource COMBINED_RANDOM_MODEL = RandomSource.create();
+  private static final RandomSource COMBINED_RANDOM_MODEL = RandomSource.create();
 
-    BakedModel[] merged;
+  BakedModel[] merged;
 
-    List<BakedQuad>[] face;
-    List<BakedQuad> generic;
+  List<BakedQuad>[] face;
+  List<BakedQuad> generic;
 
-    boolean isSideLit;
+  boolean isSideLit;
 
-    Set<ChiselRenderType> renderTypes = Set.of();
+  Set<ChiselRenderType> renderTypes = Set.of();
 
-    @SuppressWarnings("unchecked")
-    public ModelCombined(final BakedModel... args) {
-        face = new ArrayList[Direction.values().length];
+  @SuppressWarnings("unchecked")
+  public ModelCombined(final BakedModel... args) {
+    face = new ArrayList[Direction.values().length];
 
-        generic = new ArrayList<>();
-        for (final Direction f : Direction.values()) {
-            face[f.ordinal()] = new ArrayList<>();
-        }
-
-        merged = args;
-
-        for (final BakedModel m : merged) {
-            generic.addAll(m.getQuads(null, null, COMBINED_RANDOM_MODEL));
-            for (final Direction f : Direction.values()) {
-                face[f.ordinal()].addAll(m.getQuads(null, f, COMBINED_RANDOM_MODEL));
-            }
-        }
-
-        isSideLit = Arrays.stream(args).anyMatch(BakedModel::usesBlockLight);
+    generic = new ArrayList<>();
+    for (final Direction f : Direction.values()) {
+      face[f.ordinal()] = new ArrayList<>();
     }
 
-    public ModelCombined(Set<ChiselRenderType> renderTypes, final BakedModel... args) {
-        this.renderTypes = renderTypes;
-        face = new ArrayList[Direction.values().length];
+    merged = args;
 
-        generic = new ArrayList<>();
-        for (final Direction f : Direction.values()) {
-            face[f.ordinal()] = new ArrayList<>();
-        }
-
-        merged = args;
-
-        for (final BakedModel m : merged) {
-            generic.addAll(m.getQuads(null, null, COMBINED_RANDOM_MODEL));
-            for (final Direction f : Direction.values()) {
-                face[f.ordinal()].addAll(m.getQuads(null, f, COMBINED_RANDOM_MODEL));
-            }
-        }
-
-        isSideLit = Arrays.stream(args).anyMatch(BakedModel::usesBlockLight);
+    for (final BakedModel m : merged) {
+      generic.addAll(m.getQuads(null, null, COMBINED_RANDOM_MODEL));
+      for (final Direction f : Direction.values()) {
+        face[f.ordinal()].addAll(m.getQuads(null, f, COMBINED_RANDOM_MODEL));
+      }
     }
 
-    public Set<ChiselRenderType> getRenderTypes() {
-        return renderTypes;
+    isSideLit = Arrays.stream(args).anyMatch(BakedModel::usesBlockLight);
+  }
+
+  public ModelCombined(Set<ChiselRenderType> renderTypes, final BakedModel... args) {
+    this.renderTypes = renderTypes;
+    face = new ArrayList[Direction.values().length];
+
+    generic = new ArrayList<>();
+    for (final Direction f : Direction.values()) {
+      face[f.ordinal()] = new ArrayList<>();
     }
 
-    @Override
-    public TextureAtlasSprite getParticleIcon() {
-        for (final BakedModel a : merged) {
-            return a.getParticleIcon();
-        }
+    merged = args;
 
-        return ClientSide.instance.getMissingIcon();
+    for (final BakedModel m : merged) {
+      generic.addAll(m.getQuads(null, null, COMBINED_RANDOM_MODEL));
+      for (final Direction f : Direction.values()) {
+        face[f.ordinal()].addAll(m.getQuads(null, f, COMBINED_RANDOM_MODEL));
+      }
     }
 
-    @Override
-    public List<BakedQuad> getQuads(
-            @Nullable BlockState blockState, @Nullable Direction side, RandomSource randomSource) {
-        if (side != null) {
-            return face[side.ordinal()];
-        }
+    isSideLit = Arrays.stream(args).anyMatch(BakedModel::usesBlockLight);
+  }
 
-        return generic;
+  public Set<ChiselRenderType> getRenderTypes() {
+    return renderTypes;
+  }
+
+  @Override
+  public TextureAtlasSprite getParticleIcon() {
+    for (final BakedModel a : merged) {
+      return a.getParticleIcon();
     }
 
-    @Override
-    public boolean usesBlockLight() {
-        return isSideLit;
+    return ClientSide.instance.getMissingIcon();
+  }
+
+  @Override
+  public List<BakedQuad> getQuads(
+      @Nullable BlockState blockState, @Nullable Direction side, RandomSource randomSource) {
+    if (side != null) {
+      return face[side.ordinal()];
     }
 
-    @Override
-    public List<BakedQuad> getQuads(
-            @Nullable BlockState state,
-            @Nullable Direction side,
-            @NotNull RandomSource rand,
-            @NotNull IModelData extraData,
-            @NotNull ChiselRenderType renderType) {
-        if (side != null) {
-            return face[side.ordinal()];
-        }
+    return generic;
+  }
 
-        return generic;
+  @Override
+  public boolean usesBlockLight() {
+    return isSideLit;
+  }
+
+  @Override
+  public List<BakedQuad> getQuads(
+      @Nullable BlockState state,
+      @Nullable Direction side,
+      @NotNull RandomSource rand,
+      @NotNull IModelData extraData,
+      @NotNull ChiselRenderType renderType) {
+    if (side != null) {
+      return face[side.ordinal()];
     }
 
-    @Override
-    public void updateModelData(
-            @NotNull BlockAndTintGetter world,
-            @NotNull BlockPos pos,
-            @NotNull BlockState state,
-            @NotNull IModelData modelData) {}
+    return generic;
+  }
 
-    @Override
-    public Set<ChiselRenderType> getRenderTypes(
-            @NotNull BlockAndTintGetter world,
-            @NotNull BlockPos pos,
-            @NotNull BlockState state,
-            @NotNull IModelData modelData) {
-        return renderTypes == null ? Set.of() : renderTypes;
-    }
+  @Override
+  public void updateModelData(
+      @NotNull BlockAndTintGetter world,
+      @NotNull BlockPos pos,
+      @NotNull BlockState state,
+      @NotNull IModelData modelData) {
+  }
+
+  @Override
+  public Set<ChiselRenderType> getRenderTypes(
+      @NotNull BlockAndTintGetter world,
+      @NotNull BlockPos pos,
+      @NotNull BlockState state,
+      @NotNull IModelData modelData) {
+    return renderTypes == null ? Set.of() : renderTypes;
+  }
 }

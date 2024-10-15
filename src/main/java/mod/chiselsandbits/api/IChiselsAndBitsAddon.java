@@ -12,10 +12,10 @@ package mod.chiselsandbits.api;
  */
 public interface IChiselsAndBitsAddon {
 
-    /**
-     * Called during init-phase for C&B.
-     *
-     * @param api C&B Api Object
-     */
-    void onReadyChiselsAndBits(final IChiselAndBitsAPI api);
+  /**
+   * Called during init-phase for C&B.
+   *
+   * @param api C&B Api Object
+   */
+  void onReadyChiselsAndBits(final IChiselAndBitsAPI api);
 }

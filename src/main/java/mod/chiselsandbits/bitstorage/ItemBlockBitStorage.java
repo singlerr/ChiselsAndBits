@@ -28,65 +28,72 @@ import org.jetbrains.annotations.Nullable;
 
 public class ItemBlockBitStorage extends BlockItem {
 
-    public ItemBlockBitStorage(final Block block, Item.Properties builder) {
-        super(block, builder);
+  public ItemBlockBitStorage(final Block block, Item.Properties builder) {
+    super(block, builder);
+  }
+
+  @Environment(EnvType.CLIENT)
+  @Override
+  public void appendHoverText(
+      final ItemStack stack,
+      @Nullable final Level worldIn,
+      final List<Component> tooltip,
+      final TooltipFlag flagIn) {
+    super.appendHoverText(stack, worldIn, tooltip, flagIn);
+    if (CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY == null) {
+      return;
     }
 
-    @Environment(EnvType.CLIENT)
-    @Override
-    public void appendHoverText(
-            final ItemStack stack,
-            @Nullable final Level worldIn,
-            final List<Component> tooltip,
-            final TooltipFlag flagIn) {
-        super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        if (CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY == null) return;
+    FluidStack fluid = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY)
+        .map(h -> h.getFluidInTank(0))
+        .orElse(FluidStack.EMPTY);
 
-        FluidStack fluid = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY)
-                .map(h -> h.getFluidInTank(0))
-                .orElse(FluidStack.EMPTY);
+    if (fluid.isEmpty()) {
+      ChiselsAndBits.getConfig().getCommon().helpText(LocalStrings.HelpBitTankEmpty, tooltip);
+    } else {
+      ChiselsAndBits.getConfig()
+          .getCommon()
+          .helpText(
+              LocalStrings.HelpBitTankFilled,
+              tooltip,
+              DeprecationHelper.translateToLocal(fluid.getTranslationKey()),
+              String.valueOf((int) Math.floor(fluid.getAmount() * 4.096)));
+    }
+  }
 
-        if (fluid.isEmpty()) {
-            ChiselsAndBits.getConfig().getCommon().helpText(LocalStrings.HelpBitTankEmpty, tooltip);
-        } else {
-            ChiselsAndBits.getConfig()
-                    .getCommon()
-                    .helpText(
-                            LocalStrings.HelpBitTankFilled,
-                            tooltip,
-                            DeprecationHelper.translateToLocal(fluid.getTranslationKey()),
-                            String.valueOf((int) Math.floor(fluid.getAmount() * 4.096)));
-        }
+  @Nullable
+  @Override
+  public ICapabilityProvider initCapabilities(final ItemStack stack,
+                                              @Nullable final CompoundTag nbt) {
+    return new FluidHandlerItemStack(stack, FluidAttributes.BUCKET_VOLUME);
+  }
+
+  @Override
+  protected boolean updateCustomBlockEntityTag(
+      final BlockPos pos,
+      final Level worldIn,
+      @Nullable final Player player,
+      final ItemStack stack,
+      final BlockState state) {
+    super.updateCustomBlockEntityTag(pos, worldIn, player, stack, state);
+    if (worldIn.isClientSide) {
+      return false;
     }
 
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(final ItemStack stack, @Nullable final CompoundTag nbt) {
-        return new FluidHandlerItemStack(stack, FluidAttributes.BUCKET_VOLUME);
+    final BlockEntity tileEntity = worldIn.getBlockEntity(pos);
+    if (!(tileEntity instanceof TileEntityBitStorage)) {
+      return false;
     }
 
-    @Override
-    protected boolean updateCustomBlockEntityTag(
-            final BlockPos pos,
-            final Level worldIn,
-            @Nullable final Player player,
-            final ItemStack stack,
-            final BlockState state) {
-        super.updateCustomBlockEntityTag(pos, worldIn, player, stack, state);
-        if (worldIn.isClientSide) return false;
+    final TileEntityBitStorage tileEntityBitStorage = (TileEntityBitStorage) tileEntity;
+    tileEntityBitStorage
+        .getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+        .ifPresent(t -> t.fill(
+            stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY)
+                .map(s -> s.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE))
+                .orElse(FluidStack.EMPTY),
+            IFluidHandler.FluidAction.EXECUTE));
 
-        final BlockEntity tileEntity = worldIn.getBlockEntity(pos);
-        if (!(tileEntity instanceof TileEntityBitStorage)) return false;
-
-        final TileEntityBitStorage tileEntityBitStorage = (TileEntityBitStorage) tileEntity;
-        tileEntityBitStorage
-                .getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-                .ifPresent(t -> t.fill(
-                        stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY)
-                                .map(s -> s.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE))
-                                .orElse(FluidStack.EMPTY),
-                        IFluidHandler.FluidAction.EXECUTE));
-
-        return true;
-    }
+    return true;
+  }
 }

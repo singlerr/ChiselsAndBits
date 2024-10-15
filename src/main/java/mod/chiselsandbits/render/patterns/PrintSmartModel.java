@@ -21,54 +21,55 @@ import org.jetbrains.annotations.NotNull;
 
 public class PrintSmartModel extends BaseSmartModel {
 
-    WeakHashMap<ItemStack, PrintBaked> cache = new WeakHashMap<ItemStack, PrintBaked>();
+  final IPatternItem item;
+  final String name;
+  WeakHashMap<ItemStack, PrintBaked> cache = new WeakHashMap<ItemStack, PrintBaked>();
 
-    final IPatternItem item;
-    final String name;
+  public PrintSmartModel(final String name, final IPatternItem item) {
+    this.name = name;
+    this.item = item;
+  }
 
-    public PrintSmartModel(final String name, final IPatternItem item) {
-        this.name = name;
-        this.item = item;
+  @Override
+  public BakedModel resolve(BakedModel originalModel, ItemStack stack, Level world,
+                            LivingEntity entity) {
+    if (ClientSide.instance.holdingShift()) {
+      PrintBaked npb = cache.get(stack);
+
+      if (npb == null) {
+        cache.put(stack, npb = new PrintBaked(name, item, stack));
+      }
+
+      return npb;
     }
 
-    @Override
-    public BakedModel resolve(BakedModel originalModel, ItemStack stack, Level world, LivingEntity entity) {
-        if (ClientSide.instance.holdingShift()) {
-            PrintBaked npb = cache.get(stack);
+    return Minecraft.getInstance()
+        .getItemRenderer()
+        .getItemModelShaper()
+        .getModelManager()
+        .getModel(new ModelResourceLocation(
+            new ResourceLocation("chiselsandbits", name + "_written"), "inventory"));
+  }
 
-            if (npb == null) {
-                cache.put(stack, npb = new PrintBaked(name, item, stack));
-            }
+  @Override
+  public boolean usesBlockLight() {
+    return false;
+  }
 
-            return npb;
-        }
+  @Override
+  public void updateModelData(
+      @NotNull BlockAndTintGetter world,
+      @NotNull BlockPos pos,
+      @NotNull BlockState state,
+      @NotNull IModelData modelData) {
+  }
 
-        return Minecraft.getInstance()
-                .getItemRenderer()
-                .getItemModelShaper()
-                .getModelManager()
-                .getModel(new ModelResourceLocation(
-                        new ResourceLocation("chiselsandbits", name + "_written"), "inventory"));
-    }
-
-    @Override
-    public boolean usesBlockLight() {
-        return false;
-    }
-
-    @Override
-    public void updateModelData(
-            @NotNull BlockAndTintGetter world,
-            @NotNull BlockPos pos,
-            @NotNull BlockState state,
-            @NotNull IModelData modelData) {}
-
-    @Override
-    public Set<ChiselRenderType> getRenderTypes(
-            @NotNull BlockAndTintGetter world,
-            @NotNull BlockPos pos,
-            @NotNull BlockState state,
-            @NotNull IModelData modelData) {
-        return Set.of(ChiselRenderType.SOLID);
-    }
+  @Override
+  public Set<ChiselRenderType> getRenderTypes(
+      @NotNull BlockAndTintGetter world,
+      @NotNull BlockPos pos,
+      @NotNull BlockState state,
+      @NotNull IModelData modelData) {
+    return Set.of(ChiselRenderType.SOLID);
+  }
 }

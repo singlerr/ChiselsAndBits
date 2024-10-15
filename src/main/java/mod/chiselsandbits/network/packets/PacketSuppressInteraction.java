@@ -10,36 +10,37 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class PacketSuppressInteraction extends ModPacket {
 
-    public static final PacketType<PacketSuppressInteraction> PACKET_TYPE = PacketType.create(
-            new ResourceLocation(Constants.MOD_ID, "packet_suppress_interaction"), PacketSuppressInteraction::new);
+  public static final PacketType<PacketSuppressInteraction> PACKET_TYPE = PacketType.create(
+      new ResourceLocation(Constants.MOD_ID, "packet_suppress_interaction"),
+      PacketSuppressInteraction::new);
 
-    private boolean newSetting = false;
+  private boolean newSetting = false;
 
-    public PacketSuppressInteraction(final FriendlyByteBuf buffer) {
-        readPayload(buffer);
-    }
+  public PacketSuppressInteraction(final FriendlyByteBuf buffer) {
+    readPayload(buffer);
+  }
 
-    public PacketSuppressInteraction(final boolean newSetting) {
-        this.newSetting = newSetting;
-    }
+  public PacketSuppressInteraction(final boolean newSetting) {
+    this.newSetting = newSetting;
+  }
 
-    @Override
-    public void server(final ServerPlayer player) {
-        EventPlayerInteract.setPlayerSuppressionState(player, newSetting);
-    }
+  @Override
+  public void server(final ServerPlayer player) {
+    EventPlayerInteract.setPlayerSuppressionState(player, newSetting);
+  }
 
-    @Override
-    public void getPayload(final FriendlyByteBuf buffer) {
-        buffer.writeBoolean(newSetting);
-    }
+  @Override
+  public void getPayload(final FriendlyByteBuf buffer) {
+    buffer.writeBoolean(newSetting);
+  }
 
-    @Override
-    public void readPayload(final FriendlyByteBuf buffer) {
-        newSetting = buffer.readBoolean();
-    }
+  @Override
+  public void readPayload(final FriendlyByteBuf buffer) {
+    newSetting = buffer.readBoolean();
+  }
 
-    @Override
-    public PacketType<?> getType() {
-        return PACKET_TYPE;
-    }
+  @Override
+  public PacketType<?> getType() {
+    return PACKET_TYPE;
+  }
 }

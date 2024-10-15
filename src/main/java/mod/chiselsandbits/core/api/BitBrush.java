@@ -9,37 +9,37 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class BitBrush implements IBitBrush {
 
-    protected final int stateID;
+  protected final int stateID;
 
-    public BitBrush(final int blockStateID) {
-        stateID = blockStateID;
+  public BitBrush(final int blockStateID) {
+    stateID = blockStateID;
+  }
+
+  @Override
+  public ItemStack getItemStack(final int count) {
+    if (stateID == 0) {
+      return ModUtil.getEmptyStack();
     }
 
-    @Override
-    public ItemStack getItemStack(final int count) {
-        if (stateID == 0) {
-            return ModUtil.getEmptyStack();
-        }
+    return ItemChiseledBit.createStack(stateID, count, true);
+  }
 
-        return ItemChiseledBit.createStack(stateID, count, true);
+  @Override
+  public boolean isAir() {
+    return stateID == 0;
+  }
+
+  @Override
+  public @Nullable BlockState getState() {
+    if (stateID == 0) {
+      return null;
     }
 
-    @Override
-    public boolean isAir() {
-        return stateID == 0;
-    }
+    return ModUtil.getStateById(stateID);
+  }
 
-    @Override
-    public @Nullable BlockState getState() {
-        if (stateID == 0) {
-            return null;
-        }
-
-        return ModUtil.getStateById(stateID);
-    }
-
-    @Override
-    public int getStateID() {
-        return stateID;
-    }
+  @Override
+  public int getStateID() {
+    return stateID;
+  }
 }

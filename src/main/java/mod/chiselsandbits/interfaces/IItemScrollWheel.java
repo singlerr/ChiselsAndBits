@@ -5,5 +5,5 @@ import net.minecraft.world.item.ItemStack;
 
 public interface IItemScrollWheel {
 
-    void scroll(Player player, ItemStack stack, int dwheel);
+  void scroll(Player player, ItemStack stack, int dwheel);
 }

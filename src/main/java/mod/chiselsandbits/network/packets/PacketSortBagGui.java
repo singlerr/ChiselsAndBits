@@ -10,30 +10,34 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class PacketSortBagGui extends ModPacket {
 
-    public static final PacketType<PacketSortBagGui> PACKET_TYPE =
-            PacketType.create(new ResourceLocation(Constants.MOD_ID, "packet_sort_bag_gui"), PacketSortBagGui::new);
+  public static final PacketType<PacketSortBagGui> PACKET_TYPE =
+      PacketType.create(new ResourceLocation(Constants.MOD_ID, "packet_sort_bag_gui"),
+          PacketSortBagGui::new);
 
-    public PacketSortBagGui(FriendlyByteBuf buffer) {
-        readPayload(buffer);
+  public PacketSortBagGui(FriendlyByteBuf buffer) {
+    readPayload(buffer);
+  }
+
+  public PacketSortBagGui() {
+  }
+
+  @Override
+  public void server(final ServerPlayer player) {
+    if (player.containerMenu instanceof BagContainer) {
+      ((BagContainer) player.containerMenu).sort();
     }
+  }
 
-    public PacketSortBagGui() {}
+  @Override
+  public void getPayload(FriendlyByteBuf buffer) {
+  }
 
-    @Override
-    public void server(final ServerPlayer player) {
-        if (player.containerMenu instanceof BagContainer) {
-            ((BagContainer) player.containerMenu).sort();
-        }
-    }
+  @Override
+  public void readPayload(FriendlyByteBuf buffer) {
+  }
 
-    @Override
-    public void getPayload(FriendlyByteBuf buffer) {}
-
-    @Override
-    public void readPayload(FriendlyByteBuf buffer) {}
-
-    @Override
-    public PacketType<?> getType() {
-        return PACKET_TYPE;
-    }
+  @Override
+  public PacketType<?> getType() {
+    return PACKET_TYPE;
+  }
 }

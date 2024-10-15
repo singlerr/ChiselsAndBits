@@ -1,8 +1,6 @@
 {
-
   "itemGroup.chiselsandbits": "Chisels & Bits",
   "itemGroup.chiselsandbits.Clipboard": "Chisels & Bits Clipboard",
-
   "block.chiselsandbits.chiseled_wood": "Gemeißeltes Holz",
   "block.chiselsandbits.chiseled_rock": "Gemeißelter Stein",
   "block.chiselsandbits.chiseled_iron": "Gemeißeltes Metall",
@@ -17,29 +15,23 @@
   "block.chiselsandbits.chiseled_snow": "Gemeißelter Schnee",
   "block.chiselsandbits.chiseled_fluid": "Gemeißelte Flüssigkeit",
   "block.chiselsandbits.chiseled_leaves": "Gemeißeltes Laub",
-
   "block.chiselsandbits.bit_tank": "Bit-Tank",
-
   "item.chiselsandbits.block_bit": "Gemeißeltes Bit",
   "item.chiselsandbits.bit_bag": "Bit-Beutel",
   "item.chiselsandbits.bit_bag_dyed": "Bit-Beutel",
   "item.chiselsandbits.wrench_wood": "Hölzerner Schraubenschlüssel",
-
   "item.chiselsandbits.positiveprint": "Positives Meißeldesign",
   "item.chiselsandbits.positiveprint_written": "Positives Meißeldesign - Beschrieben",
   "item.chiselsandbits.negativeprint": "Negatives Meißeldesign",
   "item.chiselsandbits.negativeprint_written": "Negatives Meißeldesign - Beschrieben",
   "item.chiselsandbits.mirrorprint": "Spiegeldesign",
   "item.chiselsandbits.mirrorprint_written": "Spiegeldesign - Beschrieben",
-
   "item.chiselsandbits.chisel_stone": "Steinmeißel",
   "item.chiselsandbits.chisel_iron": "Eisenmeißel",
   "item.chiselsandbits.chisel_gold": "Goldmeißel",
   "item.chiselsandbits.chisel_diamond": "Diamantmeißel",
-
   "item.chiselsandbits.bitsaw_diamond": "Diamant-Bitsäge",
   "item.chiselsandbits.tape_measure": "Maßband",
-
   "mod.chiselsandbits.chiselmode.single": "Einzelnes Bit",
   "mod.chiselsandbits.chiselmode.snap2": "Ausgerichteter 1/8-großer Würfel",
   "mod.chiselsandbits.chiselmode.snap4": "Ausgerichteter 1/4-großer Würfel",
@@ -53,20 +45,16 @@
   "mod.chiselsandbits.chiselmode.cube_large": "Mittlerer Würfel",
   "mod.chiselsandbits.chiselmode.drawn_region": "Gemalte Region",
   "mod.chiselsandbits.chiselmode.same_material": "Same Material",
-
   "mod.chiselsandbits.bitoption.place": "Place",
   "mod.chiselsandbits.bitoption.replace": "Replace",
-
   "mod.chiselsandbits.positivepatternmode.replace": "Ersetzen",
   "mod.chiselsandbits.positivepatternmode.additive": "Hinzufügen",
   "mod.chiselsandbits.positivepatternmode.placement": "Platzieren",
   "mod.chiselsandbits.positivepatternmode.impose": "Einsetzen",
-
   "mod.chiselsandbits.tapemeasure.chatmsg": "x: %s,  y: %s,  z: %s",
   "mod.chiselsandbits.tapemeasure.bit": "Bit",
   "mod.chiselsandbits.tapemeasure.block": "Block",
   "mod.chiselsandbits.tapemeasure.distance": "Distanz",
-
   "mod.chiselsandbits.result.out_of_range": "Nicht nah genug",
   "mod.chiselsandbits.result.has_changed": "Block wurde verändert",
   "mod.chiselsandbits.result.missing_bits": "Nicht genug Bits oder Meißelhaltbarkeit!",
@@ -74,7 +62,6 @@
   "mod.chiselsandbits.result.nothing_to_redo": "Nichts zu wiederholen",
   "mod.chiselsandbits.result.require_bag": "You need empty slots in your inventory or a bag before you can use this item!",
   "mod.chiselsandbits.result.void_excess": "Your inventory has filled up, any excess bits have been voided!",
-
   "mod.chiselsandbits.other.rotate.ccw": "Rotiere linksherum",
   "mod.chiselsandbits.other.rotate.cw": "Rotiere rechtsherum",
   "mod.chiselsandbits.other.mode": "Radialmenü",
@@ -83,14 +70,11 @@
   "mod.chiselsandbits.other.pickbit": "Bit aufnehmen",
   "mod.chiselsandbits.other.offgrid": "Place Off Grid",
   "mod.chiselsandbits.other.add_to_clipboard": "Block zum Clipboard hinzufügen",
-
   "mod.chiselsandbits.other.roll_x": "Rotate X Clockwise",
   "mod.chiselsandbits.other.roll_z": "Rotate Z Clockwise",
-
   "mod.chiselsandbits.help.shiftdetails": "<Halte Shift für Details>",
   "mod.chiselsandbits.help.empty": "Leer",
   "mod.chiselsandbits.help.filled": "Filled",
-
   "mod.chiselsandbits.help.chiseled_block": "Linksklick zum Platzieren;Schleichen ignoriert Blockgitter;Mausrad zum Rotieren",
   "mod.chiselsandbits.help.bit_bag": "Enthält Bits und füllt diese automatisch nach",
   "mod.chiselsandbits.help.wrench": "Rechtsklick rotiert Blöcke",
@@ -102,7 +86,6 @@
   "mod.chiselsandbits.help.bitsaw": "Kombiniere mit Blöcken oder gemeißelten Blöcken;Schneide entlang einer der 3 Achsen",
   "mod.chiselsandbits.help.bittank": "Gib Flüssigkeiten hinein und extrahiere Bits",
   "mod.chiselsandbits.help.tape_measure": "Rechtsklick + Ziehen zum Messen;Schleichen + Rechtsklick zum Freigeben;{} zeigt das Menü an",
-
   "mod.chiselsandbits.help.chiseled_block.long": "Linksklick zum Platzieren des Blocks. Schleichen während des Platzierens ignoriert das Blockgitter. Shift und Mausrad rotiert den Block.",
   "mod.chiselsandbits.help.bit_bag.long": "Füllt sich automatisch mit Bits und stellt diese während des Bauens zur Verfügung.",
   "mod.chiselsandbits.help.wrench.long": "Rechtsklick auf einen Block rotiert diesen um die Achse der angeklickten Fläche.",
@@ -114,9 +97,7 @@
   "mod.chiselsandbits.help.chisel.long": "Linksklick auf einen kompatiblen Block entfernt Bits aus diesem. Mit Rechtsklick oder Shift + Mausrad kann zwischen den verschiedenen Meißelmethoden gewählt werden.",
   "mod.chiselsandbits.help.bitsaw.long": "Kombiniere diese Säge mit kompatiblen oder symmetrisch gemeißelten Blöcken, um sie zu halbieren. Die Position der Säge relativ zum Block bestimmt die Schneideachse: entlang der X-Achse mit der Säge links oder rechts, entlang der Y-Achse mit der Säge darüber oder darunter, und entlang der Z-Achse, wenn die Säge diagonal platziert ist.",
   "mod.chiselsandbits.help.bittank.long": "Rechtsklick mit einem Eimer füllt den Tank mit der Flüssigkeit oder entfernt diese. Rechtsklick ohne Eimer extrahiert Bits aus dem gefüllten Tank. Shift + Rechtsklick gibt Bits hinein. Ist dabei die Hand leer, wird versucht, so viele Bits wie möglich hineinzugeben. Flüssigkeits-Bits können auch automatisch mit Trichtern oder ähnlichen Mechanismen extrahiert werden.",
-
   "mod.chiselsandbits.help.bit.any": "Jedes Bit is gültig.",
-
   "mod.chiselsandbits.help.nobind": "No Key Bind",
   "mod.chiselsandbits.help.leftshift": "Left Shift",
   "mod.chiselsandbits.help.rightshift": "Right Shift",
@@ -128,18 +109,15 @@
   "mod.chiselsandbits.help.reallytrash": "Klicke erneut, um wirklich alles zu löschen",
   "mod.chiselsandbits.help.reallytrash_blank": "Klicke erneut, um %s zu löschen",
   "mod.chiselsandbits.help.trash.invalid": "Kann %s nicht löschen",
-
   "mod.chiselsandbits.pretty.axis-y": "Hoch/Runter",
   "mod.chiselsandbits.pretty.axis-x": "Ost/West",
   "mod.chiselsandbits.pretty.axis-z": "Nord/Süd",
-
   "mod.chiselsandbits.pretty.facing-up": "Hoch",
   "mod.chiselsandbits.pretty.facing-down": "Runter",
   "mod.chiselsandbits.pretty.facing-east": "Ost",
   "mod.chiselsandbits.pretty.facing-west": "West",
   "mod.chiselsandbits.pretty.facing-north": "Nord",
   "mod.chiselsandbits.pretty.facing-south": "Süd",
-
   "chiselsandbits.color.white": "Weiß",
   "chiselsandbits.color.orange": "Orange",
   "chiselsandbits.color.magenta": "Magenta",
@@ -156,7 +134,6 @@
   "chiselsandbits.color.green": "Grün",
   "chiselsandbits.color.red": "Rot",
   "chiselsandbits.color.black": "Schwarz",
-
   "commands.setbit.usage": "/setbit <x> <y> <z> <bitx> <bity> <bitz> <TileName> [dataValue]",
   "commands.setbit.outOfWorld": "Block kann nicht außerhalb der Welt platziert werden",
   "commands.setbit.noChange": "Bit kann nicht platziert werden",
@@ -164,7 +141,6 @@
   "commands.setbit.cannotChiselBlock": "Block kann nicht gemeißelt werden",
   "commands.setbit.invalidState": "Ungültiger Bit-Typ",
   "commands.setbit.spaceOccupied": "Bit kann nicht auf unfreier Stelle platziert werden",
-
   "mod.chiselsandbits.config.maxUndoLevel": "Max. Anzahl an Rückgängig-Schritten",
   "mod.chiselsandbits.config.persistCreativeClipboard": "Speichere/Lade die Inhalte des Creative Clipboard",
   "mod.chiselsandbits.config.fluidBitsAreClickThrough": "Durchlässige Flüssigkeits-Bits",
@@ -187,16 +163,13 @@
   "mod.chiselsandbits.config.enableChiselMode_Snap2": "Aktiviere Modus - Ausgerichteter 1/8-großer Würfel",
   "mod.chiselsandbits.config.enableChiselMode_Snap4": "Aktiviere Modus - Ausgerichteter 1/4-großer Würfel",
   "mod.chiselsandbits.config.enableChiselMode_Snap8": "Aktiviere Modus - Ausgerichteter 1/2-großer Würfel",
-
   "mod.chiselsandbits.config.enablePositivePatternMode_Additive": "Aktiviere Modus - Hinzufügen",
   "mod.chiselsandbits.config.enablePositivePatternMode_Impose": "Aktiviere Modus - Einfügen",
   "mod.chiselsandbits.config.enablePositivePatternMode_Placement": "Aktiviere Modus - Platzieren",
   "mod.chiselsandbits.config.enablePositivePatternMode_Replace": "Aktiviere Modus - Ersetzen",
-
   "mod.chiselsandbits.config.enableTapeMeasure_Bit": "Aktiviere Modus - Bit",
   "mod.chiselsandbits.config.enableTapeMeasure_Block": "Aktiviere Modus - Block",
   "mod.chiselsandbits.config.enableTapeMeasure_Distance": "Aktiviere Modus - Distanz",
-
   "mod.chiselsandbits.config.enableToolbarIcons": "Zeige Modus-Icon für Meißel in der Werkzeugleiste",
   "mod.chiselsandbits.config.perChiselMode": "Speichere ausgewählten Modus pro Werkzeug",
   "mod.chiselsandbits.config.chatModeNotification": "Verkünde Modusänderungen im Chat",

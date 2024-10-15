@@ -7,8 +7,8 @@ import mod.chiselsandbits.api.IChiselsAndBitsAddon;
 @ChiselsAndBitsAddon
 public class ApiDebug implements IChiselsAndBitsAddon {
 
-    @Override
-    public void onReadyChiselsAndBits(final IChiselAndBitsAPI api) {
-        DebugAction.api = api;
-    }
+  @Override
+  public void onReadyChiselsAndBits(final IChiselAndBitsAPI api) {
+    DebugAction.api = api;
+  }
 }

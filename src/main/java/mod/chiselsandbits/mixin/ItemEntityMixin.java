@@ -11,13 +11,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ItemEntity.class)
 public abstract class ItemEntityMixin {
 
-    @Inject(
-            method = "playerTouch",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getCount()I"),
-            cancellable = true)
-    private void mod$onItemPickup(Player player, CallbackInfo ci) {
-        boolean result = EntityItemPickupEvent.EVENT.invoker().handle((ItemEntity) (Object) this, player);
+  @Inject(
+      method = "playerTouch",
+      at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getCount()I"),
+      cancellable = true)
+  private void mod$onItemPickup(Player player, CallbackInfo ci) {
+    boolean result =
+        EntityItemPickupEvent.EVENT.invoker().handle((ItemEntity) (Object) this, player);
 
-        if (result) ci.cancel();
+    if (result) {
+      ci.cancel();
     }
+  }
 }

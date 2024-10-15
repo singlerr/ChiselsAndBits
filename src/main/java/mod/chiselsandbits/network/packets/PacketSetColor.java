@@ -16,70 +16,73 @@ import net.minecraft.world.item.ItemStack;
 
 public class PacketSetColor extends ModPacket {
 
-    public static final PacketType<PacketSetColor> PACKET_TYPE =
-            PacketType.create(new ResourceLocation(Constants.MOD_ID, "packet_set_color"), PacketSetColor::new);
+  public static final PacketType<PacketSetColor> PACKET_TYPE =
+      PacketType.create(new ResourceLocation(Constants.MOD_ID, "packet_set_color"),
+          PacketSetColor::new);
 
-    private DyeColor newColor = DyeColor.WHITE;
-    private ChiselToolType type = ChiselToolType.TAPEMEASURE;
-    private boolean chatNotification = false;
+  private DyeColor newColor = DyeColor.WHITE;
+  private ChiselToolType type = ChiselToolType.TAPEMEASURE;
+  private boolean chatNotification = false;
 
-    public PacketSetColor(final FriendlyByteBuf buffer) {
-        readPayload(buffer);
+  public PacketSetColor(final FriendlyByteBuf buffer) {
+    readPayload(buffer);
+  }
+
+  public PacketSetColor(final DyeColor newColor, final ChiselToolType type,
+                        final boolean chatNotification) {
+    this.newColor = newColor;
+    this.type = type;
+    this.chatNotification = chatNotification;
+  }
+
+  @Override
+  public void server(final ServerPlayer player) {
+    final ItemStack ei = player.getMainHandItem();
+    if (ei != null && ei.getItem() instanceof IChiselModeItem) {
+      final DyeColor originalMode = getColor(ei);
+      setColor(ei, newColor);
+
+      if (originalMode != newColor && chatNotification) {
+        player.sendSystemMessage(
+            Component.translatable("chiselsandbits.color." + newColor.getName()));
+      }
+    }
+  }
+
+  private void setColor(final ItemStack ei, final DyeColor newColor2) {
+    if (ei != null) {
+      ei.addTagElement("color", StringTag.valueOf(newColor2.name()));
+    }
+  }
+
+  private DyeColor getColor(final ItemStack ei) {
+    try {
+      if (ei != null && ei.hasTag()) {
+        return DyeColor.valueOf(ModUtil.getTagCompound(ei).getString("color"));
+      }
+    } catch (final IllegalArgumentException e) {
+      // nope!
     }
 
-    public PacketSetColor(final DyeColor newColor, final ChiselToolType type, final boolean chatNotification) {
-        this.newColor = newColor;
-        this.type = type;
-        this.chatNotification = chatNotification;
-    }
+    return DyeColor.WHITE;
+  }
 
-    @Override
-    public void server(final ServerPlayer player) {
-        final ItemStack ei = player.getMainHandItem();
-        if (ei != null && ei.getItem() instanceof IChiselModeItem) {
-            final DyeColor originalMode = getColor(ei);
-            setColor(ei, newColor);
+  @Override
+  public void getPayload(final FriendlyByteBuf buffer) {
+    buffer.writeBoolean(chatNotification);
+    buffer.writeEnum(type);
+    buffer.writeEnum(newColor);
+  }
 
-            if (originalMode != newColor && chatNotification) {
-                player.sendSystemMessage(Component.translatable("chiselsandbits.color." + newColor.getName()));
-            }
-        }
-    }
+  @Override
+  public void readPayload(final FriendlyByteBuf buffer) {
+    chatNotification = buffer.readBoolean();
+    type = buffer.readEnum(ChiselToolType.class);
+    newColor = buffer.readEnum(DyeColor.class);
+  }
 
-    private void setColor(final ItemStack ei, final DyeColor newColor2) {
-        if (ei != null) {
-            ei.addTagElement("color", StringTag.valueOf(newColor2.name()));
-        }
-    }
-
-    private DyeColor getColor(final ItemStack ei) {
-        try {
-            if (ei != null && ei.hasTag()) {
-                return DyeColor.valueOf(ModUtil.getTagCompound(ei).getString("color"));
-            }
-        } catch (final IllegalArgumentException e) {
-            // nope!
-        }
-
-        return DyeColor.WHITE;
-    }
-
-    @Override
-    public void getPayload(final FriendlyByteBuf buffer) {
-        buffer.writeBoolean(chatNotification);
-        buffer.writeEnum(type);
-        buffer.writeEnum(newColor);
-    }
-
-    @Override
-    public void readPayload(final FriendlyByteBuf buffer) {
-        chatNotification = buffer.readBoolean();
-        type = buffer.readEnum(ChiselToolType.class);
-        newColor = buffer.readEnum(DyeColor.class);
-    }
-
-    @Override
-    public PacketType<?> getType() {
-        return PACKET_TYPE;
-    }
+  @Override
+  public PacketType<?> getType() {
+    return PACKET_TYPE;
+  }
 }

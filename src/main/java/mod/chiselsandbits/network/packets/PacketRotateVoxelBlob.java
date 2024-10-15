@@ -13,59 +13,60 @@ import net.minecraft.world.level.block.Rotation;
 
 public class PacketRotateVoxelBlob extends ModPacket {
 
-    public static final PacketType<PacketRotateVoxelBlob> PACKET_TYPE = PacketType.create(
-            new ResourceLocation(Constants.MOD_ID, "packet_rotate_voxel_blob"), PacketRotateVoxelBlob::new);
+  public static final PacketType<PacketRotateVoxelBlob> PACKET_TYPE = PacketType.create(
+      new ResourceLocation(Constants.MOD_ID, "packet_rotate_voxel_blob"),
+      PacketRotateVoxelBlob::new);
 
-    private Direction.Axis axis;
-    private Rotation rotation;
+  private Direction.Axis axis;
+  private Rotation rotation;
 
-    public PacketRotateVoxelBlob(FriendlyByteBuf buffer) {
-        readPayload(buffer);
+  public PacketRotateVoxelBlob(FriendlyByteBuf buffer) {
+    readPayload(buffer);
+  }
+
+  public PacketRotateVoxelBlob(final Direction.Axis axis, final Rotation rotation) {
+    this.axis = axis;
+    this.rotation = rotation;
+  }
+
+  @Override
+  public void server(final ServerPlayer player) {
+    final ItemStack is = player.getMainHandItem();
+    if (is != null && is.getItem() instanceof IVoxelBlobItem) {
+      ((IVoxelBlobItem) is.getItem()).rotate(is, axis, rotation);
     }
+  }
 
-    public PacketRotateVoxelBlob(final Direction.Axis axis, final Rotation rotation) {
-        this.axis = axis;
-        this.rotation = rotation;
-    }
+  @Override
+  public void getPayload(final FriendlyByteBuf buffer) {
+    buffer.writeEnum(axis);
+    buffer.writeEnum(rotation);
+  }
 
-    @Override
-    public void server(final ServerPlayer player) {
-        final ItemStack is = player.getMainHandItem();
-        if (is != null && is.getItem() instanceof IVoxelBlobItem) {
-            ((IVoxelBlobItem) is.getItem()).rotate(is, axis, rotation);
-        }
-    }
+  @Override
+  public void readPayload(final FriendlyByteBuf buffer) {
+    axis = buffer.readEnum(Direction.Axis.class);
+    rotation = buffer.readEnum(Rotation.class);
+  }
 
-    @Override
-    public void getPayload(final FriendlyByteBuf buffer) {
-        buffer.writeEnum(axis);
-        buffer.writeEnum(rotation);
-    }
+  public Direction.Axis getAxis() {
+    return axis;
+  }
 
-    @Override
-    public void readPayload(final FriendlyByteBuf buffer) {
-        axis = buffer.readEnum(Direction.Axis.class);
-        rotation = buffer.readEnum(Rotation.class);
-    }
+  public void setAxis(final Direction.Axis axis) {
+    this.axis = axis;
+  }
 
-    public Direction.Axis getAxis() {
-        return axis;
-    }
+  public Rotation getRotation() {
+    return rotation;
+  }
 
-    public void setAxis(final Direction.Axis axis) {
-        this.axis = axis;
-    }
+  public void setRotation(final Rotation rotation) {
+    this.rotation = rotation;
+  }
 
-    public Rotation getRotation() {
-        return rotation;
-    }
-
-    public void setRotation(final Rotation rotation) {
-        this.rotation = rotation;
-    }
-
-    @Override
-    public PacketType<?> getType() {
-        return PACKET_TYPE;
-    }
+  @Override
+  public PacketType<?> getType() {
+    return PACKET_TYPE;
+  }
 }

@@ -4,7 +4,7 @@ plugins {
 
 group = rootProject.maven_group
 version = rootProject.mod_version
-base{
+base {
     archivesName = "${archives_base_name}-api-layer"
 }
 repositories {

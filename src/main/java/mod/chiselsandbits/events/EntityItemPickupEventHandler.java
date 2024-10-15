@@ -13,79 +13,80 @@ import net.minecraft.world.item.ItemStack;
 
 public class EntityItemPickupEventHandler {
 
-    public static void register() {
-        EntityItemPickupEvent.EVENT.register(EntityItemPickupEventHandler::pickupItems);
-    }
+  public static void register() {
+    EntityItemPickupEvent.EVENT.register(EntityItemPickupEventHandler::pickupItems);
+  }
 
-    private static boolean pickupItems(final ItemEntity entityItem, final Player player) {
-        boolean modified = false;
-        if (entityItem != null) {
-            final ItemStack is = entityItem.getItem();
-            if (is != null && is.getItem() instanceof ItemChiseledBit) {
-                final int originalSize = ModUtil.getStackSize(is);
-                final Container inv = player.inventory;
-                final List<ItemBitBag.BagPos> bags = ItemBitBag.getBags(inv);
+  private static boolean pickupItems(final ItemEntity entityItem, final Player player) {
+    boolean modified = false;
+    if (entityItem != null) {
+      final ItemStack is = entityItem.getItem();
+      if (is != null && is.getItem() instanceof ItemChiseledBit) {
+        final int originalSize = ModUtil.getStackSize(is);
+        final Container inv = player.inventory;
+        final List<ItemBitBag.BagPos> bags = ItemBitBag.getBags(inv);
 
-                // has the stack?
-                final boolean seen = ModUtil.containsAtLeastOneOf(inv, is);
+        // has the stack?
+        final boolean seen = ModUtil.containsAtLeastOneOf(inv, is);
 
-                if (seen) {
-                    for (final ItemBitBag.BagPos i : bags) {
-                        if (entityItem.isAlive()) {
-                            modified = updateEntity(
-                                            player,
-                                            entityItem,
-                                            i.inv.insertItem(ModUtil.nonNull(entityItem.getItem())),
-                                            originalSize)
-                                    || modified;
-                        }
-                    }
-                } else {
-                    if (ModUtil.getStackSize(is) > is.getMaxStackSize() && entityItem.isAlive()) {
-                        final ItemStack singleStack = is.copy();
-                        ModUtil.setStackSize(singleStack, singleStack.getMaxStackSize());
+        if (seen) {
+          for (final ItemBitBag.BagPos i : bags) {
+            if (entityItem.isAlive()) {
+              modified = updateEntity(
+                  player,
+                  entityItem,
+                  i.inv.insertItem(ModUtil.nonNull(entityItem.getItem())),
+                  originalSize)
+                  || modified;
+            }
+          }
+        } else {
+          if (ModUtil.getStackSize(is) > is.getMaxStackSize() && entityItem.isAlive()) {
+            final ItemStack singleStack = is.copy();
+            ModUtil.setStackSize(singleStack, singleStack.getMaxStackSize());
 
-                        if (player.inventory.add(singleStack) == false) {
-                            ModUtil.adjustStackSize(is, -(singleStack.getMaxStackSize() - ModUtil.getStackSize(is)));
-                        }
-
-                        modified = updateEntity(player, entityItem, is, originalSize) || modified;
-                    } else {
-                        return false;
-                    }
-
-                    for (final ItemBitBag.BagPos i : bags) {
-
-                        if (entityItem.isAlive()) {
-                            modified = updateEntity(
-                                            player,
-                                            entityItem,
-                                            i.inv.insertItem(ModUtil.nonNull(entityItem.getItem())),
-                                            originalSize)
-                                    || modified;
-                        }
-                    }
-                }
+            if (player.inventory.add(singleStack) == false) {
+              ModUtil.adjustStackSize(is,
+                  -(singleStack.getMaxStackSize() - ModUtil.getStackSize(is)));
             }
 
-            ItemBitBag.cleanupInventory(player, is);
-        }
+            modified = updateEntity(player, entityItem, is, originalSize) || modified;
+          } else {
+            return false;
+          }
 
-        if (modified) {
-            return true;
+          for (final ItemBitBag.BagPos i : bags) {
+
+            if (entityItem.isAlive()) {
+              modified = updateEntity(
+                  player,
+                  entityItem,
+                  i.inv.insertItem(ModUtil.nonNull(entityItem.getItem())),
+                  originalSize)
+                  || modified;
+            }
+          }
         }
-        return false;
+      }
+
+      ItemBitBag.cleanupInventory(player, is);
     }
 
-    private static boolean updateEntity(
-            final Player player, final ItemEntity ei, ItemStack is, final int originalSize) {
-        if (is == null) {
-            ei.remove(Entity.RemovalReason.DISCARDED);
-            return true;
-        } else {
-            final int changed = ModUtil.getStackSize(is) - ModUtil.getStackSize(ei.getItem());
-            ei.setItem(is);
-            return changed != 0;
-        }
+    if (modified) {
+      return true;
     }
+    return false;
+  }
+
+  private static boolean updateEntity(
+      final Player player, final ItemEntity ei, ItemStack is, final int originalSize) {
+    if (is == null) {
+      ei.remove(Entity.RemovalReason.DISCARDED);
+      return true;
+    } else {
+      final int changed = ModUtil.getStackSize(is) - ModUtil.getStackSize(ei.getItem());
+      ei.setItem(is);
+      return changed != 0;
+    }
+  }
 }

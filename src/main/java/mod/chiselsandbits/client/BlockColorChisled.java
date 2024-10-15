@@ -11,17 +11,18 @@ import org.jetbrains.annotations.Nullable;
 
 public class BlockColorChisled implements BlockColor {
 
-    public static final int TINT_MASK = 0xff;
-    public static final int TINT_BITS = 8;
+  public static final int TINT_MASK = 0xff;
+  public static final int TINT_BITS = 8;
 
-    @Override
-    public int getColor(
-            @NotNull final BlockState state,
-            @Nullable final BlockAndTintGetter displayReader,
-            @Nullable final BlockPos pos,
-            final int color) {
-        final BlockState containedState = ModUtil.getStateById(color >> TINT_BITS);
-        int tintValue = color & TINT_MASK;
-        return Minecraft.getInstance().getBlockColors().getColor(containedState, displayReader, pos, tintValue);
-    }
+  @Override
+  public int getColor(
+      @NotNull final BlockState state,
+      @Nullable final BlockAndTintGetter displayReader,
+      @Nullable final BlockPos pos,
+      final int color) {
+    final BlockState containedState = ModUtil.getStateById(color >> TINT_BITS);
+    int tintValue = color & TINT_MASK;
+    return Minecraft.getInstance().getBlockColors()
+        .getColor(containedState, displayReader, pos, tintValue);
+  }
 }

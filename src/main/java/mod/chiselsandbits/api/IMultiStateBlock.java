@@ -9,5 +9,5 @@ import net.minecraft.world.level.block.state.BlockState;
  * the largest quantity of a C&B block.
  */
 public interface IMultiStateBlock {
-    BlockState getPrimaryState(BlockGetter world, BlockPos pos);
+  BlockState getPrimaryState(BlockGetter world, BlockPos pos);
 }
