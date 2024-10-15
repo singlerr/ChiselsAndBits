@@ -17,7 +17,6 @@ import net.minecraft.core.Direction.AxisDirection;
 public class ChiselExtrudeIterator extends BaseChiselIterator implements ChiselIterator {
   final int INDEX_X = 0;
 
-  ;
   final int INDEX_Y = 8;
   final int INDEX_Z = 16;
   // future state.
@@ -25,6 +24,7 @@ public class ChiselExtrudeIterator extends BaseChiselIterator implements ChiselI
   // present state.
   Direction side;
   int value;
+
   public ChiselExtrudeIterator(
       final int dim,
       final int sx,

@@ -10,7 +10,7 @@ public class InMemoryQuadCompressor implements Runnable {
 
   protected static final float EPSILON = 0.0001f;
 
-  private static CacheMap<float[][], WeakReference<float[][]>> cachelvl2 =
+  private static final CacheMap<float[][], WeakReference<float[][]>> cachelvl2 =
       new CacheMap<float[][], WeakReference<float[][]>>(new EqTest() {
 
         @Override
@@ -44,7 +44,7 @@ public class InMemoryQuadCompressor implements Runnable {
         }
       });
 
-  private static CacheMap<float[], WeakReference<float[]>> cache =
+  private static final CacheMap<float[], WeakReference<float[]>> cache =
       new CacheMap<float[], WeakReference<float[]>>(new EqTest() {
 
         @Override

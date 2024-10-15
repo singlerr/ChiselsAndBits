@@ -17,7 +17,7 @@ public class VoxelRegionSrc implements IVoxelSrc {
   final int wrapY;
   final int wrapX;
 
-  final VoxelBlob blobs[];
+  final VoxelBlob[] blobs;
 
   private VoxelRegionSrc(final Level src, final BlockPos min, final BlockPos max,
                          final BlockPos actingCenter) {

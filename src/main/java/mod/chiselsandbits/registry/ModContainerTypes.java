@@ -25,7 +25,9 @@ public final class ModContainerTypes {
         BuiltInRegistries.MENU,
         new ResourceLocation(Constants.MOD_ID, "chisel_station"),
         CHISEL_STATION_CONTAINER.get());
-  }  public static final Supplier<MenuType<BagContainer>> BAG_CONTAINER =
+  }
+
+  public static final Supplier<MenuType<BagContainer>> BAG_CONTAINER =
       Suppliers.memoize(() -> new MenuType<>(BagContainer::new, FeatureFlagSet.of()));
   public static final Supplier<MenuType<ChiselPrinterContainer>> CHISEL_STATION_CONTAINER =
       Suppliers.memoize(() -> new MenuType<>(ChiselPrinterContainer::new, FeatureFlagSet.of()));

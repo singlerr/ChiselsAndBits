@@ -10,6 +10,7 @@ public final class Constants {
   public static final String MOD_ID = "chiselsandbits";
   public static final String MOD_NAME = "Chisels & Bits";
   public static final String MOD_VERSION = "%VERSION%";
+
   private Constants() {
     throw new IllegalStateException("Tried to initialize: Constants but this is a Utility class.");
   }

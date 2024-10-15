@@ -234,11 +234,10 @@ public class ChiselPrinterTileEntity extends BlockEntity implements MenuProvider
     }
 
     final ItemStack stack = getPatternStack();
-    if (!(stack.getItem() instanceof IPatternItem)) {
+    if (!(stack.getItem() instanceof IPatternItem patternItem)) {
       return ItemStack.EMPTY;
     }
 
-    final IPatternItem patternItem = (IPatternItem) stack.getItem();
     final ItemStack realisedPattern = patternItem.getPatternedItem(stack.copy(), true);
     if (realisedPattern == null || realisedPattern.isEmpty()) {
       return ItemStack.EMPTY;
@@ -356,8 +355,7 @@ public class ChiselPrinterTileEntity extends BlockEntity implements MenuProvider
   private int getStorageContents(final Direction targetedFacing) {
     final BlockEntity targetedTileEntity =
         this.getLevel().getBlockEntity(this.getBlockPos().relative(targetedFacing));
-    if (targetedTileEntity instanceof TileEntityBitStorage) {
-      final TileEntityBitStorage storage = (TileEntityBitStorage) targetedTileEntity;
+    if (targetedTileEntity instanceof TileEntityBitStorage storage) {
       return storage.getBits();
     }
 
@@ -394,8 +392,7 @@ public class ChiselPrinterTileEntity extends BlockEntity implements MenuProvider
   private BlockState getStorage(final Direction targetedFacing) {
     final BlockEntity targetedTileEntity =
         this.getLevel().getBlockEntity(this.getBlockPos().relative(targetedFacing));
-    if (targetedTileEntity instanceof TileEntityBitStorage) {
-      final TileEntityBitStorage storage = (TileEntityBitStorage) targetedTileEntity;
+    if (targetedTileEntity instanceof TileEntityBitStorage storage) {
       return storage.getState();
     }
 
@@ -432,8 +429,7 @@ public class ChiselPrinterTileEntity extends BlockEntity implements MenuProvider
   private void drainStorage(final int amount, final Direction targetedFacing) {
     final BlockEntity targetedTileEntity =
         this.getLevel().getBlockEntity(this.getBlockPos().relative(targetedFacing));
-    if (targetedTileEntity instanceof TileEntityBitStorage) {
-      final TileEntityBitStorage storage = (TileEntityBitStorage) targetedTileEntity;
+    if (targetedTileEntity instanceof TileEntityBitStorage storage) {
       storage.extractBits(0, amount, false);
     }
   }

@@ -37,13 +37,9 @@ public class ClientConfiguration extends AbstractConfiguration {
     enableRightClickModeChange = defineBoolean(builder, "enable-right-click-mode-change", false);
     invertBitBagFullness = defineBoolean(builder, "invert-bit-bag-fullness", false);
     enableToolbarIcons = defineBoolean(builder, "enable.toolbar.icons", true);
-    ;
     perChiselMode = defineBoolean(builder, "per-chisel-mode", true);
-    ;
     chatModeNotification = defineBoolean(builder, "chat-mode-notification", true);
-    ;
     itemNameModeDisplay = defineBoolean(builder, "item-name-mode-display", true);
-    ;
     addBrokenBlocksToCreativeClipboard =
         defineBoolean(builder, "clipboard.add-broken-blocks", false);
     maxUndoLevel = defineInteger(builder, "undo.max-count", 10);

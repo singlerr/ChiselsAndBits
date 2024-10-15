@@ -27,6 +27,7 @@ public class ModelQuadReader extends BaseModelReader {
   float[] pos;
   float[] uv;
   int index = 0;
+
   public ModelQuadReader(
       final String textureName, final TextureAtlasSprite texture, final Direction face,
       final Direction cull) {
@@ -91,61 +92,59 @@ public class ModelQuadReader extends BaseModelReader {
     }
 
     if (cull == null) {
-      return new StringBuilder("{ \"from\": [")
-          .append(minX)
-          .append(",")
-          .append(minY)
-          .append(",")
-          .append(minZ)
-          .append("], \"to\": [")
-          .append(maxX)
-          .append(",")
-          .append(maxY)
-          .append(",")
-          .append(maxZ)
-          .append("], \"faces\": { \"")
-          .append(face.getSerializedName())
-          .append("\":  { \"uv\": [")
-          .append(U1)
-          .append(",")
-          .append(V1)
-          .append(",")
-          .append(U2)
-          .append(",")
-          .append(V2)
-          .append("], \"texture\": \"")
-          .append(texture)
-          .append("\" } } },\n")
-          .toString();
+      return "{ \"from\": [" +
+          minX +
+          "," +
+          minY +
+          "," +
+          minZ +
+          "], \"to\": [" +
+          maxX +
+          "," +
+          maxY +
+          "," +
+          maxZ +
+          "], \"faces\": { \"" +
+          face.getSerializedName() +
+          "\":  { \"uv\": [" +
+          U1 +
+          "," +
+          V1 +
+          "," +
+          U2 +
+          "," +
+          V2 +
+          "], \"texture\": \"" +
+          texture +
+          "\" } } },\n";
     } else {
-      return new StringBuilder("{ \"from\": [")
-          .append(minX)
-          .append(",")
-          .append(minY)
-          .append(",")
-          .append(minZ)
-          .append("], \"to\": [")
-          .append(maxX)
-          .append(",")
-          .append(maxY)
-          .append(",")
-          .append(maxZ)
-          .append("], \"faces\": { \"")
-          .append(face.getSerializedName())
-          .append("\":  { \"uv\": [")
-          .append(U1)
-          .append(",")
-          .append(V1)
-          .append(",")
-          .append(U2)
-          .append(",")
-          .append(V2)
-          .append("], \"texture\": \"")
-          .append(texture)
-          .append("\", \"cullface\": \"")
-          .append(cull.getSerializedName())
-          .append("\" } } },\n")
-          .toString();
+      return "{ \"from\": [" +
+          minX +
+          "," +
+          minY +
+          "," +
+          minZ +
+          "], \"to\": [" +
+          maxX +
+          "," +
+          maxY +
+          "," +
+          maxZ +
+          "], \"faces\": { \"" +
+          face.getSerializedName() +
+          "\":  { \"uv\": [" +
+          U1 +
+          "," +
+          V1 +
+          "," +
+          U2 +
+          "," +
+          V2 +
+          "], \"texture\": \"" +
+          texture +
+          "\", \"cullface\": \"" +
+          cull.getSerializedName() +
+          "\" } } },\n";
     }
   }
 

@@ -14,8 +14,9 @@ public class ModelUVReader extends BaseModelReader {
   final float maxVMinusMin;
   public int corners;
   int uCoord, vCoord;
-  private float pos[];
-  private float uv[];
+  private float[] pos;
+  private float[] uv;
+
   public ModelUVReader(final TextureAtlasSprite texture, final int uFaceCoord,
                        final int vFaceCoord) {
     minU = texture.getU0();

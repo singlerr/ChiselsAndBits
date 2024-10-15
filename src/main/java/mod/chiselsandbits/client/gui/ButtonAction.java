@@ -24,5 +24,5 @@ public enum ButtonAction {
   BROWN,
   GREEN,
   RED,
-  BLACK;
+  BLACK
 }

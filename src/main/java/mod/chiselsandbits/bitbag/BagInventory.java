@@ -242,8 +242,6 @@ public class BagInventory implements Container {
     inv.onChange();
   }
 
-  ;
-
   public void clear(final ItemStack stack) {
     for (int x = 0; x < stackSlots.length; ++x) {
       if (matches(stack, stackSlots[x])) {
@@ -422,6 +420,7 @@ public class BagInventory implements Container {
   private static class StateQtyPair {
     int qty;
     int state;
+
     public StateQtyPair(int state, int qty) {
       this.qty = qty;
       this.state = state;

@@ -3,6 +3,7 @@ package mod.chiselsandbits.chiseledblock.serialization;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Optional;
 import mod.chiselsandbits.core.Log;
@@ -18,13 +19,9 @@ import net.minecraft.world.level.block.state.properties.Property;
 public class StringStates {
 
   public static int getStateIDFromName(final String name) {
-    final String parts[] = name.split("[?&]");
+    final String[] parts = name.split("[?&]");
 
-    try {
-      parts[0] = URLDecoder.decode(parts[0], "UTF-8");
-    } catch (final UnsupportedEncodingException e) {
-      Log.logError("Failed to reload Property from store data : " + name, e);
-    }
+    parts[0] = URLDecoder.decode(parts[0], StandardCharsets.UTF_8);
 
     final Block blk = BuiltInRegistries.BLOCK.get(new ResourceLocation(parts[0]));
 
@@ -42,10 +39,10 @@ public class StringStates {
     for (int x = 1; x < parts.length; ++x) {
       try {
         if (parts[x].length() > 0) {
-          final String nameval[] = parts[x].split("[=]");
+          final String[] nameval = parts[x].split("[=]");
           if (nameval.length == 2) {
-            nameval[0] = URLDecoder.decode(nameval[0], "UTF-8");
-            nameval[1] = URLDecoder.decode(nameval[1], "UTF-8");
+            nameval[0] = URLDecoder.decode(nameval[0], StandardCharsets.UTF_8);
+            nameval[1] = URLDecoder.decode(nameval[1], StandardCharsets.UTF_8);
 
             state = withState(state, blk, nameval);
           }
@@ -88,37 +85,34 @@ public class StringStates {
 
     String sname = "air?";
 
-    try {
-      final StringBuilder stateName = new StringBuilder(URLEncoder.encode(
-          Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(blk)).toString(), "UTF-8"));
-      stateName.append('?');
+    final StringBuilder stateName = new StringBuilder(URLEncoder.encode(
+        Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(blk)).toString(),
+        StandardCharsets.UTF_8));
+    stateName.append('?');
 
-      boolean first = true;
-      for (final Property<?> p : state.getBlock().getStateDefinition().getProperties()) {
-        if (!first) {
-          stateName.append('&');
-        }
-
-        first = false;
-
-        final Comparable<?> propVal = state.getValue(p);
-
-        String saveAs;
-        if (propVal instanceof StringRepresentable) {
-          saveAs = ((StringRepresentable) propVal).getSerializedName();
-        } else {
-          saveAs = propVal.toString();
-        }
-
-        stateName.append(URLEncoder.encode(p.getName(), "UTF-8"));
-        stateName.append('=');
-        stateName.append(URLEncoder.encode(saveAs, "UTF-8"));
+    boolean first = true;
+    for (final Property<?> p : state.getBlock().getStateDefinition().getProperties()) {
+      if (!first) {
+        stateName.append('&');
       }
 
-      sname = stateName.toString();
-    } catch (final UnsupportedEncodingException e) {
-      Log.logError("Failed to Serialize State", e);
+      first = false;
+
+      final Comparable<?> propVal = state.getValue(p);
+
+      String saveAs;
+      if (propVal instanceof StringRepresentable) {
+        saveAs = ((StringRepresentable) propVal).getSerializedName();
+      } else {
+        saveAs = propVal.toString();
+      }
+
+      stateName.append(URLEncoder.encode(p.getName(), StandardCharsets.UTF_8));
+      stateName.append('=');
+      stateName.append(URLEncoder.encode(saveAs, StandardCharsets.UTF_8));
     }
+
+    sname = stateName.toString();
 
     return sname;
   }

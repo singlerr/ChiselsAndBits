@@ -25,7 +25,7 @@ public enum ChiselToolType {
   private final boolean hasMenu;
   private final boolean hasItemSettings;
 
-  private ChiselToolType(final boolean menu, final boolean itemSettings) {
+  ChiselToolType(final boolean menu, final boolean itemSettings) {
     hasMenu = menu;
     hasItemSettings = itemSettings;
   }

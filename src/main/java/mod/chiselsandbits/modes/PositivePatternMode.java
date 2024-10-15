@@ -17,7 +17,7 @@ public enum PositivePatternMode implements IToolMode {
 
   public Object binding;
 
-  private PositivePatternMode(final LocalStrings str) {
+  PositivePatternMode(final LocalStrings str) {
     string = str;
   }
 

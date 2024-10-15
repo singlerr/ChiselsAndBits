@@ -37,9 +37,9 @@ public class VaporizeWater {
         e.getWorld()
             .addParticle(
                 ParticleTypes.LARGE_SMOKE,
-                (double) i + Math.random(),
-                (double) j + Math.random(),
-                (double) k + Math.random(),
+                i + Math.random(),
+                j + Math.random(),
+                k + Math.random(),
                 0.0D,
                 0.0D,
                 0.0D);

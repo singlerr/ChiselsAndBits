@@ -150,6 +150,5 @@ public class BitLocation implements IBitLocation {
     bitZ = (bitZ + 16) % 16;
     this.blockPos = new BlockPos.MutableBlockPos(
         blockPos.getX() + xOffset, blockPos.getY() + yOffset, blockPos.getZ() + zOffset);
-    ;
   }
 }

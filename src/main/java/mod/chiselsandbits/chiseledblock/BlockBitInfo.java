@@ -38,14 +38,14 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 
 public class BlockBitInfo {
   // imc api...
-  private static HashMap<Block, Boolean> ignoreLogicBlocks = new HashMap<>();
+  private static final HashMap<Block, Boolean> ignoreLogicBlocks = new HashMap<>();
   // cache data..
-  private static HashMap<BlockState, BlockBitInfo> stateBitInfo = new HashMap<>();
-  private static HashMap<Block, SupportsAnalysisResult> supportedBlocks = new HashMap<>();
-  private static HashMap<Block, Boolean> forcedBlocks = new HashMap<>();
-  private static HashMap<Block, Fluid> fluidBlocks = new HashMap<>();
-  private static IntObjectMap<Fluid> fluidStates = new IntObjectHashMap<>();
-  private static HashMap<BlockState, Integer> bitColor = new HashMap<>();
+  private static final HashMap<BlockState, BlockBitInfo> stateBitInfo = new HashMap<>();
+  private static final HashMap<Block, SupportsAnalysisResult> supportedBlocks = new HashMap<>();
+  private static final HashMap<Block, Boolean> forcedBlocks = new HashMap<>();
+  private static final HashMap<Block, Fluid> fluidBlocks = new HashMap<>();
+  private static final IntObjectMap<Fluid> fluidStates = new IntObjectHashMap<>();
+  private static final HashMap<BlockState, Integer> bitColor = new HashMap<>();
 
   static {
     ignoreLogicBlocks.put(Blocks.ACACIA_LEAVES, true);
@@ -425,8 +425,7 @@ public class BlockBitInfo {
       return true;
     }
 
-    if (stack.getItem() instanceof BlockItem) {
-      final BlockItem blockItem = (BlockItem) stack.getItem();
+    if (stack.getItem() instanceof BlockItem blockItem) {
       final Block block = blockItem.getBlock();
       final BlockState blockState = block.defaultBlockState();
       final BlockBitInfo.SupportsAnalysisResult result = BlockBitInfo.doSupportAnalysis(blockState);
@@ -442,11 +441,7 @@ public class BlockBitInfo {
       return false;
     }
 
-    if (stack.getItem() instanceof ItemBlockChiseled) {
-      return true;
-    }
-
-    return false;
+    return stack.getItem() instanceof ItemBlockChiseled;
   }
 
   public static class SupportsAnalysisResult {

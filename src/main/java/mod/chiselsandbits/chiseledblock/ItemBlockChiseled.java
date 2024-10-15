@@ -428,11 +428,10 @@ public class ItemBlockChiseled extends BlockItem
 
         if (name != null) {
           final Component parent = super.getName(stack);
-          if (!(parent instanceof MutableComponent)) {
+          if (!(parent instanceof MutableComponent formattedParent)) {
             return parent;
           }
 
-          final MutableComponent formattedParent = (MutableComponent) parent;
           return formattedParent.append(" - ").append(name);
         }
       }

@@ -41,8 +41,7 @@ public class PacketBagGui extends ModPacket {
 
   public void doAction(final Player player) {
     final AbstractContainerMenu c = player.containerMenu;
-    if (c instanceof BagContainer) {
-      final BagContainer bc = (BagContainer) c;
+    if (c instanceof BagContainer bc) {
       bc.handleCustomSlotAction(slotNumber, mouseButton, duplicateButton, holdingShift);
     }
   }

@@ -27,8 +27,7 @@ public class TooltipEvent {
           ||
           Minecraft.getInstance().player.getOffhandItem()
               .getItem() instanceof ItemMagnifyingGlass) {
-        if (stack.getItem() instanceof BlockItem) {
-          final BlockItem blockItem = (BlockItem) stack.getItem();
+        if (stack.getItem() instanceof BlockItem blockItem) {
           final Block block = blockItem.getBlock();
           final BlockState blockState = block.defaultBlockState();
           final BlockBitInfo.SupportsAnalysisResult result =

@@ -64,8 +64,7 @@ public class BitSawCrafting extends CustomRecipe {
             continue;
           }
 
-          if (is != null && is.getItem() instanceof BlockItem) {
-            final BlockItem blkItem = (BlockItem) is.getItem();
+          if (is != null && is.getItem() instanceof BlockItem blkItem) {
             final BlockState state = blkItem.getBlock().defaultBlockState();
 
             if (!BlockBitInfo.isSupported(state)) {
@@ -93,8 +92,6 @@ public class BitSawCrafting extends CustomRecipe {
 
     return r;
   }
-
-  ;
 
   @Override
   public boolean matches(final CraftingContainer inv, final Level worldIn) {

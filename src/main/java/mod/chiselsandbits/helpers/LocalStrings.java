@@ -110,7 +110,7 @@ public enum LocalStrings {
 
   private final String string;
 
-  private LocalStrings(final String postFix) {
+  LocalStrings(final String postFix) {
     string = "mod.chiselsandbits." + postFix;
   }
 

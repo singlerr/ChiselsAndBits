@@ -27,13 +27,12 @@ public class BagDyeing extends CustomRecipe {
     dyed_output output = getOutput(inv);
 
     if (output != null) {
-      return ModItems.ITEM_BIT_BAG_DEFAULT.get().dyeBag(output.bag, output.color);
+      ModItems.ITEM_BIT_BAG_DEFAULT.get();
+      return ItemBitBag.dyeBag(output.bag, output.color);
     }
 
     return ModUtil.getEmptyStack();
   }
-
-  ;
 
   private dyed_output getOutput(CraftingContainer inv) {
     ItemStack bag = null;
@@ -68,8 +67,7 @@ public class BagDyeing extends CustomRecipe {
   }
 
   private DyeColor getDye(ItemStack is) {
-    if (is.getItem() instanceof DyeItem) {
-      final DyeItem item = (DyeItem) is.getItem();
+    if (is.getItem() instanceof DyeItem item) {
       return item.getDyeColor();
     }
 

@@ -7,11 +7,11 @@ import net.minecraftforge.items.IItemHandler;
 public class IItemHandlerSlot implements IItemInInventory {
 
   private final @Nonnull ItemStack originalStack;
-  private IItemHandler internal;
-  private int zz;
-  private @Nonnull ItemStack stack; // copy of itemstack
-  private ActingPlayer src;
-  private boolean isEditable;
+  private final IItemHandler internal;
+  private final int zz;
+  private final @Nonnull ItemStack stack; // copy of itemstack
+  private final ActingPlayer src;
+  private final boolean isEditable;
 
   public IItemHandlerSlot(IItemHandler internal, int zz, ItemStack which, ActingPlayer src,
                           boolean canEdit) {

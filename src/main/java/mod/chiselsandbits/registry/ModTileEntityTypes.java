@@ -31,7 +31,9 @@ public final class ModTileEntityTypes {
         BuiltInRegistries.BLOCK_ENTITY_TYPE,
         new ResourceLocation(Constants.MOD_ID, "chisel_printer"),
         CHISEL_PRINTER.get());
-  }  public static final Supplier<BlockEntityType<TileEntityBlockChiseled>> CHISELED =
+  }
+
+  public static final Supplier<BlockEntityType<TileEntityBlockChiseled>> CHISELED =
       Suppliers.memoize(
           () -> BlockEntityType.Builder.of(TileEntityBlockChiseled::new,
                   ModBlocks.CHISELED_BLOCK.get())

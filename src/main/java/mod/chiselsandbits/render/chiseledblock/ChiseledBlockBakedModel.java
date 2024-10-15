@@ -403,7 +403,7 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
                       final float v = maxLightmap * Math.max(0, Math.min(15, pc.light));
                       faceBuilder.put(vertNum, elementIndex, v, v);
                     } else {
-                      int uIndex = faceVertMap[myFace.get3DDataValue()][vertNum] * 2 + 0;
+                      int uIndex = faceVertMap[myFace.get3DDataValue()][vertNum] * 2;
                       int vIndex = faceVertMap[myFace.get3DDataValue()][vertNum] * 2 + 1;
                       float u = pc.sprite.getU(uvs[uIndex] / 16f);
                       float v = pc.sprite.getV(uvs[vIndex] / 16f);

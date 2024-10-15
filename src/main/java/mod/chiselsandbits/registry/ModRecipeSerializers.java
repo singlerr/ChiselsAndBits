@@ -35,6 +35,7 @@ public final class ModRecipeSerializers {
       Suppliers.memoize(() -> new SimpleCraftingRecipeSerializer<>(MirrorTransferCrafting::new));
   public static final Supplier<SimpleCraftingRecipeSerializer<BitSawCrafting>> BIT_SAW_CRAFTING =
       Suppliers.memoize(() -> new SimpleCraftingRecipeSerializer<>(BitSawCrafting::new));
+
   private ModRecipeSerializers() {
     throw new IllegalStateException(
         "Tried to initialize: ModRecipeSerializers but this is a Utility class.");

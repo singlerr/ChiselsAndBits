@@ -86,9 +86,7 @@ public final class VoxelBlob implements IVoxelSrc {
   }
 
   public VoxelBlob(final VoxelBlob vb) {
-    for (int x = 0; x < values.length; ++x) {
-      values[x] = vb.values[x];
-    }
+    System.arraycopy(vb.values, 0, values, 0, values.length);
     noneAir = (BitSet) vb.noneAir.clone();
   }
 
@@ -174,10 +172,9 @@ public final class VoxelBlob implements IVoxelSrc {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof VoxelBlob)) {
+    if (!(o instanceof VoxelBlob voxelBlob)) {
       return false;
     }
-    final VoxelBlob voxelBlob = (VoxelBlob) o;
     return detail == voxelBlob.detail && Arrays.equals(values, voxelBlob.values);
   }
 
@@ -189,7 +186,7 @@ public final class VoxelBlob implements IVoxelSrc {
   }
 
   public boolean canMerge(final VoxelBlob second) {
-    final int sv[] = second.values;
+    final int[] sv = second.values;
 
     for (int x = 0; x < values.length; ++x) {
       if (values[x] != 0 && sv[x] != 0 && values[x] != sv[x]) {
@@ -205,7 +202,7 @@ public final class VoxelBlob implements IVoxelSrc {
 
     final int[] secondValues = second.values;
     final BitSet secondNoneAir = second.noneAir;
-    final int ov[] = out.values;
+    final int[] ov = out.values;
     final BitSet ona = out.noneAir;
 
     for (int x = 0; x < values.length; ++x) {
@@ -387,9 +384,7 @@ public final class VoxelBlob implements IVoxelSrc {
   }
 
   public void fill(final VoxelBlob src) {
-    for (int x = 0; x < array_size; x++) {
-      values[x] = src.values[x];
-    }
+    System.arraycopy(src.values, 0, values, 0, array_size);
     noneAir.clear();
     noneAir.or(src.noneAir);
   }
@@ -471,7 +466,7 @@ public final class VoxelBlob implements IVoxelSrc {
     return p;
   }
 
-  protected int getBit(final int offset) {
+  int getBit(final int offset) {
     if (offset < 0 || offset >= values.length) {
       return 0;
     }
@@ -479,7 +474,7 @@ public final class VoxelBlob implements IVoxelSrc {
     return values[offset];
   }
 
-  protected void putBit(final int offset, final int newValue) {
+  void putBit(final int offset, final int newValue) {
     values[offset] = newValue;
     noneAir.set(offset, newValue > 0);
   }
@@ -499,8 +494,6 @@ public final class VoxelBlob implements IVoxelSrc {
   public void clear(final int x, final int y, final int z) {
     putBit(x | y << 4 | z << 8, 0);
   }
-
-  ;
 
   private void legacyRead(final ByteArrayInputStream o) throws IOException {
     final GZIPInputStream w = new GZIPInputStream(o);
@@ -725,7 +718,7 @@ public final class VoxelBlob implements IVoxelSrc {
 
     for (final Entry<Component, Integer> e : contents.entrySet()) {
       details.add(Component.literal(
-              new StringBuilder().append(e.getValue()).append(' ').toString())
+              String.valueOf(e.getValue()) + ' ')
           .append(e.getKey()));
     }
 

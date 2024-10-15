@@ -48,7 +48,7 @@ public class ChiselCrafting extends CustomRecipe {
       }
     }
 
-    if (pattern == null || pattern.hasTag() == false) {
+    if (pattern == null || !pattern.hasTag()) {
       return null;
     }
 

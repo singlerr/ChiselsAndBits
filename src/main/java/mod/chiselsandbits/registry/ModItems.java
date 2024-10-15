@@ -71,6 +71,7 @@ public final class ModItems {
       Suppliers.memoize(() -> new ItemTapeMeasure(new Item.Properties()));
   public static final Supplier<ItemMagnifyingGlass> ITEM_MAGNIFYING_GLASS =
       Suppliers.memoize(() -> new ItemMagnifyingGlass(new Item.Properties()));
+
   private ModItems() {
     throw new IllegalStateException("Tried to initialize: ModItems but this is a Utility class.");
   }

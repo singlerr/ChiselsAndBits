@@ -32,7 +32,7 @@ public class BitOcclusionIterator extends BitCollisionIterator {
   }
 
   protected void addCurrentBox(final double addition) {
-    if (lastSetting == true) {
+    if (lastSetting) {
       addBox(addition);
       lastSetting = false;
     }

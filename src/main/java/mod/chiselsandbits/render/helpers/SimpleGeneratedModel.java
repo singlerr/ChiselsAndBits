@@ -119,7 +119,7 @@ public class SimpleGeneratedModel implements BakedModel {
             b.put(
                 vertNum,
                 elementIndex,
-                Float.intBitsToFloat(vertData[0 + wrapAt * vertNum]),
+                Float.intBitsToFloat(vertData[wrapAt * vertNum]),
                 Float.intBitsToFloat(vertData[1 + wrapAt * vertNum]),
                 Float.intBitsToFloat(vertData[2 + wrapAt * vertNum]));
             break;

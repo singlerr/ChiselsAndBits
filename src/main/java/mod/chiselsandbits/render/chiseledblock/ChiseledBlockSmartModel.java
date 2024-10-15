@@ -379,10 +379,9 @@ public class ChiseledBlockSmartModel extends BaseSmartModel implements ICacheCle
       if (this == o) {
         return true;
       }
-      if (!(o instanceof ModelCacheKey)) {
+      if (!(o instanceof ModelCacheKey that)) {
         return false;
       }
-      final ModelCacheKey that = (ModelCacheKey) o;
       return Objects.equals(blob, that.blob) && Objects.equals(type, that.type);
     }
 

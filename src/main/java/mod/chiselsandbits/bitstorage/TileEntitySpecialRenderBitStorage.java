@@ -142,10 +142,9 @@ public class TileEntitySpecialRenderBitStorage
       if (this == o) {
         return true;
       }
-      if (!(o instanceof CacheKey)) {
+      if (!(o instanceof CacheKey cacheKey)) {
         return false;
       }
-      final CacheKey cacheKey = (CacheKey) o;
       return blockStateId == cacheKey.blockStateId && bitCount == cacheKey.bitCount;
     }
 

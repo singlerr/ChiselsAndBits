@@ -10,7 +10,7 @@ public enum BitOperation {
   final boolean placementOffset;
   final ChiselToolType type;
 
-  private BitOperation(final boolean b, final boolean c, final boolean o, final ChiselToolType t) {
+  BitOperation(final boolean b, final boolean c, final boolean o, final ChiselToolType t) {
     bits = b;
     chisels = c;
     type = t;

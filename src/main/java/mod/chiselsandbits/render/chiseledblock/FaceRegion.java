@@ -12,6 +12,7 @@ class FaceRegion {
   private int maxX;
   private int maxY;
   private int maxZ;
+
   public FaceRegion(
       final Direction myFace,
       final int centerX,

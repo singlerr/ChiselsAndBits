@@ -116,8 +116,6 @@ public class ChiselBlockCrafting extends CustomRecipe {
     return i;
   }
 
-  ;
-
   @Override
   public boolean matches(final CraftingContainer inv, final Level worldIn) {
     return getInfo(inv).isValid;
@@ -216,8 +214,6 @@ public class ChiselBlockCrafting extends CustomRecipe {
       }
     }
 
-    ;
-
     private static class Chiseler implements IBitVisitor {
       final IBitBrush airBrush;
       private final ItemStack chisel;
@@ -264,7 +260,6 @@ public class ChiselBlockCrafting extends CustomRecipe {
         return currentValue;
       }
 
-      ;
     }
   }
 }

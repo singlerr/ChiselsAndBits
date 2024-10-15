@@ -141,11 +141,9 @@ public class ItemChiseledBit extends Item
 
     try {
       final Component myName = target.getHoverName();
-      if (!(myName instanceof MutableComponent)) {
+      if (!(myName instanceof MutableComponent formattableName)) {
         return myName;
       }
-
-      final MutableComponent formattableName = (MutableComponent) myName;
 
       final Set<String> extra = new HashSet<String>();
       if (blk != null && state != null) {
@@ -153,7 +151,7 @@ public class ItemChiseledBit extends Item
           if (p.getName().equals("axis") || p.getName().equals("facing")) {
             extra.add(
                 DeprecationHelper.translateToLocal("mod.chiselsandbits.pretty." + p.getName() + "-"
-                    + state.getValue(p).toString()));
+                    + state.getValue(p)));
           }
         }
       }
@@ -199,7 +197,7 @@ public class ItemChiseledBit extends Item
   }
 
   public static boolean sameBit(final ItemStack output, final int blk) {
-    return output.hasTag() ? getStackState(output) == blk : false;
+    return output.hasTag() && getStackState(output) == blk;
   }
 
   public static @Nonnull ItemStack createStack(final int id, final int count,
@@ -375,9 +373,9 @@ public class ItemChiseledBit extends Item
     final int stateId = ItemChiseledBit.getStackState(stack);
     if (stateId == 0) {
       tooltip.add(Component.literal(ChatFormatting.RED.toString()
-          + ChatFormatting.ITALIC.toString()
+          + ChatFormatting.ITALIC
           + LocalStrings.AnyHelpBit.getLocal()
-          + ChatFormatting.RESET.toString()));
+          + ChatFormatting.RESET));
     }
   }
 

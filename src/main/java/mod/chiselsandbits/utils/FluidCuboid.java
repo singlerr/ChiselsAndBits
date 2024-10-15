@@ -30,7 +30,7 @@ public final class FluidCuboid {
   /**
    * Block faces for the fluid
    */
-  private Map<Direction, FluidFace> faces;
+  private final Map<Direction, FluidFace> faces;
 
   /**
    * Cache for scaled from

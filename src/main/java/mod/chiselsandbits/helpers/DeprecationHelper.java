@@ -24,8 +24,7 @@ public class DeprecationHelper {
   }
 
   public static BlockState getStateFromItem(final ItemStack bitItemStack) {
-    if (bitItemStack != null && bitItemStack.getItem() instanceof BlockItem) {
-      final BlockItem blkItem = (BlockItem) bitItemStack.getItem();
+    if (bitItemStack != null && bitItemStack.getItem() instanceof BlockItem blkItem) {
       return blkItem.getBlock().defaultBlockState();
     }
 

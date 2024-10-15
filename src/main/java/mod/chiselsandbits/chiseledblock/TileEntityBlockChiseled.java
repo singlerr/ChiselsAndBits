@@ -645,6 +645,7 @@ public class TileEntityBlockChiseled extends BlockEntity
     final ItemStack out;
     final VoxelBlobStateReference ref;
     final int rotations;
+
     public ItemStackGeneratedCache(
         final ItemStack itemstack, final VoxelBlobStateReference blobStateReference,
         final int rotations2) {

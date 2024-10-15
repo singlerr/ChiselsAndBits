@@ -45,7 +45,7 @@ public class EntityItemPickupEventHandler {
             final ItemStack singleStack = is.copy();
             ModUtil.setStackSize(singleStack, singleStack.getMaxStackSize());
 
-            if (player.inventory.add(singleStack) == false) {
+            if (!player.inventory.add(singleStack)) {
               ModUtil.adjustStackSize(is,
                   -(singleStack.getMaxStackSize() - ModUtil.getStackSize(is)));
             }
@@ -72,10 +72,7 @@ public class EntityItemPickupEventHandler {
       ItemBitBag.cleanupInventory(player, is);
     }
 
-    if (modified) {
-      return true;
-    }
-    return false;
+    return modified;
   }
 
   private static boolean updateEntity(

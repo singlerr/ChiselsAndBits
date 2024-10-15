@@ -9,7 +9,6 @@ public interface ResourceRegistrationEvent {
       EventFactory.createArrayBacked(ResourceRegistration.class, listeners -> () -> {
         for (ResourceRegistration listener : listeners) {
           listener.handle();
-          ;
         }
       });
 

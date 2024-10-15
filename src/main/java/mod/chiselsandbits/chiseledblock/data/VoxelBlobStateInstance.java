@@ -22,7 +22,7 @@ public final class VoxelBlobStateInstance implements Comparable<VoxelBlobStateIn
   private static final int HAS_SOLIDS = 2;
   public final int hash;
   public final byte[] voxelBytes;
-  protected SoftReference<VoxelBlob> blob;
+  SoftReference<VoxelBlob> blob;
   // Separate fluids and solids, and use both for occlusion.
   private int generated = 0;
   private SoftReference<AABB[]> fluidBoxes = null;

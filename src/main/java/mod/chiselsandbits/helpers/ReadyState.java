@@ -21,19 +21,19 @@ public enum ReadyState {
           return PENDING_POST;
         }
         throw new RuntimeException(
-            "Triggered " + trigger.toString() + " but was " + this.toString());
+            "Triggered " + trigger + " but was " + this);
       case TRIGGER_POST:
         if (this == PENDING_POST) {
           return READY;
         }
         throw new RuntimeException(
-            "Triggered " + trigger.toString() + " but was " + this.toString());
+            "Triggered " + trigger + " but was " + this);
       case TRIGGER_PRE:
         if (this == PENDING_PRE) {
           return PENDING_INIT;
         }
         throw new RuntimeException(
-            "Triggered " + trigger.toString() + " but was " + this.toString());
+            "Triggered " + trigger + " but was " + this);
       default:
     }
 

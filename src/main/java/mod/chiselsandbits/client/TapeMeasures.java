@@ -37,7 +37,6 @@ public class TapeMeasures {
   private static final double halfBit = bitSize / 2.0f;
   private final ArrayList<Measure> measures = new ArrayList<Measure>();
 
-  ;
   private Measure preview;
 
   private static double AABBDistnace(final Vec3 eyes, final AABB box) {
@@ -382,6 +381,7 @@ public class TapeMeasures {
     public final DyeColor color;
     public final ResourceLocation DimensionId;
     public double distance = 1;
+
     public Measure(
         final BitLocation a2,
         final BitLocation b2,

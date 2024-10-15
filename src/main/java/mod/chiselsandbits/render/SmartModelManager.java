@@ -27,6 +27,7 @@ public class SmartModelManager {
   private final List<ModelResourceLocation> res = new ArrayList<ModelResourceLocation>();
   private final List<ICacheClearable> clearable = new ArrayList<ICacheClearable>();
   private boolean setup = false;
+
   private SmartModelManager() {
   }
 

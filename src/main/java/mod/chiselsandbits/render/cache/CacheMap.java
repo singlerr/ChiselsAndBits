@@ -12,10 +12,8 @@ public class CacheMap<K, V> {
 
   private final EqTest test;
 
-  ;
   private final ReferenceQueue<K> queue = new ReferenceQueue<K>();
 
-  ;
   private final HashMap<Object, V> inner = new HashMap<Object, V>();
   private final EqWrapper lookupHelper = new EqWrapper();
 
@@ -23,8 +21,6 @@ public class CacheMap<K, V> {
     test = new EqSimple();
     ModelCacheCleanup.registerCacheMap(this);
   }
-
-  ;
 
   public CacheMap(final EqTest test) {
     this.test = test;
@@ -73,9 +69,7 @@ public class CacheMap<K, V> {
     }
   }
 
-  ;
-
-  public static interface EqTest {
+  public interface EqTest {
 
     boolean doTest(Object a, Object b);
 

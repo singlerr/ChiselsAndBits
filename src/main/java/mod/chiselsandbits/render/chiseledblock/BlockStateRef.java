@@ -26,4 +26,3 @@ public class BlockStateRef implements IStateRef {
     return b;
   }
 }
-;

@@ -163,8 +163,7 @@ public class ItemPositivePrint extends ItemNegativePrint
         final Map<Integer, Integer> stats = pattern.getBlockSums();
 
         if (consumeEntirePattern(pattern, stats, pos, ActingPlayer.testingAs(player, hand))
-            && output.getItem() instanceof ItemBlockChiseled) {
-          final ItemBlockChiseled ibc = (ItemBlockChiseled) output.getItem();
+            && output.getItem() instanceof ItemBlockChiseled ibc) {
           final InteractionResult res = ibc.tryPlace(context, offgrid);
 
           if (res == InteractionResult.SUCCESS) {
@@ -308,8 +307,7 @@ public class ItemPositivePrint extends ItemNegativePrint
             stats,
             context.getClickedPos(),
             ActingPlayer.testingAs(context.getPlayer(), context.getHand()))
-            && output.getItem() instanceof ItemBlockChiseled) {
-          final ItemBlockChiseled ibc = (ItemBlockChiseled) output.getItem();
+            && output.getItem() instanceof ItemBlockChiseled ibc) {
           final InteractionResult res = ibc.tryPlace(new BlockPlaceContext(context), offGrid);
 
           if (res == InteractionResult.SUCCESS) {

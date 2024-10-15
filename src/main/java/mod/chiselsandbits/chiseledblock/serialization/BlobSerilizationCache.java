@@ -7,10 +7,10 @@ import net.minecraft.network.FriendlyByteBuf;
 
 public class BlobSerilizationCache {
 
-  private static ThreadLocal<BitStream> bitbuffer = new ThreadLocal<BitStream>();
-  private static ThreadLocal<Deflater> deflater = new ThreadLocal<Deflater>();
-  private static ThreadLocal<ByteBuffer> buffer = new ThreadLocal<ByteBuffer>();
-  private static ThreadLocal<FriendlyByteBuf> pbuffer = new ThreadLocal<FriendlyByteBuf>();
+  private static final ThreadLocal<BitStream> bitbuffer = new ThreadLocal<BitStream>();
+  private static final ThreadLocal<Deflater> deflater = new ThreadLocal<Deflater>();
+  private static final ThreadLocal<ByteBuffer> buffer = new ThreadLocal<ByteBuffer>();
+  private static final ThreadLocal<FriendlyByteBuf> pbuffer = new ThreadLocal<FriendlyByteBuf>();
 
   public static BitStream getCacheBitStream() {
     BitStream bb = bitbuffer.get();

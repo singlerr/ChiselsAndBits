@@ -18,7 +18,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class CreativeClipboardTab implements ICacheClearable {
   static boolean renewMappings = true;
-  private static List<ItemStack> myWorldItems = new ArrayList<ItemStack>();
+  private static final List<ItemStack> myWorldItems = new ArrayList<ItemStack>();
   private static List<CompoundTag> myCrossItems = new ArrayList<CompoundTag>();
   private static ClipboardStorage clipStorage = null;
 

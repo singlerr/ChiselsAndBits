@@ -81,11 +81,10 @@ public class ItemBlockBitStorage extends BlockItem {
     }
 
     final BlockEntity tileEntity = worldIn.getBlockEntity(pos);
-    if (!(tileEntity instanceof TileEntityBitStorage)) {
+    if (!(tileEntity instanceof TileEntityBitStorage tileEntityBitStorage)) {
       return false;
     }
 
-    final TileEntityBitStorage tileEntityBitStorage = (TileEntityBitStorage) tileEntity;
     tileEntityBitStorage
         .getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
         .ifPresent(t -> t.fill(

@@ -29,7 +29,7 @@ import net.minecraft.world.phys.BlockHitResult;
  */
 public class EventPlayerInteract {
 
-  private static WeakHashMap<Player, Boolean> serverSuppressEvent =
+  private static final WeakHashMap<Player, Boolean> serverSuppressEvent =
       new WeakHashMap<Player, Boolean>();
 
   public static void register() {

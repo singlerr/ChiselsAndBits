@@ -20,7 +20,7 @@ public final class BakedQuadBuilder implements IVertexConsumer, IFaceBuilder {
 
   private int vertices = 0;
   private int elements = 0;
-  private boolean full = false;
+  private final boolean full = false;
 
   private VertexFormat vertexFormat;
 

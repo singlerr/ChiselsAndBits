@@ -28,9 +28,11 @@ public class PacketAccurateSneakPlace extends ModPacket {
   private Direction side;
   private double hitX, hitY, hitZ;
   private boolean offgrid;
+
   public PacketAccurateSneakPlace(FriendlyByteBuf buffer) {
     readPayload(buffer);
   }
+
   public PacketAccurateSneakPlace(
       final ItemStack stack,
       final BlockPos pos,

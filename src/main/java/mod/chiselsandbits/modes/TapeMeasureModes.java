@@ -16,7 +16,7 @@ public enum TapeMeasureModes implements IToolMode {
 
   public Object binding;
 
-  private TapeMeasureModes(final LocalStrings str) {
+  TapeMeasureModes(final LocalStrings str) {
     string = str;
   }
 

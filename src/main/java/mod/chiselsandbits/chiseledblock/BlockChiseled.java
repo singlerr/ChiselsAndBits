@@ -64,7 +64,7 @@ public class BlockChiseled extends Block
   public static final BlockPos ZERO = BlockPos.ZERO;
   public static final BooleanProperty FULL_BLOCK = BooleanProperty.create("full_block");
   static ExceptionNoTileEntity noTileEntity = new ExceptionNoTileEntity();
-  private static ThreadLocal<BlockState> actingAs = new ThreadLocal<>();
+  private static final ThreadLocal<BlockState> actingAs = new ThreadLocal<>();
   public final String name;
 
   public BlockChiseled(final String name, final BlockBehaviour.Properties properties) {
@@ -319,9 +319,9 @@ public class BlockChiseled extends Block
   public ItemStack getCloneItemStack(
       BlockState blockState, HitResult target, LevelReader levelReader, BlockPos blockPos,
       Player player) {
-      if (!(target instanceof BlockHitResult)) {
-          return ItemStack.EMPTY;
-      }
+    if (!(target instanceof BlockHitResult)) {
+      return ItemStack.EMPTY;
+    }
 
     try {
       return getPickBlock((BlockHitResult) target, blockPos, getTileEntity(levelReader, blockPos));
@@ -379,9 +379,9 @@ public class BlockChiseled extends Block
       final CollisionContext context) {
     try {
       final VoxelBlob blob = getTileEntity(reader, pos).getBlob();
-        if (blob == null) {
-            return Shapes.empty();
-        }
+      if (blob == null) {
+        return Shapes.empty();
+      }
 
       return VoxelShapeCache.getInstance().get(blob, BoxType.OCCLUSION);
     } catch (ExceptionNoTileEntity exceptionNoTileEntity) {
@@ -394,9 +394,9 @@ public class BlockChiseled extends Block
                                       CollisionContext context) {
     try {
       final VoxelBlob blob = getTileEntity(worldIn, pos).getBlob();
-        if (blob == null) {
-            return Shapes.empty();
-        }
+      if (blob == null) {
+        return Shapes.empty();
+      }
 
       return VoxelShapeCache.getInstance().get(blob, BoxType.OCCLUSION);
     } catch (ExceptionNoTileEntity exceptionNoTileEntity) {
@@ -409,9 +409,9 @@ public class BlockChiseled extends Block
                                    CollisionContext context) {
     try {
       final VoxelBlob blob = getTileEntity(reader, pos).getBlob();
-        if (blob == null) {
-            return Shapes.empty();
-        }
+      if (blob == null) {
+        return Shapes.empty();
+      }
 
       return VoxelShapeCache.getInstance().get(blob, BoxType.OCCLUSION);
     } catch (ExceptionNoTileEntity exceptionNoTileEntity) {
@@ -427,8 +427,6 @@ public class BlockChiseled extends Block
   public boolean propagatesSkylightDown(BlockState state, BlockGetter reader, BlockPos pos) {
     return true;
   }
-
-  ;
 
   @Override
   public BlockState rotate(

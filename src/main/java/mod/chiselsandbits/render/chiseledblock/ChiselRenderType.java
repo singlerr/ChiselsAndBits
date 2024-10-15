@@ -19,7 +19,7 @@ public enum ChiselRenderType {
   public final RenderType layer;
   public final VoxelType type;
 
-  private ChiselRenderType(final RenderType layer, final VoxelType type) {
+  ChiselRenderType(final RenderType layer, final VoxelType type) {
     this.layer = layer;
     this.type = type;
   }

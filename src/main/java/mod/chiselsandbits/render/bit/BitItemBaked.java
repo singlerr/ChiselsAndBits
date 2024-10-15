@@ -12,7 +12,11 @@ import mod.chiselsandbits.render.chiseledblock.ChiselRenderType;
 import mod.chiselsandbits.render.helpers.ModelQuadLayer;
 import mod.chiselsandbits.render.helpers.ModelUtil;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.*;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.BlockElementFace;
+import net.minecraft.client.renderer.block.model.BlockElementRotation;
+import net.minecraft.client.renderer.block.model.BlockFaceUV;
+import net.minecraft.client.renderer.block.model.FaceBakery;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BlockModelRotation;
 import net.minecraft.core.BlockPos;
@@ -46,7 +50,7 @@ public class BitItemBaked extends BaseBakedBlockModel {
       for (final RenderType layer : RenderType.chunkBufferLayers()) {
         final ModelQuadLayer[] layers = ModelUtil.getCachedFace(BlockRef, RANDOM, myFace, layer);
 
-        if (layers == null || layers.length == 0) {
+        if (layers == null) {
           continue;
         }
 

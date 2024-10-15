@@ -39,11 +39,7 @@ public class StackableCrafting extends CustomRecipe {
       }
     }
 
-    if (target == null || !target.hasTag() || !(target.getItem() instanceof ItemBlockChiseled)) {
-      return false;
-    }
-
-    return true;
+    return target != null && target.hasTag() && target.getItem() instanceof ItemBlockChiseled;
   }
 
   @Override

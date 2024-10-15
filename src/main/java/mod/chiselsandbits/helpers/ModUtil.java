@@ -216,11 +216,7 @@ public class ModUtil {
   public static boolean isHoldingChiseledBlock(final Player player) {
     final ItemStack inHand = player.getMainHandItem();
 
-    if (inHand != null && inHand.getItem() instanceof ItemBlockChiseled) {
-      return true;
-    }
-
-    return false;
+    return inHand != null && inHand.getItem() instanceof ItemBlockChiseled;
   }
 
   public static int getRotationIndex(final Direction face) {
@@ -448,7 +444,7 @@ public class ModUtil {
     if (block.equals(Blocks.LAVA)) {
       return Items.LAVA_BUCKET;
     } else if (block instanceof CropBlock) {
-      final ItemStack stack = ((CropBlock) block).getCloneItemStack(null, null, blockState);
+      final ItemStack stack = block.getCloneItemStack(null, null, blockState);
       if (stack != null) {
         return stack.getItem();
       }
@@ -642,8 +638,7 @@ public class ModUtil {
   @SuppressWarnings("deprecation")
   public static BlockState getStateFromItem(final ItemStack is) {
     try {
-      if (!ModUtil.isEmpty(is) && is.getItem() instanceof BlockItem) {
-        final BlockItem iblk = (BlockItem) is.getItem();
+      if (!ModUtil.isEmpty(is) && is.getItem() instanceof BlockItem iblk) {
         final BlockState state = iblk.getBlock().defaultBlockState();
 
         return state;

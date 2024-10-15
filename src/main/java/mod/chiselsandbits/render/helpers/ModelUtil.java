@@ -41,12 +41,12 @@ public class ModelUtil implements ICacheClearable {
       blockToTexture =
       new HashMap<>();
   public static RandomSource MODEL_RANDOM = RandomSource.create();
-  private static HashMap<Triple<Integer, RenderType, Direction>, ModelQuadLayer[]> cache =
+  private static final HashMap<Triple<Integer, RenderType, Direction>, ModelQuadLayer[]> cache =
       new HashMap<>();
-  private static HashMap<Pair<RenderType, Integer>, ChiseledBlockBakedModel> breakCache =
+  private static final HashMap<Pair<RenderType, Integer>, ChiseledBlockBakedModel> breakCache =
       new HashMap<>();
   @SuppressWarnings("unused")
-  private static ModelUtil instance = new ModelUtil();
+  private static final ModelUtil instance = new ModelUtil();
 
   private ModelUtil() {
     ChiselsAndBits.getInstance().addClearable(this);
@@ -74,11 +74,7 @@ public class ModelUtil implements ICacheClearable {
       return mpc;
     }
 
-    try {
-      return getInnerCachedFace(cacheVal, stateID, weight, face, layer);
-    } finally {
-      // restore previous layer.
-    }
+    return getInnerCachedFace(cacheVal, stateID, weight, face, layer);
   }
 
   private static ModelQuadLayer[] getInnerCachedFace(

@@ -56,9 +56,9 @@ public enum ModPacketTypes {
   }));
 
   private static final Logger LOGGER = LogManager.getLogger(ModPacketTypes.class);
-  private static HashMap<Class<? extends ModPacket>, Integer> fromClassToId =
+  private static final HashMap<Class<? extends ModPacket>, Integer> fromClassToId =
       new HashMap<Class<? extends ModPacket>, Integer>();
-  private static HashMap<Integer, Class<? extends ModPacket>> fromIdToClass =
+  private static final HashMap<Integer, Class<? extends ModPacket>> fromIdToClass =
       new HashMap<Integer, Class<? extends ModPacket>>();
   private final Consumer<NetworkChannel> registrationHandler;
 

@@ -46,7 +46,7 @@ public class BagGui extends AbstractContainerScreen<BagContainer> {
   protected void init() {
     super.init();
     trashBtn = addWidget(
-        new GuiIconButton(leftPos - 18, topPos + 0, ClientSide.trashIcon, p_onPress_1_ -> {
+        new GuiIconButton(leftPos - 18, topPos, ClientSide.trashIcon, p_onPress_1_ -> {
           if (requireConfirm) {
             dontThrow = true;
             if (isValidBitItem()) {
@@ -70,7 +70,7 @@ public class BagGui extends AbstractContainerScreen<BagContainer> {
   }
 
   BagContainer getBagContainer() {
-    return (BagContainer) menu;
+    return menu;
   }
 
   @Override

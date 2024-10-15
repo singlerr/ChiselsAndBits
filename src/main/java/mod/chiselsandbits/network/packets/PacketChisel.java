@@ -10,7 +10,14 @@ import mod.chiselsandbits.chiseledblock.data.VoxelBlob;
 import mod.chiselsandbits.chiseledblock.iterators.ChiselIterator;
 import mod.chiselsandbits.chiseledblock.iterators.ChiselTypeIterator;
 import mod.chiselsandbits.client.UndoTracker;
-import mod.chiselsandbits.helpers.*;
+import mod.chiselsandbits.helpers.ActingPlayer;
+import mod.chiselsandbits.helpers.BitInventoryFeeder;
+import mod.chiselsandbits.helpers.BitOperation;
+import mod.chiselsandbits.helpers.ContinousBits;
+import mod.chiselsandbits.helpers.ContinousChisels;
+import mod.chiselsandbits.helpers.IContinuousInventory;
+import mod.chiselsandbits.helpers.ModUtil;
+import mod.chiselsandbits.helpers.VoxelRegionSrc;
 import mod.chiselsandbits.items.ItemBitBag;
 import mod.chiselsandbits.items.ItemChisel;
 import mod.chiselsandbits.items.ItemChiseledBit;
@@ -168,8 +175,7 @@ public class PacketChisel extends ModPacket {
 
             final BlockEntity te =
                 rv.te != null ? rv.te : ModUtil.getChiseledTileEntity(world, pos, place.usesBits());
-            if (te instanceof TileEntityBlockChiseled) {
-              final TileEntityBlockChiseled tec = (TileEntityBlockChiseled) te;
+            if (te instanceof TileEntityBlockChiseled tec) {
 
               final VoxelBlob mask = new VoxelBlob();
 

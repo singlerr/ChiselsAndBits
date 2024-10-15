@@ -27,7 +27,7 @@ public enum ChiselMode implements IToolMode {
 
   public Object binding;
 
-  private ChiselMode(final LocalStrings str) {
+  ChiselMode(final LocalStrings str) {
     string = str;
   }
 

@@ -46,8 +46,7 @@ public class PaletteUtils {
   }
 
   public static void read(final Palette<BlockState> stateIPalette, final FriendlyByteBuf buffer) {
-    if (stateIPalette instanceof LinearPalette) {
-      final LinearPalette<BlockState> palette = (LinearPalette<BlockState>) stateIPalette;
+    if (stateIPalette instanceof LinearPalette<BlockState> palette) {
       palette.size = buffer.readVarInt();
 
       final Object[] statesArray = palette.values;
@@ -58,8 +57,7 @@ public class PaletteUtils {
       }
     }
 
-    if (stateIPalette instanceof HashMapPalette) {
-      final HashMapPalette<BlockState> palette = (HashMapPalette<BlockState>) stateIPalette;
+    if (stateIPalette instanceof HashMapPalette<BlockState> palette) {
       palette.values.clear();
       int i = buffer.readVarInt();
 

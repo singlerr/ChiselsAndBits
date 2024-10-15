@@ -9,6 +9,7 @@ public final class IntegerBox {
   public int maxX;
   public int maxY;
   public int maxZ;
+
   public IntegerBox(final int x1, final int y1, final int z1, final int x2, final int y2,
                     final int z2) {
     minX = x1;

@@ -85,8 +85,6 @@ public class ChiselsAndBitsMenu extends Screen {
     this.render(guiGraphics, guiGraphics.pose(), i, j, f);
   }
 
-  ;
-
   public void render(
       GuiGraphics graphics,
       final PoseStack matrixStack,
@@ -435,8 +433,6 @@ public class ChiselsAndBitsMenu extends Screen {
 
     matrixStack.popPose();
   }
-
-  ;
 
   private boolean inTriangle(
       final double x1,
