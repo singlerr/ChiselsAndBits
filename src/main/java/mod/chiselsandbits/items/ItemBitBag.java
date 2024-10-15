@@ -142,8 +142,6 @@ public class ItemBitBag extends Item {
     return new BagCapabilityProvider(stack, nbt);
   }
 
-  ;
-
   @Override
   public Component getName(final ItemStack stack) {
     DyeColor color = getDyedColor(stack);

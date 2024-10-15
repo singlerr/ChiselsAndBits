@@ -19,11 +19,10 @@ public class ItemApiDebug extends Item {
   @Override
   public Component getName(final ItemStack stack) {
     final Component parent = super.getName(stack);
-    if (!(parent instanceof MutableComponent)) {
+    if (!(parent instanceof MutableComponent name)) {
       return parent;
     }
 
-    final MutableComponent name = (MutableComponent) parent;
     return name.append(" - " + getAction(stack).name());
   }
 

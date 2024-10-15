@@ -1,8 +1,11 @@
 package mod.chiselsandbits.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
-import java.awt.*;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import java.util.List;
 import mod.chiselsandbits.registry.ModBlocks;
 import mod.chiselsandbits.utils.Constants;
@@ -20,7 +23,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.lwjgl.opengl.GL11;
 
 public class RenderHelper {
 
@@ -164,8 +166,10 @@ public class RenderHelper {
     final Tesselator tess = Tesselator.getInstance();
     final BufferBuilder bufferBuilder = tess.getBuilder();
     //        RenderSystem.shadeModel(GL11.GL_FLAT);
+
     RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
-    RenderSystem.lineWidth(4.5f);
+    RenderSystem.enableDepthTest();
+    RenderSystem.lineWidth(5.5f);
     bufferBuilder.begin(VertexFormat.Mode.DEBUG_LINES, DefaultVertexFormat.POSITION_COLOR);
 
     final float minX = (float) boundingBox.minX;
@@ -258,6 +262,7 @@ public class RenderHelper {
         .endVertex();
 
     tess.end();
+    RenderSystem.disableDepthTest();
     RenderSystem.setShaderColor(1, 1, 1, 1);
   }
 

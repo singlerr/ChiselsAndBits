@@ -484,8 +484,7 @@ public class ClientSide {
       final Minecraft mc = Minecraft.getInstance();
       if (mc.hitResult != null
           && mc.hitResult.getType() == HitResult.Type.BLOCK
-          && mc.hitResult instanceof BlockHitResult) {
-        final BlockHitResult rayTraceResult = (BlockHitResult) mc.hitResult;
+          && mc.hitResult instanceof BlockHitResult rayTraceResult) {
 
         try {
           final IBitAccess access =
@@ -503,8 +502,7 @@ public class ClientSide {
       final Minecraft mc = Minecraft.getInstance();
       if (mc.hitResult != null
           && mc.hitResult.getType() == HitResult.Type.BLOCK
-          && mc.hitResult instanceof BlockHitResult) {
-        BlockHitResult rayTraceResult = (BlockHitResult) mc.hitResult;
+          && mc.hitResult instanceof BlockHitResult rayTraceResult) {
 
         try {
           final BitLocation bl = new BitLocation(rayTraceResult, BitOperation.CHISEL);

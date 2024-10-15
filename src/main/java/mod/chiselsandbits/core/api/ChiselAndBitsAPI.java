@@ -256,7 +256,6 @@ public class ChiselAndBitsAPI implements IChiselAndBitsAPI {
 
       BitInventoryFeeder feeder = new BitInventoryFeeder(player, player.getCommandSenderWorld());
       feeder.addItem(ei);
-      return;
     } else if (!player.inventory.add(stack)) {
       ei.setItem(stack);
       player.getCommandSenderWorld().addFreshEntity(ei);

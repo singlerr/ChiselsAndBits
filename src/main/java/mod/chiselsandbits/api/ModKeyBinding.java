@@ -39,5 +39,5 @@ public enum ModKeyBinding {
   // Tape Measure Modes
   BIT,
   BLOCK,
-  DISTANCE;
+  DISTANCE
 }

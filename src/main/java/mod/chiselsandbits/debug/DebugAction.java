@@ -40,11 +40,9 @@ public abstract class DebugAction {
     player.sendSystemMessage(Component.literal(side + msg));
   }
 
-  ;
-
   private static void apiAssert(final String name, final Player player,
                                 final boolean must_be_true) {
-    if (must_be_true != true) {
+    if (!must_be_true) {
       Msg(player, name + " = false");
     }
   }
@@ -58,7 +56,7 @@ public abstract class DebugAction {
       final double hitZ,
       @Nonnull Player player);
 
-  static enum Tests {
+  enum Tests {
     canBeChiseled(new DebugAction.canBeChiseled()),
     createBitItem(new DebugAction.createBitItem()),
     getBit(new DebugAction.getBit()),
@@ -76,7 +74,7 @@ public abstract class DebugAction {
 
     final DebugAction which;
 
-    private Tests(final DebugAction action) {
+    Tests(final DebugAction action) {
       which = action;
     }
   }
@@ -179,8 +177,6 @@ public abstract class DebugAction {
     }
   }
 
-  ;
-
   static class getTileClass extends DebugAction {
 
     @Override
@@ -199,8 +195,6 @@ public abstract class DebugAction {
     }
   }
 
-  ;
-
   static class canBeChiseled extends DebugAction {
 
     @Override
@@ -216,8 +210,6 @@ public abstract class DebugAction {
     }
   }
 
-  ;
-
   static class isBlockChiseled extends DebugAction {
 
     @Override
@@ -232,8 +224,6 @@ public abstract class DebugAction {
       Msg(player, "isBlockChiseled = " + (api.isBlockChiseled(w, pos) ? "true" : "false"));
     }
   }
-
-  ;
 
   static class getBitAccess extends DebugAction {
 
@@ -264,8 +254,6 @@ public abstract class DebugAction {
       }
     }
   }
-
-  ;
 
   static class queryTest extends DebugAction {
 
@@ -301,8 +289,6 @@ public abstract class DebugAction {
     }
   }
 
-  ;
-
   static class setBitAccess extends DebugAction {
 
     @Override
@@ -331,8 +317,6 @@ public abstract class DebugAction {
       }
     }
   }
-
-  ;
 
   static class Randomize extends DebugAction {
 
@@ -374,8 +358,6 @@ public abstract class DebugAction {
     }
   }
 
-  ;
-
   static class Mirror extends DebugAction {
 
     @Override
@@ -401,8 +383,6 @@ public abstract class DebugAction {
     }
   }
 
-  ;
-
   static class Spin extends DebugAction {
 
     @Override
@@ -427,8 +407,6 @@ public abstract class DebugAction {
       }
     }
   }
-
-  ;
 
   static class listContents extends DebugAction {
 
@@ -471,8 +449,6 @@ public abstract class DebugAction {
     }
   }
 
-  ;
-
   static class getBit extends DebugAction {
 
     @Override
@@ -512,8 +488,6 @@ public abstract class DebugAction {
     }
   }
 
-  ;
-
   static class occlusionTest extends DebugAction {
 
     @Override
@@ -533,8 +507,6 @@ public abstract class DebugAction {
       player.sendSystemMessage(Component.literal(out.air() + " not-blocked"));
     }
   }
-
-  ;
 
   static class createBitItem extends DebugAction {
 
@@ -562,5 +534,4 @@ public abstract class DebugAction {
     }
   }
 
-  ;
 }

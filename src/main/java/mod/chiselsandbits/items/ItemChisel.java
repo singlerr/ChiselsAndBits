@@ -342,8 +342,7 @@ public class ItemChisel extends DiggerItem implements IItemScrollWheel, IChiselM
     Component displayName = super.getName(itemStack);
     if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT
         && ChiselsAndBits.getConfig().getClient().itemNameModeDisplay.get()
-        && displayName instanceof MutableComponent) {
-      final MutableComponent formattableTextComponent = (MutableComponent) displayName;
+        && displayName instanceof MutableComponent formattableTextComponent) {
       if (ChiselsAndBits.getConfig().getClient().perChiselMode.get()
           || FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
         return formattableTextComponent

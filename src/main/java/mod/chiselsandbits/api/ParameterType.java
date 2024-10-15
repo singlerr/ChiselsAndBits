@@ -15,8 +15,6 @@ public interface ParameterType<T extends Object> {
     INTEGER
   }
 
-  ;
-
   enum BooleanParam implements ParameterType<Boolean> {
     ENABLE_DAMAGE_TOOLS(
         /* damageTools */),
@@ -28,8 +26,6 @@ public interface ParameterType<T extends Object> {
       return ParamTypes.BOOLEAN;
     }
   }
-
-  ;
 
   enum FloatParam implements ParameterType<Float> {
     BLOCK_FULL_LIGHT_PERCENTAGE(/* bitLightPercentage */);
