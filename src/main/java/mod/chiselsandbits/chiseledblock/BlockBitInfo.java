@@ -49,6 +49,10 @@ public class BlockBitInfo {
 
   static {
     ignoreLogicBlocks.put(Blocks.ACACIA_LEAVES, true);
+    ignoreLogicBlocks.put(Blocks.AZALEA_LEAVES, true);
+    ignoreLogicBlocks.put(Blocks.CHERRY_LEAVES, true);
+    ignoreLogicBlocks.put(Blocks.MANGROVE_LEAVES, true);
+    ignoreLogicBlocks.put(Blocks.FLOWERING_AZALEA_LEAVES, true);
     ignoreLogicBlocks.put(Blocks.BIRCH_LEAVES, true);
     ignoreLogicBlocks.put(Blocks.DARK_OAK_LEAVES, true);
     ignoreLogicBlocks.put(Blocks.JUNGLE_LEAVES, true);

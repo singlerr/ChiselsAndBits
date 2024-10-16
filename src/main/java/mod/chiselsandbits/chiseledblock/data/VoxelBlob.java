@@ -47,11 +47,12 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class VoxelBlob implements IVoxelSrc {
 
@@ -68,6 +69,7 @@ public final class VoxelBlob implements IVoxelSrc {
   private static final Map<Object, BitSet> layerFilters = new HashMap<>();
   private static final int VERSION_COMPACT = 0; // stored meta.
   private static final int VERSION_CROSSWORLD_LEGACY = 1; // stored meta.
+  private static final Logger log = LoggerFactory.getLogger(VoxelBlob.class);
   public static VoxelBlob NULL_BLOB = new VoxelBlob();
   static int bestBufferSize = 26;
 
@@ -120,10 +122,10 @@ public final class VoxelBlob implements IVoxelSrc {
 
     final var blockReg = BuiltInRegistries.BLOCK;
     for (final Block block : blockReg) {
-      if (block instanceof LiquidBlock) {
-        continue;
-      }
       for (final BlockState state : block.getStateDefinition().getPossibleStates()) {
+        if (ModUtil.isFluid(state)) {
+          continue;
+        }
         final int id = ModUtil.getStateId(state);
         if (state == null || state.getBlock() != block) {
           // reverse mapping is broken, so just skip over this state.
@@ -768,8 +770,6 @@ public final class VoxelBlob implements IVoxelSrc {
       }
 
       if (fluidFilterState.get(ref) != wantsFluids) {
-        noneAir.clear(x);
-        values[x] = 0;
       } else {
         hasValues = true;
         break;
@@ -777,10 +777,6 @@ public final class VoxelBlob implements IVoxelSrc {
     }
 
     return hasValues;
-  }
-
-  public boolean simulateFilter(final RenderType layer) {
-    return this.filter(layer);
   }
 
   public boolean filter(final RenderType layer) {
@@ -794,9 +790,6 @@ public final class VoxelBlob implements IVoxelSrc {
       }
 
       if (!layerFilterState.get(ref)) {
-        noneAir.clear(x);
-        values[x] = 0;
-
       } else {
         hasValues = true;
         break;

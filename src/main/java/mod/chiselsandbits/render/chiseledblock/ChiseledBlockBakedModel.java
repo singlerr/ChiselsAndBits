@@ -156,7 +156,7 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
     }
 
     if (originalModel != null && data != null) {
-      if (data.filter(layer.layer)) {
+      if (layer.filter(data)) {
         final ChiseledModelBuilder builder = new ChiseledModelBuilder();
         generateFaces(builder, data, RANDOM);
 

@@ -314,6 +314,10 @@ public class ModUtil {
     }
   }
 
+  public static boolean isFluid(BlockState state) {
+    return state.getFluidState().isSource() || !state.getFluidState().isEmpty();
+  }
+
   public static TileEntityBlockChiseled getChiseledTileEntity(
       @Nonnull final BlockGetter world, @Nonnull final BlockPos pos) {
     final BlockEntity te = getTileEntitySafely(world, pos);

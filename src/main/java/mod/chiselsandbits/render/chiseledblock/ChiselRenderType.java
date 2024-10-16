@@ -49,6 +49,7 @@ public enum ChiselRenderType {
       return false;
     }
 
+
     if (vb.filter(layer)) {
       if (type != null) {
         return vb.filterFluids(type == VoxelType.FLUID);

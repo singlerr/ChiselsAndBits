@@ -197,6 +197,11 @@ public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
   public void emitItemQuads(
       final ItemStack itemStack, final Supplier<RandomSource> supplier,
       final RenderContext renderContext) {
+    if (!cached) {
+      BlockBitInfo.recalculate();
+      VoxelBlob.clearCache();
+      cached = true;
+    }
     final BakedModel itemModel = getDelegate()
         .getOverrides()
         .resolve(
