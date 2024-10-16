@@ -105,6 +105,7 @@ public class BlockBitInfo {
         BlockBitInfo.addFluidBlock(o);
       }
     }
+
   }
 
   public static void addFluidBlock(final Fluid fluid) {

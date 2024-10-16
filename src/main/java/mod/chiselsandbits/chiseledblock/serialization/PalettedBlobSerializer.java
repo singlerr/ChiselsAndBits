@@ -17,7 +17,8 @@ import net.minecraft.world.level.chunk.PaletteResize;
 
 public class PalettedBlobSerializer extends BlobSerializer implements PaletteResize<BlockState> {
   private final IdMapper<BlockState> registry = Block.BLOCK_STATE_REGISTRY;
-  private final Palette<BlockState> registryPalette = new GlobalPalette<>(Block.BLOCK_STATE_REGISTRY);
+  private final Palette<BlockState> registryPalette =
+      new GlobalPalette<>(Block.BLOCK_STATE_REGISTRY);
   private Palette<BlockState> palette = new GlobalPalette<>(Block.BLOCK_STATE_REGISTRY);
   private int bits = 0;
 

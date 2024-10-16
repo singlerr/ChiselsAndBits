@@ -15,10 +15,12 @@ import net.minecraft.world.phys.AABB;
 public final class VoxelBlobStateReference
     implements Comparable<VoxelBlobStateReference>, IStateRef {
 
-  private static final Map<VoxelBlobStateInstance, WeakReference<VoxelBlobStateInstance>> serverRefs =
+  private static final Map<VoxelBlobStateInstance, WeakReference<VoxelBlobStateInstance>>
+      serverRefs =
       Collections.synchronizedMap(
           new WeakHashMap<VoxelBlobStateInstance, WeakReference<VoxelBlobStateInstance>>());
-  private static final Map<VoxelBlobStateInstance, WeakReference<VoxelBlobStateInstance>> clientRefs =
+  private static final Map<VoxelBlobStateInstance, WeakReference<VoxelBlobStateInstance>>
+      clientRefs =
       Collections.synchronizedMap(
           new WeakHashMap<VoxelBlobStateInstance, WeakReference<VoxelBlobStateInstance>>());
 

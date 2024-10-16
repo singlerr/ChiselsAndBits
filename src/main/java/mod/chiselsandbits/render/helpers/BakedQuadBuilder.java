@@ -11,17 +11,14 @@ import net.minecraft.core.Direction;
 
 public final class BakedQuadBuilder implements IVertexConsumer, IFaceBuilder {
   private static final int SIZE = DefaultVertexFormat.BLOCK.getElements().size();
-
+  private final boolean full = false;
   private float[][][] unpackedData = new float[4][SIZE][4];
   private int tint = -1;
   private Direction orientation;
   private TextureAtlasSprite texture;
   private boolean applyDiffuseLighting = true;
-
   private int vertices = 0;
   private int elements = 0;
-  private final boolean full = false;
-
   private VertexFormat vertexFormat;
 
   public BakedQuadBuilder(TextureAtlasSprite texture) {

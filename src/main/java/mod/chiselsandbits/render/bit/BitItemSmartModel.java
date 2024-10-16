@@ -62,7 +62,9 @@ public class BitItemSmartModel extends BaseSmartModel implements ICacheClearable
             stateID, ChiselRenderType.CUTOUT, blob, DefaultVertexFormat.BLOCK, true);
         final BakedModel e = new ChiseledBlockBakedModel(
             stateID, ChiselRenderType.TRANSLUCENT, blob, DefaultVertexFormat.BLOCK, true);
-        out = new ModelCombined(a, b, c, d, e);
+        final BakedModel f = new ChiseledBlockBakedModel(
+            stateID, ChiselRenderType.TRANSLUCENT_FLUID, blob, DefaultVertexFormat.BLOCK, true);
+        out = new ModelCombined(a, b, c, d, e, f);
       } else {
         out = new BitItemBaked(stateID);
       }

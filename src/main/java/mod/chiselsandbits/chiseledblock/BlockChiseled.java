@@ -54,7 +54,6 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,8 +62,8 @@ public class BlockChiseled extends Block
 
   public static final BlockPos ZERO = BlockPos.ZERO;
   public static final BooleanProperty FULL_BLOCK = BooleanProperty.create("full_block");
-  static ExceptionNoTileEntity noTileEntity = new ExceptionNoTileEntity();
   private static final ThreadLocal<BlockState> actingAs = new ThreadLocal<>();
+  static ExceptionNoTileEntity noTileEntity = new ExceptionNoTileEntity();
   public final String name;
 
   public BlockChiseled(final String name, final BlockBehaviour.Properties properties) {
@@ -380,44 +379,44 @@ public class BlockChiseled extends Block
     try {
       final VoxelBlob blob = getTileEntity(reader, pos).getBlob();
       if (blob == null) {
-        return Shapes.empty();
+        return super.getShape(state, reader, pos, context);
       }
 
       return VoxelShapeCache.getInstance().get(blob, BoxType.OCCLUSION);
     } catch (ExceptionNoTileEntity exceptionNoTileEntity) {
-      return Shapes.empty();
+      return super.getShape(state, reader, pos, context);
     }
   }
 
-  @Deprecated
-  public VoxelShape getCollisionShape(BlockState state, BlockGetter worldIn, BlockPos pos,
-                                      CollisionContext context) {
-    try {
-      final VoxelBlob blob = getTileEntity(worldIn, pos).getBlob();
-      if (blob == null) {
-        return Shapes.empty();
-      }
-
-      return VoxelShapeCache.getInstance().get(blob, BoxType.OCCLUSION);
-    } catch (ExceptionNoTileEntity exceptionNoTileEntity) {
-      return Shapes.empty();
-    }
-  }
-
-  @Deprecated
-  public VoxelShape getVisualShape(BlockState state, BlockGetter reader, BlockPos pos,
-                                   CollisionContext context) {
-    try {
-      final VoxelBlob blob = getTileEntity(reader, pos).getBlob();
-      if (blob == null) {
-        return Shapes.empty();
-      }
-
-      return VoxelShapeCache.getInstance().get(blob, BoxType.OCCLUSION);
-    } catch (ExceptionNoTileEntity exceptionNoTileEntity) {
-      return Shapes.empty();
-    }
-  }
+//  @Deprecated
+//  public VoxelShape getCollisionShape(BlockState state, BlockGetter worldIn, BlockPos pos,
+//                                      CollisionContext context) {
+//    try {
+//      final VoxelBlob blob = getTileEntity(worldIn, pos).getBlob();
+//      if (blob == null) {
+//        return super.getShape(state, worldIn, pos, context);
+//      }
+//
+//      return VoxelShapeCache.getInstance().get(blob, BoxType.OCCLUSION);
+//    } catch (ExceptionNoTileEntity exceptionNoTileEntity) {
+//      return super.getShape(state, worldIn, pos, context);
+//    }
+//  }
+//
+//  @Deprecated
+//  public VoxelShape getVisualShape(BlockState state, BlockGetter reader, BlockPos pos,
+//                                   CollisionContext context) {
+//    try {
+//      final VoxelBlob blob = getTileEntity(reader, pos).getBlob();
+//      if (blob == null) {
+//        return Shapes.empty();
+//      }
+//
+//      return VoxelShapeCache.getInstance().get(blob, BoxType.OCCLUSION);
+//    } catch (ExceptionNoTileEntity exceptionNoTileEntity) {
+//      return Shapes.empty();
+//    }
+//  }
 
   @Override
   public boolean hasDynamicShape() {

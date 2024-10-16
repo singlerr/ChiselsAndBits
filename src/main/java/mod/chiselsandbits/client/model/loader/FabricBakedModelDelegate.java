@@ -3,6 +3,7 @@ package mod.chiselsandbits.client.model.loader;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
+import mod.chiselsandbits.chiseledblock.BlockBitInfo;
 import mod.chiselsandbits.chiseledblock.data.VoxelBlob;
 import mod.chiselsandbits.client.model.baked.DataAwareBakedModel;
 import mod.chiselsandbits.client.model.data.IModelData;
@@ -125,6 +126,7 @@ public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
       final Supplier<RandomSource> supplier,
       final RenderContext renderContext) {
     if (!cached) {
+      BlockBitInfo.recalculate();
       VoxelBlob.clearCache();
       cached = true;
     }

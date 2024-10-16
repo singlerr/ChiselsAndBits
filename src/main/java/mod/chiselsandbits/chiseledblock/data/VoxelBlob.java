@@ -49,7 +49,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
@@ -100,10 +99,6 @@ public final class VoxelBlob implements IVoxelSrc {
         final int stateId = ModUtil.getStateId(blockState);
         if (BlockBitInfo.getTypeFromStateID(stateId) == VoxelType.FLUID) {
           fluidFilterState.set(stateId);
-          return;
-        }
-        if (blockState.getBlock() instanceof SimpleWaterloggedBlock) {
-          fluidFilterState.set(stateId);
         }
       });
     }
@@ -134,15 +129,6 @@ public final class VoxelBlob implements IVoxelSrc {
           // reverse mapping is broken, so just skip over this state.
           continue;
         }
-
-        if (!state.getFluidState().isEmpty() || state.getFluidState().isSource()) {
-          final int fluidId = ModUtil.getStateId(state.getFluidState().createLegacyBlock());
-          layerFilters
-              .get(ItemBlockRenderTypes.getRenderLayer(state.getFluidState()))
-              .set(fluidId);
-          continue;
-        }
-
         layerFilters.get(ItemBlockRenderTypes.getChunkRenderType(state)).set(id);
       }
     }
@@ -782,7 +768,8 @@ public final class VoxelBlob implements IVoxelSrc {
       }
 
       if (fluidFilterState.get(ref) != wantsFluids) {
-
+        noneAir.clear(x);
+        values[x] = 0;
       } else {
         hasValues = true;
         break;
@@ -793,24 +780,7 @@ public final class VoxelBlob implements IVoxelSrc {
   }
 
   public boolean simulateFilter(final RenderType layer) {
-    final BitSet layerFilterState = layerFilters.get(layer);
-    boolean hasValues = false;
-
-    for (int x = 0; x < array_size; x++) {
-      final int ref = values[x];
-      if (ref == 0) {
-        continue;
-      }
-
-      if (!layerFilterState.get(ref)) {
-
-      } else {
-        hasValues = true;
-        break;
-      }
-    }
-
-    return hasValues;
+    return this.filter(layer);
   }
 
   public boolean filter(final RenderType layer) {
@@ -823,7 +793,11 @@ public final class VoxelBlob implements IVoxelSrc {
         continue;
       }
 
-      if (layerFilterState.get(ref)) {
+      if (!layerFilterState.get(ref)) {
+        noneAir.clear(x);
+        values[x] = 0;
+
+      } else {
         hasValues = true;
         break;
       }

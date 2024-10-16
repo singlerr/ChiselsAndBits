@@ -40,13 +40,13 @@ public class ModelUtil implements ICacheClearable {
   private static final HashMap<Pair<RenderType, Direction>, HashMap<Integer, String>>
       blockToTexture =
       new HashMap<>();
-  public static RandomSource MODEL_RANDOM = RandomSource.create();
   private static final HashMap<Triple<Integer, RenderType, Direction>, ModelQuadLayer[]> cache =
       new HashMap<>();
   private static final HashMap<Pair<RenderType, Integer>, ChiseledBlockBakedModel> breakCache =
       new HashMap<>();
   @SuppressWarnings("unused")
   private static final ModelUtil instance = new ModelUtil();
+  public static RandomSource MODEL_RANDOM = RandomSource.create();
 
   private ModelUtil() {
     ChiselsAndBits.getInstance().addClearable(this);
@@ -57,16 +57,6 @@ public class ModelUtil implements ICacheClearable {
     if (layer == null) {
       return null;
     }
-
-    BlockState state = ModUtil.getStateById(stateID);
-    if (!state.getFluidState().isEmpty() || state.getFluidState().isSource()) {
-      if (!ItemBlockRenderTypes.getRenderLayer(state.getFluidState()).equals(layer)) {
-        return null;
-      }
-    } else if (!ItemBlockRenderTypes.getChunkRenderType(state).equals(layer)) {
-      return null;
-    }
-
     final Triple<Integer, RenderType, Direction> cacheVal = Triple.of(stateID, layer, face);
 
     final ModelQuadLayer[] mpc = cache.get(cacheVal);
@@ -272,6 +262,9 @@ public class ModelUtil implements ICacheClearable {
   public static BakedModel solveModel(
       final BlockState state, final RandomSource weight, final BakedModel originalModel,
       final RenderType layer) {
+    if (ItemBlockRenderTypes.getChunkRenderType(state) != layer) {
+      return null;
+    }
     boolean hasFaces;
 
     try {
@@ -284,6 +277,7 @@ public class ModelUtil implements ICacheClearable {
       // an exception was thrown.. use the item model and hope...
       hasFaces = false;
     }
+
 
     if (!hasFaces) {
       // if the model is empty then lets grab an item and try that...

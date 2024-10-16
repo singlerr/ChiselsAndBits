@@ -156,34 +156,18 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
     }
 
     if (originalModel != null && data != null) {
-      if (isItem) {
-        if (data.simulateFilter(layer.layer)) {
-          final ChiseledModelBuilder builder = new ChiseledModelBuilder();
-          generateFaces(builder, data, RANDOM);
+      if (data.filter(layer.layer)) {
+        final ChiseledModelBuilder builder = new ChiseledModelBuilder();
+        generateFaces(builder, data, RANDOM);
 
-          // convert from builder to final storage.
-          up = builder.getSide(Direction.UP);
-          down = builder.getSide(Direction.DOWN);
-          east = builder.getSide(Direction.EAST);
-          west = builder.getSide(Direction.WEST);
-          north = builder.getSide(Direction.NORTH);
-          south = builder.getSide(Direction.SOUTH);
-          generic = builder.getSide(null);
-        }
-      } else {
-        if (layer.filter(data)) {
-          final ChiseledModelBuilder builder = new ChiseledModelBuilder();
-          generateFaces(builder, data, RANDOM);
-
-          // convert from builder to final storage.
-          up = builder.getSide(Direction.UP);
-          down = builder.getSide(Direction.DOWN);
-          east = builder.getSide(Direction.EAST);
-          west = builder.getSide(Direction.WEST);
-          north = builder.getSide(Direction.NORTH);
-          south = builder.getSide(Direction.SOUTH);
-          generic = builder.getSide(null);
-        }
+        // convert from builder to final storage.
+        up = builder.getSide(Direction.UP);
+        down = builder.getSide(Direction.DOWN);
+        east = builder.getSide(Direction.EAST);
+        west = builder.getSide(Direction.WEST);
+        north = builder.getSide(Direction.NORTH);
+        south = builder.getSide(Direction.SOUTH);
+        generic = builder.getSide(null);
       }
     }
   }
