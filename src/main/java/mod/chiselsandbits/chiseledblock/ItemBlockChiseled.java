@@ -559,8 +559,8 @@ public class ItemBlockChiseled extends BlockItem
                 DeprecationHelper.getSoundType(this.block).getPitch() * 0.8F,
                 false);
 
-        if (!context.getPlayer().isCreative() &&
-            context.getItemInHand().getItem() instanceof ItemBlockChiseled) {
+        if (!context.getPlayer().isCreative()
+            && context.getItemInHand().getItem() instanceof ItemBlockChiseled) {
           ModUtil.adjustStackSize(context.getItemInHand(), -1);
         }
 

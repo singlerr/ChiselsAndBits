@@ -24,9 +24,8 @@ public class TooltipEvent {
     if (Minecraft.getInstance().player != null
         && ChiselsAndBits.getConfig().getCommon().enableHelp.get()) {
       if (Minecraft.getInstance().player.getMainHandItem().getItem() instanceof ItemMagnifyingGlass
-          ||
-          Minecraft.getInstance().player.getOffhandItem()
-              .getItem() instanceof ItemMagnifyingGlass) {
+          || Minecraft.getInstance().player.getOffhandItem()
+          .getItem() instanceof ItemMagnifyingGlass) {
         if (stack.getItem() instanceof BlockItem blockItem) {
           final Block block = blockItem.getBlock();
           final BlockState blockState = block.defaultBlockState();

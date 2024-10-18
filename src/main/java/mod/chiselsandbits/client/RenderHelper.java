@@ -201,7 +201,6 @@ public class RenderHelper {
         .color(red, green, blue, alpha)
         .endVertex();
 
-
     // Y line at 0 / 0
     bufferBuilder
         .vertex(matrixStack.last().pose(), minX, maxY, minZ)

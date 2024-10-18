@@ -144,10 +144,13 @@ public class ClientSide {
   ReadyState readyState = ReadyState.PENDING_PRE;
   boolean wasDrawing = false;
   int displayStatus = 0;
+
   @Nonnull
   ChiselToolType lastTool = ChiselToolType.CHISEL;
+
   @Nonnull
   InteractionHand lastHand = InteractionHand.MAIN_HAND;
+
   private KeyMapping rotateCCW;
   private KeyMapping rotateCW;
   private KeyMapping undo;

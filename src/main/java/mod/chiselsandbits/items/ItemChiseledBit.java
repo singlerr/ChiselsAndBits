@@ -149,9 +149,8 @@ public class ItemChiseledBit extends Item
       if (blk != null && state != null) {
         for (final Property<?> p : state.getProperties()) {
           if (p.getName().equals("axis") || p.getName().equals("facing")) {
-            extra.add(
-                DeprecationHelper.translateToLocal("mod.chiselsandbits.pretty." + p.getName() + "-"
-                    + state.getValue(p)));
+            extra.add(DeprecationHelper.translateToLocal(
+                "mod.chiselsandbits.pretty." + p.getName() + "-" + state.getValue(p)));
           }
         }
       }

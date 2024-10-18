@@ -50,6 +50,4 @@ public final class ModTileEntityTypes {
           () -> BlockEntityType.Builder.of(ChiselPrinterTileEntity::new,
                   ModBlocks.CHISEL_PRINTER_BLOCK.get())
               .build(null));
-
-
 }

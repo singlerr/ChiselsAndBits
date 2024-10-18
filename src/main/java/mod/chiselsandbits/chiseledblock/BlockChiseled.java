@@ -381,42 +381,41 @@ public class BlockChiseled extends Block
       if (blob == null) {
         return super.getShape(state, reader, pos, context);
       }
-
       return VoxelShapeCache.getInstance().get(blob, BoxType.OCCLUSION);
     } catch (ExceptionNoTileEntity exceptionNoTileEntity) {
       return super.getShape(state, reader, pos, context);
     }
   }
 
-//  @Deprecated
-//  public VoxelShape getCollisionShape(BlockState state, BlockGetter worldIn, BlockPos pos,
-//                                      CollisionContext context) {
-//    try {
-//      final VoxelBlob blob = getTileEntity(worldIn, pos).getBlob();
-//      if (blob == null) {
-//        return super.getShape(state, worldIn, pos, context);
-//      }
-//
-//      return VoxelShapeCache.getInstance().get(blob, BoxType.OCCLUSION);
-//    } catch (ExceptionNoTileEntity exceptionNoTileEntity) {
-//      return super.getShape(state, worldIn, pos, context);
-//    }
-//  }
-//
-//  @Deprecated
-//  public VoxelShape getVisualShape(BlockState state, BlockGetter reader, BlockPos pos,
-//                                   CollisionContext context) {
-//    try {
-//      final VoxelBlob blob = getTileEntity(reader, pos).getBlob();
-//      if (blob == null) {
-//        return Shapes.empty();
-//      }
-//
-//      return VoxelShapeCache.getInstance().get(blob, BoxType.OCCLUSION);
-//    } catch (ExceptionNoTileEntity exceptionNoTileEntity) {
-//      return Shapes.empty();
-//    }
-//  }
+  @Deprecated
+  public VoxelShape getCollisionShape(BlockState state, BlockGetter worldIn, BlockPos pos,
+                                      CollisionContext context) {
+    try {
+      final VoxelBlob blob = getTileEntity(worldIn, pos).getBlob();
+      if (blob == null) {
+        return super.getShape(state, worldIn, pos, context);
+      }
+
+      return VoxelShapeCache.getInstance().get(blob, BoxType.COLLISION);
+    } catch (ExceptionNoTileEntity exceptionNoTileEntity) {
+      return super.getShape(state, worldIn, pos, context);
+    }
+  }
+  //
+  //  @Deprecated
+  //  public VoxelShape getVisualShape(BlockState state, BlockGetter reader, BlockPos pos,
+  //                                   CollisionContext context) {
+  //    try {
+  //      final VoxelBlob blob = getTileEntity(reader, pos).getBlob();
+  //      if (blob == null) {
+  //        return Shapes.empty();
+  //      }
+  //
+  //      return VoxelShapeCache.getInstance().get(blob, BoxType.OCCLUSION);
+  //    } catch (ExceptionNoTileEntity exceptionNoTileEntity) {
+  //      return Shapes.empty();
+  //    }
+  //  }
 
   @Override
   public boolean hasDynamicShape() {

@@ -115,6 +115,7 @@ public class TileEntityBlockChiseled extends BlockEntity
     if (this.blobStateReference == null || !this.blobStateReference.equals(blobStateReference)) {
       this.blobStateReference = blobStateReference;
       modelData.setData(MP_VBSR, blobStateReference);
+      modelData.setData(MODEL_UPDATE, true);
     }
   }
 
@@ -321,8 +322,8 @@ public class TileEntityBlockChiseled extends BlockEntity
 
   @Override
   public @Nullable Object getRenderData() {
-    //        modelData.setData(MP_VBSR, getBlobStateReference());
-    //        modelData.setData(MP_PBSI, getPrimaryBlockStateId());
+    modelData.setData(MP_VBSR, getBlobStateReference());
+    modelData.setData(MP_PBSI, getPrimaryBlockStateId());
     return modelData;
   }
 

@@ -92,59 +92,57 @@ public class ModelQuadReader extends BaseModelReader {
     }
 
     if (cull == null) {
-      return "{ \"from\": [" +
-          minX +
-          "," +
-          minY +
-          "," +
-          minZ +
-          "], \"to\": [" +
-          maxX +
-          "," +
-          maxY +
-          "," +
-          maxZ +
-          "], \"faces\": { \"" +
-          face.getSerializedName() +
-          "\":  { \"uv\": [" +
-          U1 +
-          "," +
-          V1 +
-          "," +
-          U2 +
-          "," +
-          V2 +
-          "], \"texture\": \"" +
-          texture +
-          "\" } } },\n";
+      return "{ \"from\": [" + minX
+          + ","
+          + minY
+          + ","
+          + minZ
+          + "], \"to\": ["
+          + maxX
+          + ","
+          + maxY
+          + ","
+          + maxZ
+          + "], \"faces\": { \""
+          + face.getSerializedName()
+          + "\":  { \"uv\": ["
+          + U1
+          + ","
+          + V1
+          + ","
+          + U2
+          + ","
+          + V2
+          + "], \"texture\": \""
+          + texture
+          + "\" } } },\n";
     } else {
-      return "{ \"from\": [" +
-          minX +
-          "," +
-          minY +
-          "," +
-          minZ +
-          "], \"to\": [" +
-          maxX +
-          "," +
-          maxY +
-          "," +
-          maxZ +
-          "], \"faces\": { \"" +
-          face.getSerializedName() +
-          "\":  { \"uv\": [" +
-          U1 +
-          "," +
-          V1 +
-          "," +
-          U2 +
-          "," +
-          V2 +
-          "], \"texture\": \"" +
-          texture +
-          "\", \"cullface\": \"" +
-          cull.getSerializedName() +
-          "\" } } },\n";
+      return "{ \"from\": [" + minX
+          + ","
+          + minY
+          + ","
+          + minZ
+          + "], \"to\": ["
+          + maxX
+          + ","
+          + maxY
+          + ","
+          + maxZ
+          + "], \"faces\": { \""
+          + face.getSerializedName()
+          + "\":  { \"uv\": ["
+          + U1
+          + ","
+          + V1
+          + ","
+          + U2
+          + ","
+          + V2
+          + "], \"texture\": \""
+          + texture
+          + "\", \"cullface\": \""
+          + cull.getSerializedName()
+          + "\" } } },\n";
     }
   }
 

@@ -44,8 +44,10 @@ public class ModelUtil implements ICacheClearable {
       new HashMap<>();
   private static final HashMap<Pair<RenderType, Integer>, ChiseledBlockBakedModel> breakCache =
       new HashMap<>();
+
   @SuppressWarnings("unused")
   private static final ModelUtil instance = new ModelUtil();
+
   public static RandomSource MODEL_RANDOM = RandomSource.create();
 
   private ModelUtil() {
@@ -262,9 +264,6 @@ public class ModelUtil implements ICacheClearable {
   public static BakedModel solveModel(
       final BlockState state, final RandomSource weight, final BakedModel originalModel,
       final RenderType layer) {
-    if (ItemBlockRenderTypes.getChunkRenderType(state) != layer) {
-      return null;
-    }
     boolean hasFaces;
 
     try {
@@ -277,7 +276,6 @@ public class ModelUtil implements ICacheClearable {
       // an exception was thrown.. use the item model and hope...
       hasFaces = false;
     }
-
 
     if (!hasFaces) {
       // if the model is empty then lets grab an item and try that...

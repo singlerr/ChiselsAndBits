@@ -31,6 +31,4 @@ public final class ModContainerTypes {
       Suppliers.memoize(() -> new MenuType<>(BagContainer::new, FeatureFlagSet.of()));
   public static final Supplier<MenuType<ChiselPrinterContainer>> CHISEL_STATION_CONTAINER =
       Suppliers.memoize(() -> new MenuType<>(ChiselPrinterContainer::new, FeatureFlagSet.of()));
-
-
 }

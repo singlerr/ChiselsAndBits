@@ -148,7 +148,11 @@ public class ChiseledBlockSmartModel extends BaseSmartModel implements ICacheCle
     if (state == null) {
       return super.handleBlockState(state, random, modelData, renderType);
     }
-
+    Map<ChiselRenderType, BakedModel> pre;
+    if (!modelData.getData(TileEntityBlockChiseled.MODEL_UPDATE)
+        && (pre = modelData.getData(TileEntityBlockChiseled.MODEL_PROP)) != null) {
+      return pre.get(renderType);
+    }
     VoxelBlobStateReference data = modelData.getData(TileEntityBlockChiseled.MP_VBSR);
     int primaryStateId = modelData.getData(TileEntityBlockChiseled.MP_PBSI);
     final VoxelBlob blob = data == null ? null : data.getVoxelBlob();

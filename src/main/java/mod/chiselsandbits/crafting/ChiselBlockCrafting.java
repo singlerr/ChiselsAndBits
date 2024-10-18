@@ -259,7 +259,6 @@ public class ChiselBlockCrafting extends CustomRecipe {
         isAir = false;
         return currentValue;
       }
-
     }
   }
 }

@@ -75,6 +75,7 @@ public final class VoxelBlob implements IVoxelSrc {
 
   static {
     fluidFilterState = new BitSet(4096);
+    clearCache();
   }
 
   final int[] values = new int[array_size];
@@ -119,7 +120,6 @@ public final class VoxelBlob implements IVoxelSrc {
     for (final RenderType layer : RenderType.chunkBufferLayers()) {
       layerFilters.put(layer, new BitSet(4096));
     }
-
     final var blockReg = BuiltInRegistries.BLOCK;
     for (final Block block : blockReg) {
       for (final BlockState state : block.getStateDefinition().getPossibleStates()) {
@@ -131,14 +131,24 @@ public final class VoxelBlob implements IVoxelSrc {
           // reverse mapping is broken, so just skip over this state.
           continue;
         }
-        layerFilters.get(ItemBlockRenderTypes.getChunkRenderType(state)).set(id);
+
+        for (RenderType renderType : RenderType.chunkBufferLayers()) {
+          if (ItemBlockRenderTypes.getChunkRenderType(state) == renderType) {
+            layerFilters.get(renderType).set(id);
+          }
+        }
+
       }
     }
 
     for (final Fluid fluid : BuiltInRegistries.FLUID) {
       for (final FluidState state : fluid.getStateDefinition().getPossibleStates()) {
         final int id = ModUtil.getStateId(state.createLegacyBlock());
-        layerFilters.get(ItemBlockRenderTypes.getRenderLayer(state)).set(id);
+        for (RenderType renderType : RenderType.chunkBufferLayers()) {
+            if (ItemBlockRenderTypes.getRenderLayer(state) == renderType) {
+                layerFilters.get(renderType).set(id);
+            }
+        }
       }
     }
   }
@@ -705,9 +715,7 @@ public final class VoxelBlob implements IVoxelSrc {
     }
 
     for (final Entry<Component, Integer> e : contents.entrySet()) {
-      details.add(Component.literal(
-              String.valueOf(e.getValue()) + ' ')
-          .append(e.getKey()));
+      details.add(Component.literal(String.valueOf(e.getValue()) + ' ').append(e.getKey()));
     }
 
     return details;
@@ -770,6 +778,8 @@ public final class VoxelBlob implements IVoxelSrc {
       }
 
       if (fluidFilterState.get(ref) != wantsFluids) {
+        values[x] = 0;
+        noneAir.clear(x);
       } else {
         hasValues = true;
         break;
@@ -790,6 +800,8 @@ public final class VoxelBlob implements IVoxelSrc {
       }
 
       if (!layerFilterState.get(ref)) {
+        noneAir.clear(x);
+        values[x] = 0;
       } else {
         hasValues = true;
         break;

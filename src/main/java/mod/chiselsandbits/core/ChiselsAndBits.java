@@ -71,10 +71,9 @@ public class ChiselsAndBits {
     EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> {
       ForgeModConfigEvents.loading(Constants.MOD_ID)
           .register(c -> handleIdMapping(Minecraft.getInstance()));
-      ForgeModConfigEvents.reloading(Constants.MOD_ID).register(c ->
-          handleIdMapping(Minecraft.getInstance()));
+      ForgeModConfigEvents.reloading(Constants.MOD_ID)
+          .register(c -> handleIdMapping(Minecraft.getInstance()));
     });
-
   }
 
   public static ChiselsAndBits getInstance() {
