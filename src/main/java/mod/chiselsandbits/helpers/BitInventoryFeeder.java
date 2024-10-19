@@ -17,97 +17,96 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 public class BitInventoryFeeder {
-  private static final Random itemRand = new Random();
-  final Player player;
-  final Level world;
-  ArrayList<Integer> seenBits = new ArrayList<>();
-  boolean hasSentMessage = false;
+    private static final Random itemRand = new Random();
+    final Player player;
+    final Level world;
+    ArrayList<Integer> seenBits = new ArrayList<>();
+    boolean hasSentMessage = false;
 
-  public BitInventoryFeeder(final Player p, final Level w) {
-    player = p;
-    world = w;
-  }
-
-  private static void spawnItem(Level world, ItemEntity ei) {
-    if (world.isClientSide) // no spawning items on the client.
-    {
-      return;
+    public BitInventoryFeeder(final Player p, final Level w) {
+        player = p;
+        world = w;
     }
 
-    world.addFreshEntity(ei);
-  }
+    private static void spawnItem(Level world, ItemEntity ei) {
+        if (world.isClientSide) // no spawning items on the client.
+        {
+            return;
+        }
 
-  public void addItem(final ItemEntity ei) {
-    ItemStack is = ModUtil.nonNull(ei.getItem());
-
-    final List<BagPos> bags = ItemBitBag.getBags(player.inventory);
-
-    if (!ModUtil.containsAtLeastOneOf(player.inventory, is)) {
-      final ItemStack minSize = is.copy();
-
-      if (ModUtil.getStackSize(minSize) > minSize.getMaxStackSize()) {
-        ModUtil.setStackSize(minSize, minSize.getMaxStackSize());
-      }
-
-      ModUtil.adjustStackSize(is, -ModUtil.getStackSize(minSize));
-      player.inventory.add(minSize);
-      ModUtil.adjustStackSize(is, ModUtil.getStackSize(minSize));
+        world.addFreshEntity(ei);
     }
 
-    for (final BagPos bp : bags) {
-      is = bp.inv.insertItem(is);
-    }
+    public void addItem(final ItemEntity ei) {
+        ItemStack is = ModUtil.nonNull(ei.getItem());
 
-    if (ModUtil.isEmpty(is)) {
-      return;
-    }
+        final List<BagPos> bags = ItemBitBag.getBags(player.inventory);
 
-    ei.setItem(is);
-    boolean result = EntityItemPickupEvent.EVENT.invoker().handle(ei, player);
-    if (result) {
-      // cancelled...
-      spawnItem(world, ei);
-    } else {
+        if (!ModUtil.containsAtLeastOneOf(player.inventory, is)) {
+            final ItemStack minSize = is.copy();
 
-      is = ei.getItem();
+            if (ModUtil.getStackSize(minSize) > minSize.getMaxStackSize()) {
+                ModUtil.setStackSize(minSize, minSize.getMaxStackSize());
+            }
 
-      if (is != null && !player.inventory.add(is)) {
+            ModUtil.adjustStackSize(is, -ModUtil.getStackSize(minSize));
+            player.inventory.add(minSize);
+            ModUtil.adjustStackSize(is, ModUtil.getStackSize(minSize));
+        }
+
+        for (final BagPos bp : bags) {
+            is = bp.inv.insertItem(is);
+        }
+
+        if (ModUtil.isEmpty(is)) {
+            return;
+        }
+
         ei.setItem(is);
-        // Never spawn the items for dropped excess items if setting is enabled.
-        if (!ChiselsAndBits.getConfig().getServer().voidExcessBits.get()) {
-          spawnItem(world, ei);
+        boolean result = EntityItemPickupEvent.EVENT.invoker().handle(ei, player);
+        if (result) {
+            // cancelled...
+            spawnItem(world, ei);
+        } else {
+
+            is = ei.getItem();
+
+            if (is != null && !player.inventory.add(is)) {
+                ei.setItem(is);
+                // Never spawn the items for dropped excess items if setting is enabled.
+                if (!ChiselsAndBits.getConfig().getServer().voidExcessBits.get()) {
+                    spawnItem(world, ei);
+                }
+            } else {
+                if (!ei.isSilent()) {
+                    ei.level.playSound(
+                            null,
+                            ei.getX(),
+                            ei.getY(),
+                            ei.getZ(),
+                            SoundEvents.ITEM_PICKUP,
+                            SoundSource.PLAYERS,
+                            0.2F,
+                            ((itemRand.nextFloat() - itemRand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                }
+            }
+
+            player.inventory.setChanged();
+
+            if (player.inventoryMenu != null) {
+                player.inventoryMenu.broadcastChanges();
+            }
         }
-      } else {
-        if (!ei.isSilent()) {
-          ei.level.playSound(
-              null,
-              ei.getX(),
-              ei.getY(),
-              ei.getZ(),
-              SoundEvents.ITEM_PICKUP,
-              SoundSource.PLAYERS,
-              0.2F,
-              ((itemRand.nextFloat() - itemRand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+
+        final int blk = ItemChiseledBit.getStackState(is);
+        if (ChiselsAndBits.getConfig().getServer().voidExcessBits.get() && !seenBits.contains(blk) && !hasSentMessage) {
+            if (!ItemChiseledBit.hasBitSpace(player, blk)) {
+                player.sendSystemMessage(Component.translatable("mod.chiselsandbits.result.void_excess"));
+                hasSentMessage = true;
+            }
+            if (!seenBits.contains(blk)) {
+                seenBits.add(blk);
+            }
         }
-      }
-
-      player.inventory.setChanged();
-
-      if (player.inventoryMenu != null) {
-        player.inventoryMenu.broadcastChanges();
-      }
     }
-
-    final int blk = ItemChiseledBit.getStackState(is);
-    if (ChiselsAndBits.getConfig().getServer().voidExcessBits.get() && !seenBits.contains(blk) &&
-        !hasSentMessage) {
-      if (!ItemChiseledBit.hasBitSpace(player, blk)) {
-        player.sendSystemMessage(Component.translatable("mod.chiselsandbits.result.void_excess"));
-        hasSentMessage = true;
-      }
-      if (!seenBits.contains(blk)) {
-        seenBits.add(blk);
-      }
-    }
-  }
 }

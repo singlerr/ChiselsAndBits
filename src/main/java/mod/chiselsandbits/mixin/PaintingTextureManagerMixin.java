@@ -11,8 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(PaintingTextureManager.class)
 public abstract class PaintingTextureManagerMixin {
 
-  @Inject(method = "<init>", at = @At("RETURN"))
-  private void mod$invokeRegistrationEvent(TextureManager textureManager, CallbackInfo ci) {
-    ResourceRegistrationEvent.EVENT.invoker().handle();
-  }
+    @Inject(method = "<init>", at = @At("RETURN"))
+    private void mod$invokeRegistrationEvent(TextureManager textureManager, CallbackInfo ci) {
+        ResourceRegistrationEvent.EVENT.invoker().handle();
+    }
 }

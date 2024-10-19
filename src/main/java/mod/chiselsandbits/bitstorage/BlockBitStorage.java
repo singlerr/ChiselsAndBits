@@ -35,109 +35,106 @@ import org.jetbrains.annotations.Nullable;
 
 public class BlockBitStorage extends Block implements EntityBlock {
 
-  private static final Property<Direction> FACING = HorizontalDirectionalBlock.FACING;
+    private static final Property<Direction> FACING = HorizontalDirectionalBlock.FACING;
 
-  public BlockBitStorage(BlockBehaviour.Properties properties) {
-    super(properties);
-  }
-
-  @Nullable
-  @Override
-  public BlockState getStateForPlacement(final BlockPlaceContext context) {
-    return defaultBlockState().setValue(FACING, context.getHorizontalDirection());
-  }
-
-  @Override
-  protected void createBlockStateDefinition(
-      final StateDefinition.Builder<Block, BlockState> builder) {
-    builder.add(FACING);
-  }
-
-  @Nullable
-  @Override
-  public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-    return new TileEntityBitStorage(blockPos, blockState);
-  }
-
-  public TileEntityBitStorage getTileEntity(final BlockEntity te) throws ExceptionNoTileEntity {
-    if (te instanceof TileEntityBitStorage) {
-      return (TileEntityBitStorage) te;
-    }
-    throw new ExceptionNoTileEntity();
-  }
-
-  public TileEntityBitStorage getTileEntity(final BlockGetter world, final BlockPos pos)
-      throws ExceptionNoTileEntity {
-    return getTileEntity(world.getBlockEntity(pos));
-  }
-
-  @Override
-  public InteractionResult use(
-      final BlockState state,
-      final Level worldIn,
-      final BlockPos pos,
-      final Player player,
-      final InteractionHand handIn,
-      final BlockHitResult hit) {
-    try {
-      final TileEntityBitStorage tank = getTileEntity(worldIn, pos);
-      final ItemStack current = ModUtil.nonNull(player.inventory.getSelected());
-
-      if (!ModUtil.isEmpty(current)) {
-        final IFluidHandler wrappedTank = tank.getPseudoFluidHandler();
-        if (FluidUtil.interactWithFluidHandler(player, handIn, wrappedTank)) {
-          return InteractionResult.SUCCESS;
-        }
-
-        if (tank.addHeldBits(current, player)) {
-          return InteractionResult.SUCCESS;
-        }
-      } else {
-        if (tank.addAllPossibleBits(player)) {
-          return InteractionResult.SUCCESS;
-        }
-      }
-
-      if (tank.extractBits(player, hit.getLocation().x, hit.getLocation().y, hit.getLocation().z,
-          pos)) {
-        return InteractionResult.SUCCESS;
-      }
-    } catch (final ExceptionNoTileEntity e) {
-      Log.noTileError(e);
+    public BlockBitStorage(BlockBehaviour.Properties properties) {
+        super(properties);
     }
 
-    return InteractionResult.FAIL;
-  }
-
-  @Environment(EnvType.CLIENT)
-  public float getShadeBrightness(BlockState state, BlockGetter worldIn, BlockPos pos) {
-    return 1.0F;
-  }
-
-  public boolean propagatesSkylightDown(BlockState state, BlockGetter reader, BlockPos pos) {
-    return true;
-  }
-
-  @Override
-  public List<ItemStack> getDrops(BlockState blockState, LootParams.Builder builder) {
-    if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) == null) {
-      return Lists.newArrayList();
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(final BlockPlaceContext context) {
+        return defaultBlockState().setValue(FACING, context.getHorizontalDirection());
     }
 
-    return Lists.newArrayList(
-        getTankDrop(
-            (TileEntityBitStorage) builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY)));
-  }
+    @Override
+    protected void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(FACING);
+    }
 
-  public ItemStack getTankDrop(final TileEntityBitStorage bitTank) {
-    final ItemStack tankStack = new ItemStack(this);
-    tankStack
-        .getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY)
-        .ifPresent(s -> s.fill(
-            bitTank.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-                .map(t -> t.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE))
-                .orElse(FluidStack.EMPTY),
-            IFluidHandler.FluidAction.EXECUTE));
-    return tankStack;
-  }
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return new TileEntityBitStorage(blockPos, blockState);
+    }
+
+    public TileEntityBitStorage getTileEntity(final BlockEntity te) throws ExceptionNoTileEntity {
+        if (te instanceof TileEntityBitStorage) {
+            return (TileEntityBitStorage) te;
+        }
+        throw new ExceptionNoTileEntity();
+    }
+
+    public TileEntityBitStorage getTileEntity(final BlockGetter world, final BlockPos pos)
+            throws ExceptionNoTileEntity {
+        return getTileEntity(world.getBlockEntity(pos));
+    }
+
+    @Override
+    public InteractionResult use(
+            final BlockState state,
+            final Level worldIn,
+            final BlockPos pos,
+            final Player player,
+            final InteractionHand handIn,
+            final BlockHitResult hit) {
+        try {
+            final TileEntityBitStorage tank = getTileEntity(worldIn, pos);
+            final ItemStack current = ModUtil.nonNull(player.inventory.getSelected());
+
+            if (!ModUtil.isEmpty(current)) {
+                final IFluidHandler wrappedTank = tank.getPseudoFluidHandler();
+                if (FluidUtil.interactWithFluidHandler(player, handIn, wrappedTank)) {
+                    return InteractionResult.SUCCESS;
+                }
+
+                if (tank.addHeldBits(current, player)) {
+                    return InteractionResult.SUCCESS;
+                }
+            } else {
+                if (tank.addAllPossibleBits(player)) {
+                    return InteractionResult.SUCCESS;
+                }
+            }
+
+            if (tank.extractBits(player, hit.getLocation().x, hit.getLocation().y, hit.getLocation().z, pos)) {
+                return InteractionResult.SUCCESS;
+            }
+        } catch (final ExceptionNoTileEntity e) {
+            Log.noTileError(e);
+        }
+
+        return InteractionResult.FAIL;
+    }
+
+    @Environment(EnvType.CLIENT)
+    public float getShadeBrightness(BlockState state, BlockGetter worldIn, BlockPos pos) {
+        return 1.0F;
+    }
+
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter reader, BlockPos pos) {
+        return true;
+    }
+
+    @Override
+    public List<ItemStack> getDrops(BlockState blockState, LootParams.Builder builder) {
+        if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) == null) {
+            return Lists.newArrayList();
+        }
+
+        return Lists.newArrayList(
+                getTankDrop((TileEntityBitStorage) builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY)));
+    }
+
+    public ItemStack getTankDrop(final TileEntityBitStorage bitTank) {
+        final ItemStack tankStack = new ItemStack(this);
+        tankStack
+                .getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY)
+                .ifPresent(s -> s.fill(
+                        bitTank.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+                                .map(t -> t.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE))
+                                .orElse(FluidStack.EMPTY),
+                        IFluidHandler.FluidAction.EXECUTE));
+        return tankStack;
+    }
 }

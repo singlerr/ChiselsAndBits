@@ -32,103 +32,100 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.config.ModConfig;
 
 public class ChiselsAndBits {
-  public static final @Nonnull String MODID = Constants.MOD_ID;
-  private static final IChiselAndBitsAPI api = new ChiselAndBitsAPI();
-  private static ChiselsAndBits instance;
-  private final NetworkChannel networkChannel = new NetworkChannel(MODID);
-  List<ICacheClearable> cacheClearables = new ArrayList<>();
-  private Configuration config;
+    public static final @Nonnull String MODID = Constants.MOD_ID;
+    private static final IChiselAndBitsAPI api = new ChiselAndBitsAPI();
+    private static ChiselsAndBits instance;
+    private final NetworkChannel networkChannel = new NetworkChannel(MODID);
+    List<ICacheClearable> cacheClearables = new ArrayList<>();
+    private Configuration config;
 
-  public ChiselsAndBits() {
-    instance = this;
-    config = new Configuration();
-    //        EnvExecutor.runWhenOn(
-    //                EnvType.CLIENT,
-    //                () -> () ->
-    // RegisterGeometryLoadersCallback.EVENT.register(ChiselsAndBitsClient::onModelRegistry));
-    EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> {
-      ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
-        LanguageHandler.loadLangPath(
-            "assets/chiselsandbits/lang/%s.json"); // hotfix config comments, it's ugly bcs it's gonna be
-        // replaced
-      });
-    });
+    public ChiselsAndBits() {
+        instance = this;
+        config = new Configuration();
+        //        EnvExecutor.runWhenOn(
+        //                EnvType.CLIENT,
+        //                () -> () ->
+        // RegisterGeometryLoadersCallback.EVENT.register(ChiselsAndBitsClient::onModelRegistry));
+        EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> {
+            ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
+                LanguageHandler.loadLangPath(
+                        "assets/chiselsandbits/lang/%s.json"); // hotfix config comments, it's ugly bcs it's gonna be
+                // replaced
+            });
+        });
 
-    EnvExecutor.runWhenOn(
-        EnvType.CLIENT,
-        () -> () -> ClientLifecycleEvents.CLIENT_STARTED.register(this::clientSetup));
-    VaporizeWater.register();
-    EventPlayerInteract.register();
-    ModTags.init();
-    ModBlocks.onModConstruction();
-    ModContainerTypes.onModConstruction();
-    ModItems.onModConstruction();
-    ModRecipeSerializers.onModConstruction();
-    ModTileEntityTypes.onModConstruction();
-    ModItemGroups.onModConstruction();
-    networkChannel.registerCommonMessages();
-    ForgeModConfigEvents.loading(Constants.MOD_ID).register(this::setupClipboard);
-    EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> {
-      ForgeModConfigEvents.loading(Constants.MOD_ID)
-          .register(c -> handleIdMapping(Minecraft.getInstance()));
-      ForgeModConfigEvents.reloading(Constants.MOD_ID)
-          .register(c -> handleIdMapping(Minecraft.getInstance()));
-    });
-  }
-
-  public static ChiselsAndBits getInstance() {
-    return instance;
-  }
-
-  public static Configuration getConfig() {
-    return instance.config;
-  }
-
-  public void setConfig(Configuration config) {
-    this.config = config;
-  }
-
-  public static IChiselAndBitsAPI getApi() {
-    return api;
-  }
-
-  public static NetworkChannel getNetworkChannel() {
-    return instance.networkChannel;
-  }
-
-  private void setupClipboard(ModConfig modConfig) {
-    CreativeClipboardTab.getInstance()
-        .load(modConfig
-            .getFullPath()
-            .getParent()
-            .resolve(MODID + "_clipboard.cfg")
-            .toFile());
-  }
-
-  public void clientSetup(Minecraft inst) {
-    EnvExecutor.runWhenOn(
-        EnvType.CLIENT,
-        () -> () -> ForgeModConfigEvents.reloading(ChiselsAndBits.MODID)
-            .register(ChiseledBlockSmartModel::onConfigurationReload));
-  }
-
-  public void handleIdMapping(Minecraft inst) {
-    BlockBitInfo.recalculate();
-    clearCache();
-  }
-
-  public void clearCache() {
-    for (final ICacheClearable clearable : cacheClearables) {
-      clearable.clearCache();
+        EnvExecutor.runWhenOn(
+                EnvType.CLIENT, () -> () -> ClientLifecycleEvents.CLIENT_STARTED.register(this::clientSetup));
+        VaporizeWater.register();
+        EventPlayerInteract.register();
+        ModTags.init();
+        ModBlocks.onModConstruction();
+        ModContainerTypes.onModConstruction();
+        ModItems.onModConstruction();
+        ModRecipeSerializers.onModConstruction();
+        ModTileEntityTypes.onModConstruction();
+        ModItemGroups.onModConstruction();
+        networkChannel.registerCommonMessages();
+        ForgeModConfigEvents.loading(Constants.MOD_ID).register(this::setupClipboard);
+        EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> {
+            ForgeModConfigEvents.loading(Constants.MOD_ID).register(c -> handleIdMapping(Minecraft.getInstance()));
+            ForgeModConfigEvents.reloading(Constants.MOD_ID).register(c -> handleIdMapping(Minecraft.getInstance()));
+        });
     }
 
-    addClearable(UndoTracker.getInstance());
-    VoxelBlob.clearCache();
-  }
-
-  public void addClearable(final ICacheClearable cache) {
-    if (!cacheClearables.contains(cache)) {
-      cacheClearables.add(cache);
+    public static ChiselsAndBits getInstance() {
+        return instance;
     }
-  }
+
+    public static Configuration getConfig() {
+        return instance.config;
+    }
+
+    public void setConfig(Configuration config) {
+        this.config = config;
+    }
+
+    public static IChiselAndBitsAPI getApi() {
+        return api;
+    }
+
+    public static NetworkChannel getNetworkChannel() {
+        return instance.networkChannel;
+    }
+
+    private void setupClipboard(ModConfig modConfig) {
+        CreativeClipboardTab.getInstance()
+                .load(modConfig
+                        .getFullPath()
+                        .getParent()
+                        .resolve(MODID + "_clipboard.cfg")
+                        .toFile());
+    }
+
+    public void clientSetup(Minecraft inst) {
+        EnvExecutor.runWhenOn(
+                EnvType.CLIENT,
+                () -> () -> ForgeModConfigEvents.reloading(ChiselsAndBits.MODID)
+                        .register(ChiseledBlockSmartModel::onConfigurationReload));
+    }
+
+    public void handleIdMapping(Minecraft inst) {
+        BlockBitInfo.recalculate();
+        clearCache();
+    }
+
+    public void clearCache() {
+        for (final ICacheClearable clearable : cacheClearables) {
+            clearable.clearCache();
+        }
+
+        addClearable(UndoTracker.getInstance());
+        VoxelBlob.clearCache();
+    }
+
+    public void addClearable(final ICacheClearable cache) {
+        if (!cacheClearables.contains(cache)) {
+            cacheClearables.add(cache);
+        }
+    }
 }

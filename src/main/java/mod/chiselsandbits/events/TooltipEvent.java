@@ -16,32 +16,30 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class TooltipEvent {
 
-  public static void register() {
-    ItemTooltipCallback.EVENT.register(TooltipEvent::onItemTooltip);
-  }
-
-  private static void onItemTooltip(ItemStack stack, TooltipFlag context, List<Component> lines) {
-    if (Minecraft.getInstance().player != null
-        && ChiselsAndBits.getConfig().getCommon().enableHelp.get()) {
-      if (Minecraft.getInstance().player.getMainHandItem().getItem() instanceof ItemMagnifyingGlass
-          || Minecraft.getInstance().player.getOffhandItem()
-          .getItem() instanceof ItemMagnifyingGlass) {
-        if (stack.getItem() instanceof BlockItem blockItem) {
-          final Block block = blockItem.getBlock();
-          final BlockState blockState = block.defaultBlockState();
-          final BlockBitInfo.SupportsAnalysisResult result =
-              BlockBitInfo.doSupportAnalysis(blockState);
-
-          lines.add(Component.literal(
-              result.isSupported()
-                  ? ChatFormatting.GREEN
-                  + result.getSupportedReason().getLocal()
-                  + ChatFormatting.RESET
-                  : ChatFormatting.RED
-                  + result.getUnsupportedReason().getLocal()
-                  + ChatFormatting.RESET));
-        }
-      }
+    public static void register() {
+        ItemTooltipCallback.EVENT.register(TooltipEvent::onItemTooltip);
     }
-  }
+
+    private static void onItemTooltip(ItemStack stack, TooltipFlag context, List<Component> lines) {
+        if (Minecraft.getInstance().player != null
+                && ChiselsAndBits.getConfig().getCommon().enableHelp.get()) {
+            if (Minecraft.getInstance().player.getMainHandItem().getItem() instanceof ItemMagnifyingGlass
+                    || Minecraft.getInstance().player.getOffhandItem().getItem() instanceof ItemMagnifyingGlass) {
+                if (stack.getItem() instanceof BlockItem blockItem) {
+                    final Block block = blockItem.getBlock();
+                    final BlockState blockState = block.defaultBlockState();
+                    final BlockBitInfo.SupportsAnalysisResult result = BlockBitInfo.doSupportAnalysis(blockState);
+
+                    lines.add(Component.literal(
+                            result.isSupported()
+                                    ? ChatFormatting.GREEN
+                                            + result.getSupportedReason().getLocal()
+                                            + ChatFormatting.RESET
+                                    : ChatFormatting.RED
+                                            + result.getUnsupportedReason().getLocal()
+                                            + ChatFormatting.RESET));
+                }
+            }
+        }
+    }
 }

@@ -8,39 +8,39 @@ import net.minecraft.core.Direction;
  */
 public interface IBitLocation {
 
-  /**
-   * Get block position that the bit is inside.
-   *
-   * @return Block Pos
-   */
-  BlockPos getBlockPos();
+    /**
+     * Get block position that the bit is inside.
+     *
+     * @return Block Pos
+     */
+    BlockPos getBlockPos();
 
-  /**
-   * get Bit X coordinate.
-   *
-   * @return X coordinate
-   */
-  int getBitX();
+    /**
+     * get Bit X coordinate.
+     *
+     * @return X coordinate
+     */
+    int getBitX();
 
-  /**
-   * get Bit Y coordinate.
-   *
-   * @return Y coordinate
-   */
-  int getBitY();
+    /**
+     * get Bit Y coordinate.
+     *
+     * @return Y coordinate
+     */
+    int getBitY();
 
-  /**
-   * get Bit Z coordinate.
-   *
-   * @return Z coordinate
-   */
-  int getBitZ();
+    /**
+     * get Bit Z coordinate.
+     *
+     * @return Z coordinate
+     */
+    int getBitZ();
 
-  /**
-   * Offsets the bit location into the given direction by one.
-   * Possibly moving it to a new block if need be.
-   *
-   * @param direction The direction.
-   */
-  IBitLocation offSet(final Direction direction);
+    /**
+     * Offsets the bit location into the given direction by one.
+     * Possibly moving it to a new block if need be.
+     *
+     * @param direction The direction.
+     */
+    IBitLocation offSet(final Direction direction);
 }

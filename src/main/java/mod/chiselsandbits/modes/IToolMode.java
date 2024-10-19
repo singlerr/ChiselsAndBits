@@ -5,13 +5,13 @@ import net.minecraft.world.item.ItemStack;
 
 public interface IToolMode {
 
-  void setMode(ItemStack ei);
+    void setMode(ItemStack ei);
 
-  LocalStrings getName();
+    LocalStrings getName();
 
-  String name();
+    String name();
 
-  boolean isDisabled();
+    boolean isDisabled();
 
-  int ordinal();
+    int ordinal();
 }

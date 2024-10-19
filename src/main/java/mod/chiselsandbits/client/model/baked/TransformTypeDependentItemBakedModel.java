@@ -6,5 +6,5 @@ import net.minecraft.world.item.ItemDisplayContext;
 
 public interface TransformTypeDependentItemBakedModel {
 
-  BakedModel applyTransform(ItemDisplayContext context, PoseStack poseStack, boolean leftHand);
+    BakedModel applyTransform(ItemDisplayContext context, PoseStack poseStack, boolean leftHand);
 }

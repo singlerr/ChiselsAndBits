@@ -18,67 +18,64 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Environment(EnvType.CLIENT)
 @Mixin(Gui.class)
 public abstract class GuiMixin {
-  @Shadow
-  @Final
-  private Minecraft minecraft;
+    @Shadow
+    @Final
+    private Minecraft minecraft;
 
-  @Unique
-  private float partialTicks;
+    @Unique
+    private float partialTicks;
 
-  @Inject(method = "render", at = @At("HEAD"))
-  public void render(GuiGraphics matrixStack, float f, CallbackInfo ci) {
-    partialTicks = f;
-  }
-
-  // This might be the wrong method to inject to
-  @Inject(
-      method = "renderPlayerHealth",
-      at =
-      @At(
-          value = "INVOKE",
-          shift = At.Shift.AFTER,
-          target = "Lnet/minecraft/util/profiling/ProfilerFiller;pop()V"),
-      cancellable = true)
-  private void renderStatusBars(GuiGraphics guiGraphics, CallbackInfo ci) {
-    if (OverlayRenderCallback.EVENT
-        .invoker()
-        .onOverlayRender(guiGraphics, partialTicks, minecraft.getWindow(),
-            OverlayRenderCallback.Types.AIR)) {
-      ci.cancel();
+    @Inject(method = "render", at = @At("HEAD"))
+    public void render(GuiGraphics matrixStack, float f, CallbackInfo ci) {
+        partialTicks = f;
     }
-  }
 
-  @Inject(method = "renderHearts", at = @At(value = "HEAD"), cancellable = true)
-  private void renderHealth(
-      GuiGraphics guiGraphics,
-      Player player,
-      int i,
-      int j,
-      int k,
-      int l,
-      float f,
-      int m,
-      int n,
-      int o,
-      boolean bl,
-      CallbackInfo ci) {
-    if (OverlayRenderCallback.EVENT
-        .invoker()
-        .onOverlayRender(
-            guiGraphics, partialTicks, minecraft.getWindow(),
-            OverlayRenderCallback.Types.PLAYER_HEALTH)) {
-      ci.cancel();
+    // This might be the wrong method to inject to
+    @Inject(
+            method = "renderPlayerHealth",
+            at =
+                    @At(
+                            value = "INVOKE",
+                            shift = At.Shift.AFTER,
+                            target = "Lnet/minecraft/util/profiling/ProfilerFiller;pop()V"),
+            cancellable = true)
+    private void renderStatusBars(GuiGraphics guiGraphics, CallbackInfo ci) {
+        if (OverlayRenderCallback.EVENT
+                .invoker()
+                .onOverlayRender(guiGraphics, partialTicks, minecraft.getWindow(), OverlayRenderCallback.Types.AIR)) {
+            ci.cancel();
+        }
     }
-  }
 
-  @Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
-  private void renderCrosshair(GuiGraphics guiGraphics, CallbackInfo ci) {
-    if (OverlayRenderCallback.EVENT
-        .invoker()
-        .onOverlayRender(
-            guiGraphics, partialTicks, minecraft.getWindow(),
-            OverlayRenderCallback.Types.CROSSHAIRS)) {
-      ci.cancel();
+    @Inject(method = "renderHearts", at = @At(value = "HEAD"), cancellable = true)
+    private void renderHealth(
+            GuiGraphics guiGraphics,
+            Player player,
+            int i,
+            int j,
+            int k,
+            int l,
+            float f,
+            int m,
+            int n,
+            int o,
+            boolean bl,
+            CallbackInfo ci) {
+        if (OverlayRenderCallback.EVENT
+                .invoker()
+                .onOverlayRender(
+                        guiGraphics, partialTicks, minecraft.getWindow(), OverlayRenderCallback.Types.PLAYER_HEALTH)) {
+            ci.cancel();
+        }
     }
-  }
+
+    @Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
+    private void renderCrosshair(GuiGraphics guiGraphics, CallbackInfo ci) {
+        if (OverlayRenderCallback.EVENT
+                .invoker()
+                .onOverlayRender(
+                        guiGraphics, partialTicks, minecraft.getWindow(), OverlayRenderCallback.Types.CROSSHAIRS)) {
+            ci.cancel();
+        }
+    }
 }

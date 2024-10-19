@@ -10,23 +10,23 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class ItemColorChiseled implements ItemColor {
 
-  @Override
-  public int getColor(final ItemStack stack, final int tint) {
-    final BlockState state = ModUtil.getStateById(tint >> BlockColorChisled.TINT_BITS);
-    final Block blk = state.getBlock();
-    final Item i = Item.byBlock(blk);
-    int tintValue = tint & BlockColorChisled.TINT_MASK;
+    @Override
+    public int getColor(final ItemStack stack, final int tint) {
+        final BlockState state = ModUtil.getStateById(tint >> BlockColorChisled.TINT_BITS);
+        final Block blk = state.getBlock();
+        final Item i = Item.byBlock(blk);
+        int tintValue = tint & BlockColorChisled.TINT_MASK;
 
-    try {
-      return ModelUtil.getItemStackColor(blk.getCloneItemStack(null, null, state), tintValue);
-    } catch (Exception ignored) {
+        try {
+            return ModelUtil.getItemStackColor(blk.getCloneItemStack(null, null, state), tintValue);
+        } catch (Exception ignored) {
 
+        }
+
+        if (i != null) {
+            return ModelUtil.getItemStackColor(new ItemStack(i, 1), tintValue);
+        }
+
+        return 0xffffff;
     }
-
-    if (i != null) {
-      return ModelUtil.getItemStackColor(new ItemStack(i, 1), tintValue);
-    }
-
-    return 0xffffff;
-  }
 }

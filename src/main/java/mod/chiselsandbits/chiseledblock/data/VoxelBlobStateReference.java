@@ -12,142 +12,139 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.world.phys.AABB;
 
-public final class VoxelBlobStateReference
-    implements Comparable<VoxelBlobStateReference>, IStateRef {
+public final class VoxelBlobStateReference implements Comparable<VoxelBlobStateReference>, IStateRef {
 
-  private static final Map<VoxelBlobStateInstance, WeakReference<VoxelBlobStateInstance>>
-      serverRefs =
-      Collections.synchronizedMap(
-          new WeakHashMap<VoxelBlobStateInstance, WeakReference<VoxelBlobStateInstance>>());
-  private static final Map<VoxelBlobStateInstance, WeakReference<VoxelBlobStateInstance>>
-      clientRefs =
-      Collections.synchronizedMap(
-          new WeakHashMap<VoxelBlobStateInstance, WeakReference<VoxelBlobStateInstance>>());
+    private static final Map<VoxelBlobStateInstance, WeakReference<VoxelBlobStateInstance>> serverRefs =
+            Collections.synchronizedMap(
+                    new WeakHashMap<VoxelBlobStateInstance, WeakReference<VoxelBlobStateInstance>>());
+    private static final Map<VoxelBlobStateInstance, WeakReference<VoxelBlobStateInstance>> clientRefs =
+            Collections.synchronizedMap(
+                    new WeakHashMap<VoxelBlobStateInstance, WeakReference<VoxelBlobStateInstance>>());
 
-  // optimize air.
-  private static byte[] airBlob;
-  public final long weight;
-  private final VoxelBlobStateInstance data;
+    // optimize air.
+    private static byte[] airBlob;
+    public final long weight;
+    private final VoxelBlobStateInstance data;
 
-  public VoxelBlobStateReference(final VoxelBlob blob, final long weight) {
-    this(blob.blobToBytes(VoxelBlob.VERSION_COMPACT_PALLETED), weight);
-    data.blob = new SoftReference<VoxelBlob>(new VoxelBlob(blob));
-  }
-
-  public VoxelBlobStateReference(final int stateId, final long weight) {
-    this(findBytesFor(stateId), weight);
-  }
-
-  public VoxelBlobStateReference(final byte[] v, final long weight) {
-    data = FindRef(v);
-    this.weight = weight;
-  }
-
-  private static Map<VoxelBlobStateInstance, WeakReference<VoxelBlobStateInstance>> getRefs() {
-
-    if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-      return clientRefs;
+    public VoxelBlobStateReference(final VoxelBlob blob, final long weight) {
+        this(blob.blobToBytes(VoxelBlob.VERSION_COMPACT_PALLETED), weight);
+        data.blob = new SoftReference<VoxelBlob>(new VoxelBlob(blob));
     }
 
-    return serverRefs;
-  }
-
-  private static VoxelBlobStateInstance lookupRef(final VoxelBlobStateInstance inst) {
-    final WeakReference<VoxelBlobStateInstance> ref = getRefs().get(inst);
-
-    if (ref != null) {
-      return ref.get();
+    public VoxelBlobStateReference(final int stateId, final long weight) {
+        this(findBytesFor(stateId), weight);
     }
 
-    return null;
-  }
+    public VoxelBlobStateReference(final byte[] v, final long weight) {
+        data = FindRef(v);
+        this.weight = weight;
+    }
 
-  private static byte[] findBytesFor(final int stateId) {
-    if (stateId == 0) {
-      if (airBlob == null) {
+    private static Map<VoxelBlobStateInstance, WeakReference<VoxelBlobStateInstance>> getRefs() {
+
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+            return clientRefs;
+        }
+
+        return serverRefs;
+    }
+
+    private static VoxelBlobStateInstance lookupRef(final VoxelBlobStateInstance inst) {
+        final WeakReference<VoxelBlobStateInstance> ref = getRefs().get(inst);
+
+        if (ref != null) {
+            return ref.get();
+        }
+
+        return null;
+    }
+
+    private static byte[] findBytesFor(final int stateId) {
+        if (stateId == 0) {
+            if (airBlob == null) {
+                final VoxelBlob vb = new VoxelBlob();
+                airBlob = vb.blobToBytes(VoxelBlob.VERSION_COMPACT_PALLETED);
+            }
+
+            return airBlob;
+        }
+
         final VoxelBlob vb = new VoxelBlob();
-        airBlob = vb.blobToBytes(VoxelBlob.VERSION_COMPACT_PALLETED);
-      }
-
-      return airBlob;
+        vb.fill(stateId);
+        return vb.blobToBytes(VoxelBlob.VERSION_COMPACT_PALLETED);
     }
 
-    final VoxelBlob vb = new VoxelBlob();
-    vb.fill(stateId);
-    return vb.blobToBytes(VoxelBlob.VERSION_COMPACT_PALLETED);
-  }
-
-  private static void addRef(final VoxelBlobStateInstance inst) {
-    getRefs().put(inst, new WeakReference<VoxelBlobStateInstance>(inst));
-  }
-
-  private static VoxelBlobStateInstance FindRef(final byte[] v) {
-    final VoxelBlobStateInstance t = new VoxelBlobStateInstance(v);
-    VoxelBlobStateInstance ref = null;
-
-    ref = lookupRef(t);
-
-    if (ref == null) {
-      ref = t;
-      addRef(t);
+    private static void addRef(final VoxelBlobStateInstance inst) {
+        getRefs().put(inst, new WeakReference<VoxelBlobStateInstance>(inst));
     }
 
-    return ref;
-  }
+    private static VoxelBlobStateInstance FindRef(final byte[] v) {
+        final VoxelBlobStateInstance t = new VoxelBlobStateInstance(v);
+        VoxelBlobStateInstance ref = null;
 
-  public VoxelBlobStateInstance getInstance() {
-    return data;
-  }
+        ref = lookupRef(t);
 
-  public byte[] getByteArray() {
-    return data.voxelBytes;
-  }
+        if (ref == null) {
+            ref = t;
+            addRef(t);
+        }
 
-  @Override
-  public VoxelBlob getVoxelBlob() {
-    return data.getBlob();
-  }
-
-  public VoxelBlob getVoxelBlobCatchable() throws Exception {
-    return data.getBlobCatchable();
-  }
-
-  @Override
-  public boolean equals(final Object obj) {
-    if (obj == null) {
-      return false;
+        return ref;
     }
 
-    if (!(obj instanceof VoxelBlobStateReference second)) {
-      return false;
+    public VoxelBlobStateInstance getInstance() {
+        return data;
     }
 
-    return data.equals(second.data) && second.weight == weight;
-  }
-
-  @Override
-  public int hashCode() {
-    return data.hash ^ (int) (weight ^ weight >>> 32);
-  }
-
-  @Override
-  public int compareTo(final VoxelBlobStateReference o) {
-    final int comp = data.compareTo(o.data);
-    if (comp == 0) {
-      if (weight == o.weight) {
-        return 0;
-      }
-
-      return weight < o.weight ? -1 : 1;
+    public byte[] getByteArray() {
+        return data.voxelBytes;
     }
-    return comp;
-  }
 
-  public Collection<AABB> getBoxes(final BoxType type) {
-    return data.getBoxes(type);
-  }
+    @Override
+    public VoxelBlob getVoxelBlob() {
+        return data.getBlob();
+    }
 
-  public int getFormat() {
-    return data.getFormat();
-  }
+    public VoxelBlob getVoxelBlobCatchable() throws Exception {
+        return data.getBlobCatchable();
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (!(obj instanceof VoxelBlobStateReference second)) {
+            return false;
+        }
+
+        return data.equals(second.data) && second.weight == weight;
+    }
+
+    @Override
+    public int hashCode() {
+        return data.hash ^ (int) (weight ^ weight >>> 32);
+    }
+
+    @Override
+    public int compareTo(final VoxelBlobStateReference o) {
+        final int comp = data.compareTo(o.data);
+        if (comp == 0) {
+            if (weight == o.weight) {
+                return 0;
+            }
+
+            return weight < o.weight ? -1 : 1;
+        }
+        return comp;
+    }
+
+    public Collection<AABB> getBoxes(final BoxType type) {
+        return data.getBoxes(type);
+    }
+
+    public int getFormat() {
+        return data.getFormat();
+    }
 }

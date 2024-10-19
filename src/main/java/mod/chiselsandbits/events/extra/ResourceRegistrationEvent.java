@@ -5,14 +5,13 @@ import net.fabricmc.fabric.api.event.EventFactory;
 
 public interface ResourceRegistrationEvent {
 
-  Event<ResourceRegistration> EVENT =
-      EventFactory.createArrayBacked(ResourceRegistration.class, listeners -> () -> {
+    Event<ResourceRegistration> EVENT = EventFactory.createArrayBacked(ResourceRegistration.class, listeners -> () -> {
         for (ResourceRegistration listener : listeners) {
-          listener.handle();
+            listener.handle();
         }
-      });
+    });
 
-  interface ResourceRegistration {
-    void handle();
-  }
+    interface ResourceRegistration {
+        void handle();
+    }
 }

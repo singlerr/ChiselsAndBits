@@ -2,11 +2,11 @@ package mod.chiselsandbits.helpers;
 
 public interface IContinuousInventory {
 
-  boolean useItem(int blockId);
+    boolean useItem(int blockId);
 
-  void fail(int blockId);
+    void fail(int blockId);
 
-  boolean isValid();
+    boolean isValid();
 
-  IItemInInventory getItem(int blockId);
+    IItemInInventory getItem(int blockId);
 }

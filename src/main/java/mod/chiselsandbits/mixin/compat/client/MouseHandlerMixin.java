@@ -11,16 +11,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(MouseHandler.class)
 public abstract class MouseHandlerMixin {
 
-  @Inject(
-      method = "onScroll",
-      at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isSpectator()Z"))
-  private void chiselsandbits$compat$beforeScroll(
-      long window,
-      double xOffset,
-      double yOffset,
-      CallbackInfo ci,
-      @Local(ordinal = 1) double deltaX,
-      @Local(ordinal = 2) double deltaY) {
-    GameMouseEvents.BEFORE_SCROLL.invoker().wheelScroll(deltaX, deltaY);
-  }
+    @Inject(
+            method = "onScroll",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isSpectator()Z"))
+    private void chiselsandbits$compat$beforeScroll(
+            long window,
+            double xOffset,
+            double yOffset,
+            CallbackInfo ci,
+            @Local(ordinal = 1) double deltaX,
+            @Local(ordinal = 2) double deltaY) {
+        GameMouseEvents.BEFORE_SCROLL.invoker().wheelScroll(deltaX, deltaY);
+    }
 }

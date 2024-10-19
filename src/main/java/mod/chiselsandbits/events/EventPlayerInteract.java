@@ -29,84 +29,82 @@ import net.minecraft.world.phys.BlockHitResult;
  */
 public class EventPlayerInteract {
 
-  private static final WeakHashMap<Player, Boolean> serverSuppressEvent =
-      new WeakHashMap<Player, Boolean>();
+    private static final WeakHashMap<Player, Boolean> serverSuppressEvent = new WeakHashMap<Player, Boolean>();
 
-  public static void register() {
-    AttackBlockCallback.EVENT.register(EventPlayerInteract::interaction);
-    UseBlockCallback.EVENT.register(EventPlayerInteract::interaction);
-  }
-
-  public static void setPlayerSuppressionState(final Player player, final boolean state) {
-    if (state) {
-      serverSuppressEvent.put(player, state);
-    } else {
-      serverSuppressEvent.remove(player);
+    public static void register() {
+        AttackBlockCallback.EVENT.register(EventPlayerInteract::interaction);
+        UseBlockCallback.EVENT.register(EventPlayerInteract::interaction);
     }
-  }
 
-  private static InteractionResult interaction(
-      Player player, Level world, InteractionHand hand, BlockPos pos, Direction direction) {
-    final ItemStack is = player.getItemInHand(hand);
-    final boolean validEvent = pos != null && world != null;
-    if ((is.getItem() instanceof ItemChisel || is.getItem() instanceof ItemChiseledBit) &&
-        validEvent) {
-      final BlockState state = world.getBlockState(pos);
-      if (BlockBitInfo.canChisel(state)) {
-        if (world.isClientSide) {
-          // this is called when the player is survival -
-          // client side.
-          is.getItem().canAttackBlock(state, world, pos, player);
-          //                    is.getItem().onBlockStartBreak(is, event.getPos(), event.getPlayer());
+    public static void setPlayerSuppressionState(final Player player, final boolean state) {
+        if (state) {
+            serverSuppressEvent.put(player, state);
+        } else {
+            serverSuppressEvent.remove(player);
+        }
+    }
+
+    private static InteractionResult interaction(
+            Player player, Level world, InteractionHand hand, BlockPos pos, Direction direction) {
+        final ItemStack is = player.getItemInHand(hand);
+        final boolean validEvent = pos != null && world != null;
+        if ((is.getItem() instanceof ItemChisel || is.getItem() instanceof ItemChiseledBit) && validEvent) {
+            final BlockState state = world.getBlockState(pos);
+            if (BlockBitInfo.canChisel(state)) {
+                if (world.isClientSide) {
+                    // this is called when the player is survival -
+                    // client side.
+                    is.getItem().canAttackBlock(state, world, pos, player);
+                    //                    is.getItem().onBlockStartBreak(is, event.getPos(), event.getPlayer());
+                }
+
+                // cancel interactions vs chiseable blocks, creative is
+                // magic.
+                return InteractionResult.FAIL;
+            }
         }
 
-        // cancel interactions vs chiseable blocks, creative is
-        // magic.
-        return InteractionResult.FAIL;
-      }
+        return testInteractionSupression(world, player);
     }
 
-    return testInteractionSupression(world, player);
-  }
+    private static InteractionResult interaction(
+            Player player, Level world, InteractionHand hand, BlockHitResult hitResult) {
 
-  private static InteractionResult interaction(
-      Player player, Level world, InteractionHand hand, BlockHitResult hitResult) {
-
-    return testInteractionSupression(player, world, hand, hitResult);
-  }
-
-  private static InteractionResult testInteractionSupression(
-      Player player, Level world, InteractionHand hand, BlockHitResult hitResult) {
-    // client is dragging...
-    if (world.isClientSide) {
-      if (ClientSide.instance.getStartPos() != null) {
-        return InteractionResult.FAIL;
-      }
-    }
-    ItemStack itemEntity = player.getItemInHand(hand);
-    // server is supressed.
-    if (!world.isClientSide && itemEntity != null) {
-      if (serverSuppressEvent.containsKey(player)) {
-        return InteractionResult.FAIL;
-      }
-    }
-    return InteractionResult.PASS;
-  }
-
-  private static InteractionResult testInteractionSupression(Level level, Player player) {
-    // client is dragging...
-    if (level.isClientSide) {
-      if (ClientSide.instance.getStartPos() != null) {
-        return InteractionResult.FAIL;
-      }
+        return testInteractionSupression(player, world, hand, hitResult);
     }
 
-    // server is supressed.
-    if (!level.isClientSide) {
-      if (serverSuppressEvent.containsKey(player)) {
-        return InteractionResult.FAIL;
-      }
+    private static InteractionResult testInteractionSupression(
+            Player player, Level world, InteractionHand hand, BlockHitResult hitResult) {
+        // client is dragging...
+        if (world.isClientSide) {
+            if (ClientSide.instance.getStartPos() != null) {
+                return InteractionResult.FAIL;
+            }
+        }
+        ItemStack itemEntity = player.getItemInHand(hand);
+        // server is supressed.
+        if (!world.isClientSide && itemEntity != null) {
+            if (serverSuppressEvent.containsKey(player)) {
+                return InteractionResult.FAIL;
+            }
+        }
+        return InteractionResult.PASS;
     }
-    return InteractionResult.PASS;
-  }
+
+    private static InteractionResult testInteractionSupression(Level level, Player player) {
+        // client is dragging...
+        if (level.isClientSide) {
+            if (ClientSide.instance.getStartPos() != null) {
+                return InteractionResult.FAIL;
+            }
+        }
+
+        // server is supressed.
+        if (!level.isClientSide) {
+            if (serverSuppressEvent.containsKey(player)) {
+                return InteractionResult.FAIL;
+            }
+        }
+        return InteractionResult.PASS;
+    }
 }

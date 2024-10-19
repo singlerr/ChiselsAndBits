@@ -8,16 +8,16 @@ import net.minecraft.world.item.ItemStack;
 
 public class ItemColorBitBag implements ItemColor {
 
-  @Override
-  public int getColor(final ItemStack p_getColor_1_, final int p_getColor_2_) {
-    if (p_getColor_2_ == 1) {
-      ModItems.ITEM_BIT_BAG_DYED.get();
-      DyeColor color = ItemBitBag.getDyedColor(p_getColor_1_);
-      if (color != null) {
-        return color.getTextColor();
-      }
-    }
+    @Override
+    public int getColor(final ItemStack p_getColor_1_, final int p_getColor_2_) {
+        if (p_getColor_2_ == 1) {
+            ModItems.ITEM_BIT_BAG_DYED.get();
+            DyeColor color = ItemBitBag.getDyedColor(p_getColor_1_);
+            if (color != null) {
+                return color.getTextColor();
+            }
+        }
 
-    return -1;
-  }
+        return -1;
+    }
 }

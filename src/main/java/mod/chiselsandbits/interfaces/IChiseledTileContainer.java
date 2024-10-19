@@ -4,9 +4,9 @@ import mod.chiselsandbits.chiseledblock.data.VoxelBlob;
 
 public interface IChiseledTileContainer {
 
-  boolean isBlobOccluded(VoxelBlob blob);
+    boolean isBlobOccluded(VoxelBlob blob);
 
-  void sendUpdate();
+    void sendUpdate();
 
-  void saveData();
+    void saveData();
 }

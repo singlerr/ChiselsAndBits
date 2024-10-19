@@ -38,5 +38,4 @@ import java.lang.annotation.RetentionPolicy;
  * };
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface IgnoreBlockLogic {
-}
+public @interface IgnoreBlockLogic {}

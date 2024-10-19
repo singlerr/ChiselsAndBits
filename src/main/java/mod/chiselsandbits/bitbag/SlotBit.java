@@ -8,13 +8,12 @@ import net.minecraft.world.item.ItemStack;
 
 public class SlotBit extends Slot {
 
-  public SlotBit(final Container inventoryIn, final int index, final int xPosition,
-                 final int yPosition) {
-    super(inventoryIn, index, xPosition, yPosition);
-  }
+    public SlotBit(final Container inventoryIn, final int index, final int xPosition, final int yPosition) {
+        super(inventoryIn, index, xPosition, yPosition);
+    }
 
-  @Override
-  public boolean mayPlace(final ItemStack stack) {
-    return ModUtil.notEmpty(stack) && stack.getItem() instanceof ItemChiseledBit;
-  }
+    @Override
+    public boolean mayPlace(final ItemStack stack) {
+        return ModUtil.notEmpty(stack) && stack.getItem() instanceof ItemChiseledBit;
+    }
 }

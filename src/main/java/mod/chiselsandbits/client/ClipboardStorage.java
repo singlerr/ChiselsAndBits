@@ -7,10 +7,9 @@ import net.minecraft.nbt.CompoundTag;
 
 public class ClipboardStorage {
 
-  public ClipboardStorage(final File file) {
-  }
+    public ClipboardStorage(final File file) {}
 
-  public void write(final List<CompoundTag> myitems) {
+    public void write(final List<CompoundTag> myitems) {
         /*if ( !ChiselsAndBits.getConfig().getServer().persistCreativeClipboard.get() )
         {
         	return;
@@ -37,9 +36,9 @@ public class ClipboardStorage {
         }
 
         save();*/
-  }
+    }
 
-  public List<CompoundTag> read() {
+    public List<CompoundTag> read() {
         /*final List<NBTTagCompound> myItems = new ArrayList<NBTTagCompound>();
 
         if ( !ChiselsAndBits.getConfig().getServer().persistCreativeClipboard.get() )
@@ -80,6 +79,6 @@ public class ClipboardStorage {
         }
 
         return myItems;*/
-    return Lists.newArrayList();
-  }
+        return Lists.newArrayList();
+    }
 }

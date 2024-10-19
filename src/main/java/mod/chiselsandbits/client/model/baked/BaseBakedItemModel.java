@@ -12,34 +12,34 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class BaseBakedItemModel extends BaseBakedPerspectiveModel implements BakedModel {
-  protected ArrayList<BakedQuad> list = new ArrayList<BakedQuad>();
+    protected ArrayList<BakedQuad> list = new ArrayList<BakedQuad>();
 
-  @Override
-  public final boolean useAmbientOcclusion() {
-    return true;
-  }
-
-  @Override
-  public final boolean isGui3d() {
-    return true;
-  }
-
-  @Override
-  public final boolean isCustomRenderer() {
-    return false;
-  }
-
-  @Override
-  public List<BakedQuad> getQuads(
-      @Nullable final BlockState state, @Nullable final Direction side, final RandomSource rand) {
-    if (side != null) {
-      return Collections.emptyList();
+    @Override
+    public final boolean useAmbientOcclusion() {
+        return true;
     }
-    return list;
-  }
 
-  @Override
-  public ItemOverrides getOverrides() {
-    return ItemOverrides.EMPTY;
-  }
+    @Override
+    public final boolean isGui3d() {
+        return true;
+    }
+
+    @Override
+    public final boolean isCustomRenderer() {
+        return false;
+    }
+
+    @Override
+    public List<BakedQuad> getQuads(
+            @Nullable final BlockState state, @Nullable final Direction side, final RandomSource rand) {
+        if (side != null) {
+            return Collections.emptyList();
+        }
+        return list;
+    }
+
+    @Override
+    public ItemOverrides getOverrides() {
+        return ItemOverrides.EMPTY;
+    }
 }

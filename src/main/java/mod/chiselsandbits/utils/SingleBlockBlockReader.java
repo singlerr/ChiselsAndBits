@@ -13,49 +13,49 @@ import org.jetbrains.annotations.Nullable;
 
 public class SingleBlockBlockReader implements BlockGetter {
 
-  private final BlockState state;
-  private final Block blk;
+    private final BlockState state;
+    private final Block blk;
 
-  public SingleBlockBlockReader(final BlockState state, final Block blk) {
-    this.state = state;
-    this.blk = blk;
-  }
-
-  public SingleBlockBlockReader(final BlockState state) {
-    this.state = state;
-    this.blk = state.getBlock();
-  }
-
-  @Nullable
-  @Override
-  public BlockEntity getBlockEntity(final BlockPos pos) {
-    if (pos == BlockPos.ZERO && state.hasBlockEntity()) {
-      return ((EntityBlock) blk).newBlockEntity(pos, state);
+    public SingleBlockBlockReader(final BlockState state, final Block blk) {
+        this.state = state;
+        this.blk = blk;
     }
 
-    return null;
-  }
-
-  @Override
-  public BlockState getBlockState(final BlockPos pos) {
-    if (pos == BlockPos.ZERO) {
-      return state;
+    public SingleBlockBlockReader(final BlockState state) {
+        this.state = state;
+        this.blk = state.getBlock();
     }
-    return Blocks.AIR.defaultBlockState();
-  }
 
-  @Override
-  public FluidState getFluidState(final BlockPos pos) {
-    return Fluids.EMPTY.defaultFluidState();
-  }
+    @Nullable
+    @Override
+    public BlockEntity getBlockEntity(final BlockPos pos) {
+        if (pos == BlockPos.ZERO && state.hasBlockEntity()) {
+            return ((EntityBlock) blk).newBlockEntity(pos, state);
+        }
 
-  @Override
-  public int getHeight() {
-    return 0;
-  }
+        return null;
+    }
 
-  @Override
-  public int getMinBuildHeight() {
-    return 0;
-  }
+    @Override
+    public BlockState getBlockState(final BlockPos pos) {
+        if (pos == BlockPos.ZERO) {
+            return state;
+        }
+        return Blocks.AIR.defaultBlockState();
+    }
+
+    @Override
+    public FluidState getFluidState(final BlockPos pos) {
+        return Fluids.EMPTY.defaultFluidState();
+    }
+
+    @Override
+    public int getHeight() {
+        return 0;
+    }
+
+    @Override
+    public int getMinBuildHeight() {
+        return 0;
+    }
 }

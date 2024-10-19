@@ -8,5 +8,4 @@ import java.lang.annotation.RetentionPolicy;
  * on load.
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ChiselsAndBitsAddon {
-}
+public @interface ChiselsAndBitsAddon {}

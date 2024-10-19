@@ -56,22 +56,22 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface KeyBindingContext {
-  /**
-   * A list of contexts that will allow all key bindings that use them to be active
-   * when holding an item of a class (or a subclass, if applyToSubClasses is true)
-   * with this annotation.
-   *
-   * @return a list of key bindings contexts
-   */
-  String[] value();
+    /**
+     * A list of contexts that will allow all key bindings that use them to be active
+     * when holding an item of a class (or a subclass, if applyToSubClasses is true)
+     * with this annotation.
+     *
+     * @return a list of key bindings contexts
+     */
+    String[] value();
 
-  /**
-   * If true, the key binding context activity check will be bypassed not only for items
-   * of a class with this annotation, but also to items of any class that extends it.
-   * <p>
-   * This argument is optional.
-   *
-   * @return whether or not this annotation applies to subclasses
-   */
-  boolean applyToSubClasses() default false;
+    /**
+     * If true, the key binding context activity check will be bypassed not only for items
+     * of a class with this annotation, but also to items of any class that extends it.
+     * <p>
+     * This argument is optional.
+     *
+     * @return whether or not this annotation applies to subclasses
+     */
+    boolean applyToSubClasses() default false;
 }

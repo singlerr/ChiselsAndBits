@@ -20,40 +20,40 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ItemRenderer.class)
 public abstract class ItemRendererMixin {
 
-  @Inject(method = "render", at = @At("HEAD"))
-  private void mod$setRenderType(
-      ItemStack itemStack,
-      ItemDisplayContext itemDisplayContext,
-      boolean bl,
-      PoseStack poseStack,
-      MultiBufferSource multiBufferSource,
-      int i,
-      int j,
-      BakedModel bakedModel,
-      CallbackInfo ci) {
-    boolean bl3;
-    if (itemDisplayContext != ItemDisplayContext.GUI
-        && !itemDisplayContext.firstPerson()
-        && itemStack.getItem() instanceof BlockItem) {
-      Block block = ((BlockItem) itemStack.getItem()).getBlock();
-      bl3 = !(block instanceof HalfTransparentBlock) && !(block instanceof StainedGlassPaneBlock);
-    } else {
-      bl3 = true;
+    @Inject(method = "render", at = @At("HEAD"))
+    private void mod$setRenderType(
+            ItemStack itemStack,
+            ItemDisplayContext itemDisplayContext,
+            boolean bl,
+            PoseStack poseStack,
+            MultiBufferSource multiBufferSource,
+            int i,
+            int j,
+            BakedModel bakedModel,
+            CallbackInfo ci) {
+        boolean bl3;
+        if (itemDisplayContext != ItemDisplayContext.GUI
+                && !itemDisplayContext.firstPerson()
+                && itemStack.getItem() instanceof BlockItem) {
+            Block block = ((BlockItem) itemStack.getItem()).getBlock();
+            bl3 = !(block instanceof HalfTransparentBlock) && !(block instanceof StainedGlassPaneBlock);
+        } else {
+            bl3 = true;
+        }
+        ModClientHooks.setRenderType(ItemBlockRenderTypes.getRenderType(itemStack, bl3));
     }
-    ModClientHooks.setRenderType(ItemBlockRenderTypes.getRenderType(itemStack, bl3));
-  }
 
-  @Inject(method = "render", at = @At("TAIL"))
-  private void mod$clearRenderType(
-      ItemStack itemStack,
-      ItemDisplayContext itemDisplayContext,
-      boolean bl,
-      PoseStack poseStack,
-      MultiBufferSource multiBufferSource,
-      int i,
-      int j,
-      BakedModel bakedModel,
-      CallbackInfo ci) {
-    ModClientHooks.setRenderType(null);
-  }
+    @Inject(method = "render", at = @At("TAIL"))
+    private void mod$clearRenderType(
+            ItemStack itemStack,
+            ItemDisplayContext itemDisplayContext,
+            boolean bl,
+            PoseStack poseStack,
+            MultiBufferSource multiBufferSource,
+            int i,
+            int j,
+            BakedModel bakedModel,
+            CallbackInfo ci) {
+        ModClientHooks.setRenderType(null);
+    }
 }
