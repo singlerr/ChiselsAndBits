@@ -113,9 +113,13 @@ tasks.withType(JavaCompile).configureEach {
 	it.options.release = 17
 }
 
+javadoc{
+	failOnError = false
+}
+
 java {
 	withSourcesJar()
-
+	withJavadocJar()
 	sourceCompatibility = JavaVersion.VERSION_17
 	targetCompatibility = JavaVersion.VERSION_17
 }

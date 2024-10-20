@@ -97,7 +97,7 @@ public final class VoxelBlobStateInstance implements Comparable<VoxelBlobStateIn
                     final VoxelBlob fluidBlob = getBlob();
                     generated |= HAS_FLUIDS;
 
-                    if (fluidBlob.filterFluids(true)) {
+                    if (fluidBlob.simulateFilterFluids(true)) {
                         final AABB[] out = generateBoxes(fluidBlob);
                         fluidBoxes = new SoftReference<AABB[]>(out);
                         return out;
@@ -110,7 +110,7 @@ public final class VoxelBlobStateInstance implements Comparable<VoxelBlobStateIn
                     final VoxelBlob solidBlob = getBlob();
                     generated |= HAS_SOLIDS;
 
-                    if (solidBlob.filterFluids(false)) {
+                    if (solidBlob.simulateFilterFluids(false)) {
                         final AABB[] out = generateBoxes(solidBlob);
                         solidBoxes = new SoftReference<AABB[]>(out);
                         return out;

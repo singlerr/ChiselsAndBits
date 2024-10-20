@@ -58,7 +58,6 @@ public final class ModBlocks {
     }
 
     public static void onModConstruction() {
-
         Registry.register(
                 BuiltInRegistries.BLOCK,
                 new ResourceLocation(Constants.MOD_ID, "bit_storage"),

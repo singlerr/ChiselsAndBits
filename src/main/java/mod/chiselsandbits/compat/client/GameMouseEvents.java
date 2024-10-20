@@ -7,13 +7,15 @@ public interface GameMouseEvents {
 
     Event<WheelScroll> BEFORE_SCROLL =
             EventFactory.createArrayBacked(WheelScroll.class, (listeners) -> ((deltaX, deltaY) -> {
+                boolean result = false;
                 for (WheelScroll listener : listeners) {
-                    listener.wheelScroll(deltaX, deltaY);
+                    result |= listener.wheelScroll(deltaX, deltaY);
                 }
+                return result;
             }));
 
     interface WheelScroll {
 
-        void wheelScroll(double deltaX, double deltaY);
+        boolean wheelScroll(double deltaX, double deltaY);
     }
 }

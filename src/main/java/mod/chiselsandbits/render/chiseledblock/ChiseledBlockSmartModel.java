@@ -68,7 +68,7 @@ public class ChiseledBlockSmartModel extends BaseSmartModel implements ICacheCle
                 final VoxelBlob blob = ref.getVoxelBlob();
 
                 // ignore non-solid, and fluids.
-                blob.filter(RenderType.solid());
+                blob.simulateFilter(RenderType.solid());
                 blob.filterFluids(false);
 
                 out = blob.getSideFlags(0, VoxelBlob.dim_minus_one, VoxelBlob.dim2);

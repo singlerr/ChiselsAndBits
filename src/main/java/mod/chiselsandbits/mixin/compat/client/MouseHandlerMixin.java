@@ -13,7 +13,8 @@ public abstract class MouseHandlerMixin {
 
     @Inject(
             method = "onScroll",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isSpectator()Z"))
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isSpectator()Z"),
+            cancellable = true)
     private void chiselsandbits$compat$beforeScroll(
             long window,
             double xOffset,
@@ -21,6 +22,8 @@ public abstract class MouseHandlerMixin {
             CallbackInfo ci,
             @Local(ordinal = 1) double deltaX,
             @Local(ordinal = 2) double deltaY) {
-        GameMouseEvents.BEFORE_SCROLL.invoker().wheelScroll(deltaX, deltaY);
+        if (GameMouseEvents.BEFORE_SCROLL.invoker().wheelScroll(deltaX, deltaY)) {
+            ci.cancel();
+        }
     }
 }

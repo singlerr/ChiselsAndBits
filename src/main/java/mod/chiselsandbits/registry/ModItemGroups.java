@@ -61,12 +61,18 @@ public final class ModItemGroups {
                     Set<Integer> reservedStates = new HashSet<>();
                     for (BlockProvider stateProvider :
                             ((ChiselAndBitsAPI) ChiselsAndBits.getApi()).getStateProviders()) {
-                        for (BlockState state : stateProvider.getStates()) {
-                            if (BlockBitInfo.canChisel(state)) {
-                                int stateId = ModUtil.getStateId(state);
-                                ItemStack itemStack = ItemChiseledBit.createStack(stateId, 1, true);
-                                output.accept(itemStack);
-                                reservedStates.add(stateId);
+                        for (Block b : stateProvider.getBlocks()) {
+                            reservedStates.add(ModUtil.getStateId(b.defaultBlockState()));
+                            for (BlockState state : b.getStateDefinition().getPossibleStates()) {
+                                if (BlockBitInfo.canChisel(state)) {
+                                    int stateId = ModUtil.getStateId(state);
+                                    ItemStack itemStack = ItemChiseledBit.createStack(stateId, 1, true);
+                                    try {
+                                        output.accept(itemStack);
+                                    } catch (Exception ignored) {
+
+                                    }
+                                }
                             }
                         }
                     }
@@ -83,11 +89,13 @@ public final class ModItemGroups {
 
                     if (BlockBitInfo.canChisel(blockState)) {
                         int stateId = ModUtil.getStateId(blockState);
-                        if (reservedStates.contains(stateId)) {
-                            continue;
-                        }
+                        if (reservedStates.contains(stateId)) continue;
                         ItemStack itemStack = ItemChiseledBit.createStack(stateId, 1, true);
-                        output.accept(itemStack);
+                        try {
+                            output.accept(itemStack);
+                        } catch (Exception ignored) {
+
+                        }
                     }
                 }
             })
