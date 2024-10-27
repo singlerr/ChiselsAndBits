@@ -321,7 +321,6 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
             return ModUtil.getEmptyStack();
         }
     }
-
     /**
      * Client side method.
      */

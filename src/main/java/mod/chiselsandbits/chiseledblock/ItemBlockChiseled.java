@@ -126,12 +126,12 @@ public class ItemBlockChiseled extends BlockItem implements IVoxelBlobItem, IIte
                         }
 
                         if (world.isEmptyBlock(bp)
-                        /*  || world.getBlockState(bp)
-                        .canBeReplaced(new BlockPlaceContext(
-                                player,
-                                hand,
-                                stack,
-                                new BlockHitResult(new Vec3(hitX, hitY, hitZ), side, pos, false)))*/ ) {
+                                || world.getBlockState(bp)
+                                        .canBeReplaced(new BlockPlaceContext(
+                                                player,
+                                                hand,
+                                                stack,
+                                                new BlockHitResult(new Vec3(hitX, hitY, hitZ), side, pos, false)))) {
                             continue;
                         }
 

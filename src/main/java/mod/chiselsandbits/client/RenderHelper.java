@@ -23,10 +23,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RenderHelper {
 
     private static final RenderType CHISEL_PREVIEW = previewRender();
+    private static final Logger log = LoggerFactory.getLogger(RenderHelper.class);
     public static RandomSource RENDER_RANDOM = RandomSource.create();
 
     private static RenderType previewRender() {
@@ -135,6 +138,7 @@ public class RenderHelper {
             int color = bakedquad.getTintIndex() == -1
                     ? alpha | 0xffffff
                     : getTint(alpha, bakedquad.getTintIndex(), worldObj, blockPos);
+
             float cb = (color & 0xFF) / 255f;
             float cg = ((color >>> 8) & 0xFF) / 255f;
             float cr = ((color >>> 16) & 0xFF) / 255f;
@@ -342,9 +346,8 @@ public class RenderHelper {
             final Level worldObj,
             final BlockPos blockPos,
             final boolean isUnplaceable,
-            final int combinedLightmap,
+            int combinedLightmap,
             final int combinedOverlay) {
-
         final int alpha = isUnplaceable ? 0x22000000 : 0xaa000000;
         RenderHelper.renderModel(matrixStack, baked, worldObj, blockPos, alpha, combinedLightmap, combinedOverlay);
     }

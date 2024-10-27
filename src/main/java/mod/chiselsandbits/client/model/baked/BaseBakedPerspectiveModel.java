@@ -15,13 +15,13 @@ public abstract class BaseBakedPerspectiveModel implements BakedModel, Transform
 
     protected static final RandomSource RANDOM = RandomSource.create();
 
-    private static final Transformation ground;
-    private static final Transformation gui;
-    private static final Transformation fixed;
-    private static final Transformation firstPerson_righthand;
-    private static final Transformation firstPerson_lefthand;
-    private static final Transformation thirdPerson_righthand;
-    private static final Transformation thirdPerson_lefthand;
+    protected static final Transformation ground;
+    protected static final Transformation gui;
+    protected static final Transformation fixed;
+    protected static final Transformation firstPerson_righthand;
+    protected static final Transformation firstPerson_lefthand;
+    protected static final Transformation thirdPerson_righthand;
+    protected static final Transformation thirdPerson_lefthand;
 
     static {
         gui = getMatrix(0, 0, 0, 30, 225, 0, 0.625f);
