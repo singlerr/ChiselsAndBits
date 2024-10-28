@@ -3,7 +3,6 @@ package mod.chiselsandbits.registry;
 import com.google.common.base.Suppliers;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 import mod.chiselsandbits.api.BlockProvider;
 import mod.chiselsandbits.chiseledblock.BlockBitInfo;
@@ -55,54 +54,50 @@ public final class ModItemGroups {
             .icon(() -> new ItemStack(ModItems.ITEM_BLOCK_BIT.get()))
             .title(Component.literal("Block bits"))
             .displayItems((params, output) -> {
-                CompletableFuture.runAsync(() -> {
-                    for (Block block : BuiltInRegistries.BLOCK) {
-                        if (block instanceof BlockChiseled) {
-                            continue;
-                        }
-                        Set<Integer> reservedStates = new HashSet<>();
-                        for (BlockProvider stateProvider :
-                                ((ChiselAndBitsAPI) ChiselsAndBits.getApi()).getStateProviders()) {
-                            for (Block b : stateProvider.getBlocks()) {
-                                reservedStates.add(ModUtil.getStateId(b.defaultBlockState()));
-                                for (BlockState state : b.getStateDefinition().getPossibleStates()) {
-                                    if (BlockBitInfo.canChisel(state)) {
-                                        int stateId = ModUtil.getStateId(state);
-                                        ItemStack itemStack = ItemChiseledBit.createStack(stateId, 1, true);
-                                        try {
-                                            output.accept(itemStack);
-                                        } catch (Exception ignored) {
+                for (Block block : BuiltInRegistries.BLOCK) {
+                    if (block instanceof BlockChiseled) {
+                        continue;
+                    }
+                    Set<Integer> reservedStates = new HashSet<>();
+                    for (BlockProvider stateProvider :
+                            ((ChiselAndBitsAPI) ChiselsAndBits.getApi()).getStateProviders()) {
+                        for (Block b : stateProvider.getBlocks()) {
+                            reservedStates.add(ModUtil.getStateId(b.defaultBlockState()));
+                            for (BlockState state : b.getStateDefinition().getPossibleStates()) {
+                                if (BlockBitInfo.canChisel(state)) {
+                                    int stateId = ModUtil.getStateId(state);
+                                    ItemStack itemStack = ItemChiseledBit.createStack(stateId, 1, true);
+                                    try {
+                                        output.accept(itemStack);
+                                    } catch (Exception ignored) {
 
-                                        }
                                     }
                                 }
                             }
                         }
+                    }
 
-                        BlockState blockState = block.defaultBlockState();
+                    BlockState blockState = block.defaultBlockState();
 
-                        if (block instanceof LiquidBlock liquidBlock) {
-                            Fluid fluid = liquidBlock.getFluidState(blockState).getType();
-                            if (fluid instanceof FlowingFluid flowingFluid) {
-                                blockState = flowingFluid
-                                        .getSource()
-                                        .defaultFluidState()
-                                        .createLegacyBlock();
-                            }
-                        }
-
-                        if (BlockBitInfo.canChisel(blockState)) {
-                            int stateId = ModUtil.getStateId(blockState);
-                            if (reservedStates.contains(stateId)) continue;
-                            ItemStack itemStack = ItemChiseledBit.createStack(stateId, 1, true);
-                            try {
-                                output.accept(itemStack);
-                            } catch (Exception ignored) {
-
-                            }
+                    if (block instanceof LiquidBlock liquidBlock) {
+                        Fluid fluid = liquidBlock.getFluidState(blockState).getType();
+                        if (fluid instanceof FlowingFluid flowingFluid) {
+                            blockState =
+                                    flowingFluid.getSource().defaultFluidState().createLegacyBlock();
                         }
                     }
-                });
+
+                    if (BlockBitInfo.canChisel(blockState)) {
+                        int stateId = ModUtil.getStateId(blockState);
+                        if (reservedStates.contains(stateId)) continue;
+                        ItemStack itemStack = ItemChiseledBit.createStack(stateId, 1, true);
+                        try {
+                            output.accept(itemStack);
+                        } catch (Exception ignored) {
+
+                        }
+                    }
+                }
             })
             .build());
     public static Supplier<CreativeModeTab> CLIPBOARD =

@@ -42,10 +42,6 @@ public class ChiselsAndBits {
     public ChiselsAndBits() {
         instance = this;
         config = new Configuration();
-        //        EnvExecutor.runWhenOn(
-        //                EnvType.CLIENT,
-        //                () -> () ->
-        // RegisterGeometryLoadersCallback.EVENT.register(ChiselsAndBitsClient::onModelRegistry));
         EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> {
             ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
                 LanguageHandler.loadLangPath(
