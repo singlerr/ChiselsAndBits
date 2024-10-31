@@ -124,7 +124,7 @@ public class TapeMeasures {
         return player.getCommandSenderWorld().dimension().registry();
     }
 
-    public void render(final PoseStack matrixStack, final float partialTicks) {
+    public void render(final PoseStack matrixStack, final MultiBufferSource buffers, final float partialTicks) {
         if (!measures.isEmpty() || preview != null) {
             final Player player = ClientSide.instance.getPlayer();
 
@@ -150,7 +150,7 @@ public class TapeMeasures {
                 });
 
                 for (final Measure m : sortList) {
-                    renderMeasure(m, m.distance, matrixStack, partialTicks);
+                    renderMeasure(m, m.distance, matrixStack, buffers, partialTicks);
                 }
             }
         }
@@ -168,7 +168,11 @@ public class TapeMeasures {
     }
 
     private void renderMeasure(
-            final Measure m, final double distance, final PoseStack matrixStack, final float partialTicks) {
+            final Measure m,
+            final double distance,
+            final PoseStack matrixStack,
+            final MultiBufferSource buffers,
+            final float partialTicks) {
         final Player player = ClientSide.instance.getPlayer();
 
         if (m.DimensionId != getDimension(player)) {
@@ -189,8 +193,7 @@ public class TapeMeasures {
             final Vec3 b = m.getVecB();
 
             RenderHelper.drawLineWithColor(
-                    matrixStack, a, b, BlockPos.ZERO, player, partialTicks, false, red, green, blue, alpha, (int)
-                            (alpha / 3.4));
+                    matrixStack, buffers, a, b, BlockPos.ZERO, false, red, green, blue, alpha, (int) (alpha / 3.4));
 
             RenderSystem.disableDepthTest();
             RenderSystem.disableCull();
@@ -217,6 +220,7 @@ public class TapeMeasures {
         final AABB box = m.getBoundingBox();
         RenderHelper.drawSelectionBoundingBoxIfExistsWithColor(
                 matrixStack,
+                buffers,
                 box.expandTowards(-0.001, -0.001, -0.001),
                 BlockPos.ZERO,
                 player,

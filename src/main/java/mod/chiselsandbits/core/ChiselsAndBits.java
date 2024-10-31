@@ -1,6 +1,7 @@
 package mod.chiselsandbits.core;
 
 import fuzs.forgeconfigapiport.fabric.api.forge.v4.ForgeModConfigEvents;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -29,7 +30,6 @@ import mod.chiselsandbits.utils.LanguageHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.fml.config.ModConfig;
 
 public class ChiselsAndBits {
     public static final @Nonnull String MODID = Constants.MOD_ID;
@@ -62,8 +62,8 @@ public class ChiselsAndBits {
         ModTileEntityTypes.onModConstruction();
         ModItemGroups.onModConstruction();
         networkChannel.registerCommonMessages();
-        ForgeModConfigEvents.loading(Constants.MOD_ID).register(this::setupClipboard);
         EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> {
+            setupClipboard(new File(Minecraft.getInstance().gameDirectory, MODID + "_clipboard"));
             ForgeModConfigEvents.loading(Constants.MOD_ID).register(c -> handleIdMapping(Minecraft.getInstance()));
             ForgeModConfigEvents.reloading(Constants.MOD_ID).register(c -> handleIdMapping(Minecraft.getInstance()));
         });
@@ -89,13 +89,9 @@ public class ChiselsAndBits {
         return instance.networkChannel;
     }
 
-    private void setupClipboard(ModConfig modConfig) {
+    private void setupClipboard(File file) {
         CreativeClipboardTab.getInstance()
-                .load(modConfig
-                        .getFullPath()
-                        .getParent()
-                        .resolve(MODID + "_clipboard.bin")
-                        .toFile());
+                .load(file.toPath().resolve(MODID + "_clipboard.bin").toFile());
     }
 
     public void clientSetup(Minecraft inst) {

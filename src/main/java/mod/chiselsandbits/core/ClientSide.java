@@ -796,7 +796,7 @@ public class ClientSide {
             }
         }
 
-        tapeMeasures.render(stack, partialTicks);
+        tapeMeasures.render(stack, context.consumers(), partialTicks);
 
         final boolean isDrawing =
                 (chMode == ChiselMode.DRAWN_REGION || tool == ChiselToolType.TAPEMEASURE) && getStartPos() != null;
@@ -902,7 +902,7 @@ public class ClientSide {
                                     && bb.maxY - bb.minY <= maxChiseSize
                                     && bb.maxZ - bb.minZ <= maxChiseSize) {
                                 RenderHelper.drawSelectionBoundingBoxIfExists(
-                                        stack, bb, BlockPos.ZERO, player, partialTicks, false);
+                                        stack, buffers, bb, BlockPos.ZERO, player, partialTicks, false);
 
                                 if (!getToolKey().isDown()) {
                                     final PacketChisel pc = new PacketChisel(
@@ -953,7 +953,7 @@ public class ClientSide {
                                         !isChisel);
                                 final AABB bb = i.getBoundingBox(vb, isChisel);
                                 RenderHelper.drawSelectionBoundingBoxIfExists(
-                                        stack, bb, location.blockPos, player, partialTicks, false);
+                                        stack, buffers, bb, location.blockPos, player, partialTicks, false);
                                 showBox = false;
                             } else if (isBit) {
                                 final VoxelBlob j = new VoxelBlob();
@@ -970,7 +970,7 @@ public class ClientSide {
                                 final AABB bb =
                                         snapToSide(i.getBoundingBox(j, isChisel), rayTraceResult.getDirection());
                                 RenderHelper.drawSelectionBoundingBoxIfExists(
-                                        stack, bb, location.blockPos, player, partialTicks, false);
+                                        stack, buffers, bb, location.blockPos, player, partialTicks, false);
                             }
                         }
                     }
