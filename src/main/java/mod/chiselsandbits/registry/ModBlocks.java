@@ -43,7 +43,8 @@ public final class ModBlocks {
             "chiseled_block",
             BlockBehaviour.Properties.of()
                     .pushReaction(PushReaction.BLOCK)
-                    .strength(3.5f, 3.5f)
+                    .strength(4.5F, 3.0F)
+                    .requiresCorrectToolForDrops()
                     .isViewBlocking((p_test_1_, p_test_2_, p_test_3_) -> false)
                     .isRedstoneConductor((p_test_1_, p_test_2_, p_test_3_) -> false)
                     .noOcclusion()));

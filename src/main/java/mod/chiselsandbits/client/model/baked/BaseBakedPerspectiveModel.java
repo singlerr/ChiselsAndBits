@@ -54,29 +54,29 @@ public abstract class BaseBakedPerspectiveModel implements BakedModel, Transform
     public BakedModel applyTransform(ItemDisplayContext context, PoseStack poseStack, boolean leftHand) {
         switch (context) {
             case FIRST_PERSON_LEFT_HAND:
-                TransformationUtils.push(poseStack, firstPerson_lefthand, leftHand);
+                TransformationUtils.push(poseStack, firstPerson_lefthand, false);
                 return this;
             case FIRST_PERSON_RIGHT_HAND:
-                TransformationUtils.push(poseStack, firstPerson_righthand, leftHand);
+                TransformationUtils.push(poseStack, firstPerson_righthand, false);
                 return this;
             case THIRD_PERSON_LEFT_HAND:
-                TransformationUtils.push(poseStack, thirdPerson_lefthand, leftHand);
+                TransformationUtils.push(poseStack, thirdPerson_lefthand, false);
                 return this;
             case THIRD_PERSON_RIGHT_HAND:
-                TransformationUtils.push(poseStack, thirdPerson_righthand, leftHand);
+                TransformationUtils.push(poseStack, thirdPerson_righthand, false);
             case FIXED:
-                TransformationUtils.push(poseStack, firstPerson_righthand, leftHand);
+                TransformationUtils.push(poseStack, firstPerson_righthand, false);
                 return this;
             case GROUND:
-                TransformationUtils.push(poseStack, ground, leftHand);
+                TransformationUtils.push(poseStack, ground, false);
                 return this;
             case GUI:
-                TransformationUtils.push(poseStack, gui, leftHand);
+                TransformationUtils.push(poseStack, gui, false);
                 return this;
             default:
         }
 
-        TransformationUtils.push(poseStack, fixed, leftHand);
+        TransformationUtils.push(poseStack, fixed, false);
         return this;
     }
 

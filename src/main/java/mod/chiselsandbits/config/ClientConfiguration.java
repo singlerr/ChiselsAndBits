@@ -23,7 +23,7 @@ public class ClientConfiguration extends AbstractConfiguration {
     public ForgeConfigSpec.BooleanValue enableFaceLightmapExtraction;
     public ForgeConfigSpec.BooleanValue useGetLightValue;
     public ForgeConfigSpec.BooleanValue disableCustomVertexFormats;
-
+    public ForgeConfigSpec.BooleanValue persistCreativeClipboard;
     public ForgeConfigSpec.LongValue modelCacheSize;
 
     /**
@@ -45,6 +45,7 @@ public class ClientConfiguration extends AbstractConfiguration {
         maxTapeMeasures = defineInteger(builder, "tape-measure.max-count", 10);
         displayMeasuringTapeInChat = defineBoolean(builder, "tape-measure.display-in-chat", true);
         radialMenuVolume = defineDouble(builder, "radial.menu.volume", 0.1f);
+        persistCreativeClipboard = defineBoolean(builder, "persist-creative-clipboard", true);
 
         finishCategory(builder);
         createCategory(builder, "client.performance");

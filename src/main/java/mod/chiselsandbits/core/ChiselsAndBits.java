@@ -94,7 +94,7 @@ public class ChiselsAndBits {
                 .load(modConfig
                         .getFullPath()
                         .getParent()
-                        .resolve(MODID + "_clipboard.cfg")
+                        .resolve(MODID + "_clipboard.bin")
                         .toFile());
     }
 

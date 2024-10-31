@@ -2,83 +2,64 @@ package mod.chiselsandbits.client;
 
 import com.google.common.collect.Lists;
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import mod.chiselsandbits.core.ChiselsAndBits;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
 
 public class ClipboardStorage {
 
-    public ClipboardStorage(final File file) {}
+    private final File file;
 
-    public void write(final List<CompoundTag> myitems) {
-        /*if ( !ChiselsAndBits.getConfig().getServer().persistCreativeClipboard.get() )
-        {
-        	return;
-        }
-
-        for ( final String name : getCategoryNames() )
-        {
-        	removeCategory( getCategory( name ) );
-        }
-
-        int idx = 0;
-        for ( final NBTTagCompound nbt : myitems )
-        {
-        	final PacketBuffer b = new PacketBuffer( Unpooled.buffer() );
-        	b.writeNBTTagCompoundToBuffer( nbt );
-
-        	final int[] o = new int[b.writerIndex()];
-        	for ( int x = 0; x < b.writerIndex(); x++ )
-        	{
-        		o[x] = b.getByte( x );
-        	}
-
-        	get( "clipboard", "" + idx++, o ).set( o );
-        }
-
-        save();*/
+    public ClipboardStorage(final File file) {
+        this.file = file;
     }
 
-    public List<CompoundTag> read() {
-        /*final List<NBTTagCompound> myItems = new ArrayList<NBTTagCompound>();
-
-        if ( !ChiselsAndBits.getConfig().getServer().persistCreativeClipboard.get() )
-        {
-        	return myItems;
+    public void write(final List<CompoundTag> items) throws IOException {
+        if (!ChiselsAndBits.getConfig().getClient().persistCreativeClipboard.get()) {
+            return;
         }
 
-        for ( final Property p : getCategory( "clipboard" ).values() )
-        {
-        	final int[] bytes = p.getIntList();
-        	final byte[] o = new byte[bytes.length];
-
-        	for ( int x = 0; x < bytes.length; x++ )
-        	{
-        		o[x] = (byte) bytes[x];
-        	}
-
-        	try
-        	{
-        		final PacketBuffer b = new PacketBuffer( Unpooled.wrappedBuffer( o ) );
-        		final NBTTagCompound c = b.readNBTTagCompoundFromBuffer();
-
-        		myItems.add( c );
-        	}
-        	catch ( final EncoderException e )
-        	{
-        		// :_ (
-        	}
-        	catch ( final EOFException e )
-        	{
-        		// :_ (
-        	}
-        	catch ( final IOException e )
-        	{
-        		// :_ (
-        	}
-
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdir();
         }
 
-        return myItems;*/
-        return Lists.newArrayList();
+        CompoundTag root = new CompoundTag();
+        root.putInt("size", items.size());
+        for (int i = 0; i < items.size(); i++) {
+            root.put("clipboard_" + i, items.get(i));
+        }
+        NbtIo.write(root, file.toPath());
+    }
+
+    public List<CompoundTag> read() throws IOException {
+        if (!ChiselsAndBits.getConfig().getClient().persistCreativeClipboard.get()) {
+            return Lists.newArrayList();
+        }
+
+        if (!file.getParentFile().exists()) {
+            file.mkdir();
+            return Lists.newArrayList();
+        }
+
+        if (!file.exists()) {
+            return Lists.newArrayList();
+        }
+
+        List<CompoundTag> items = new ArrayList<>();
+        CompoundTag root = NbtIo.read(file.toPath());
+        int size = root.getInt("size");
+
+        for (int i = 0; i < size; i++) {
+            try {
+                items.add((CompoundTag) root.get("clipboard_" + i));
+            } catch (Exception ignore) {
+
+            }
+        }
+
+        return items;
     }
 }

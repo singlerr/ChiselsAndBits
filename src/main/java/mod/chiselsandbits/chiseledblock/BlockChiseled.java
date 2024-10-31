@@ -22,10 +22,12 @@ import mod.chiselsandbits.registry.ModBlocks;
 import mod.chiselsandbits.utils.SingleBlockBlockReader;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -164,6 +166,11 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
     }
 
     @Override
+    public void destroy(LevelAccessor levelAccessor, BlockPos blockPos, BlockState blockState) {
+        super.destroy(levelAccessor, blockPos, blockState);
+    }
+
+    @Override
     public BlockState playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
         BlockState newState = super.playerWillDestroy(level, blockPos, blockState, player);
         try {
@@ -218,7 +225,7 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
     @Override
     public float getExplosionResistance(
             BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, Explosion explosion) {
-        return 0;
+        return 5;
     }
 
     @Override
@@ -271,12 +278,12 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
             final BlockState state,
             final BlockEntity te,
             final ItemStack stack) {
-        try {
-            popResource(worldIn, pos, getTileEntity(te).getItemStack(player));
-        } catch (final ExceptionNoTileEntity e) {
-            Log.noTileError(e);
-            super.playerDestroy(worldIn, player, pos, state, null, stack);
-        }
+        //        try {
+        //            popResource(worldIn, pos, getTileEntity(te).getItemStack(player));
+        //        } catch (final ExceptionNoTileEntity e) {
+        //            Log.noTileError(e);
+        //            super.playerDestroy(worldIn, player, pos, state, null, stack);
+        //        }
     }
 
     @Override
@@ -321,6 +328,7 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
             return ModUtil.getEmptyStack();
         }
     }
+
     /**
      * Client side method.
      */
@@ -403,11 +411,6 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
     //    }
     //  }
 
-    @Override
-    public boolean hasDynamicShape() {
-        return true;
-    }
-
     public boolean propagatesSkylightDown(BlockState state, BlockGetter reader, BlockPos pos) {
         return true;
     }
@@ -471,7 +474,7 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
             return canHarvestBlockInternal(new SingleBlockBlockReader(activeState), pos, player);
         }
 
-        return true;
+        return false;
     }
 
     private boolean canHarvestBlockInternal(BlockGetter world, BlockPos pos, Player player) {
@@ -525,6 +528,22 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
         } catch (final ExceptionNoTileEntity e) {
             Log.noTileError(e);
             return Blocks.STONE.defaultBlockState();
+        }
+    }
+
+    @Override
+    protected void spawnDestroyParticles(Level level, Player player, BlockPos blockPos, BlockState blockState) {
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+            if (!blockState.isAir()) {
+                SoundType soundType = blockState.getSoundType();
+                level.playLocalSound(
+                        blockPos,
+                        soundType.getBreakSound(),
+                        SoundSource.BLOCKS,
+                        (soundType.getVolume() + 1.0F) / 2.0F,
+                        soundType.getPitch() * 0.8F,
+                        false);
+            }
         }
     }
 

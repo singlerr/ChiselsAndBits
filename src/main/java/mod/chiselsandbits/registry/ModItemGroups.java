@@ -1,7 +1,7 @@
 package mod.chiselsandbits.registry;
 
 import com.google.common.base.Suppliers;
-import java.util.HashSet;
+import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
 import java.util.Set;
 import java.util.function.Supplier;
 import mod.chiselsandbits.api.BlockProvider;
@@ -54,29 +54,23 @@ public final class ModItemGroups {
             .icon(() -> new ItemStack(ModItems.ITEM_BLOCK_BIT.get()))
             .title(Component.literal("Block bits"))
             .displayItems((params, output) -> {
+                Set<Integer> reservedStates = new IntLinkedOpenHashSet();
+                for (BlockProvider stateProvider : ((ChiselAndBitsAPI) ChiselsAndBits.getApi()).getStateProviders()) {
+                    for (Block b : stateProvider.getBlocks()) {
+                        for (BlockState state : b.getStateDefinition().getPossibleStates()) {
+                            int stateId = ModUtil.getStateId(state);
+                            if (BlockBitInfo.canChisel(state)) {
+                                ItemStack itemStack = ItemChiseledBit.createStack(stateId, 1, true);
+                                output.accept(itemStack);
+                                reservedStates.add(stateId);
+                            }
+                        }
+                    }
+                }
                 for (Block block : BuiltInRegistries.BLOCK) {
                     if (block instanceof BlockChiseled) {
                         continue;
                     }
-                    Set<Integer> reservedStates = new HashSet<>();
-                    for (BlockProvider stateProvider :
-                            ((ChiselAndBitsAPI) ChiselsAndBits.getApi()).getStateProviders()) {
-                        for (Block b : stateProvider.getBlocks()) {
-                            reservedStates.add(ModUtil.getStateId(b.defaultBlockState()));
-                            for (BlockState state : b.getStateDefinition().getPossibleStates()) {
-                                if (BlockBitInfo.canChisel(state)) {
-                                    int stateId = ModUtil.getStateId(state);
-                                    ItemStack itemStack = ItemChiseledBit.createStack(stateId, 1, true);
-                                    try {
-                                        output.accept(itemStack);
-                                    } catch (Exception ignored) {
-
-                                    }
-                                }
-                            }
-                        }
-                    }
-
                     BlockState blockState = block.defaultBlockState();
 
                     if (block instanceof LiquidBlock liquidBlock) {
@@ -89,13 +83,11 @@ public final class ModItemGroups {
 
                     if (BlockBitInfo.canChisel(blockState)) {
                         int stateId = ModUtil.getStateId(blockState);
-                        if (reservedStates.contains(stateId)) continue;
-                        ItemStack itemStack = ItemChiseledBit.createStack(stateId, 1, true);
-                        try {
-                            output.accept(itemStack);
-                        } catch (Exception ignored) {
-
+                        if (reservedStates.contains(stateId)) {
+                            continue;
                         }
+                        ItemStack itemStack = ItemChiseledBit.createStack(stateId, 1, true);
+                        output.accept(itemStack);
                     }
                 }
             })

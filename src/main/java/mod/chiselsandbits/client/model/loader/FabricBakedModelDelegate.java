@@ -108,9 +108,17 @@ public class FabricBakedModelDelegate implements BakedModel, ICacheClearable {
         Object attachmentData = blockAndTintGetter.getBlockEntityRenderData(blockPos);
 
         if (attachmentData instanceof IModelData modelData) {
-            dataAwareBakedModel.updateModelData(blockAndTintGetter, blockPos, blockState, modelData);
-            emitBlockQuads(
-                    dataAwareBakedModel, modelData, blockAndTintGetter, blockState, blockPos, supplier, renderContext);
+            synchronized (dataAwareBakedModel) {
+                dataAwareBakedModel.updateModelData(blockAndTintGetter, blockPos, blockState, modelData);
+                emitBlockQuads(
+                        dataAwareBakedModel,
+                        modelData,
+                        blockAndTintGetter,
+                        blockState,
+                        blockPos,
+                        supplier,
+                        renderContext);
+            }
         }
     }
 

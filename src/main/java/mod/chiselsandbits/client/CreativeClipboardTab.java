@@ -2,7 +2,9 @@ package mod.chiselsandbits.client;
 
 import com.google.common.collect.ImmutableList;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import mod.chiselsandbits.api.IBitAccess;
 import mod.chiselsandbits.api.ItemType;
@@ -11,13 +13,17 @@ import mod.chiselsandbits.chiseledblock.data.VoxelBlob;
 import mod.chiselsandbits.core.ChiselsAndBits;
 import mod.chiselsandbits.helpers.ModUtil;
 import mod.chiselsandbits.interfaces.ICacheClearable;
+import mod.chiselsandbits.registry.ModItemGroups;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CreativeClipboardTab implements ICacheClearable {
     private static final List<ItemStack> myWorldItems = new ArrayList<ItemStack>();
+    private static final Logger log = LoggerFactory.getLogger(CreativeClipboardTab.class);
     static boolean renewMappings = true;
     private static List<CompoundTag> myCrossItems = new ArrayList<CompoundTag>();
     private static ClipboardStorage clipStorage = null;
@@ -37,7 +43,12 @@ public class CreativeClipboardTab implements ICacheClearable {
 
     public void load(final File file) {
         clipStorage = new ClipboardStorage(file);
-        myCrossItems = clipStorage.read();
+        try {
+            myCrossItems = clipStorage.read();
+        } catch (IOException e) {
+            myCrossItems = Collections.emptyList();
+            log.info("Error occurred while reading clipboards", e);
+        }
     }
 
     public void addItem(final ItemStack iss) {
@@ -76,10 +87,17 @@ public class CreativeClipboardTab implements ICacheClearable {
                 myCrossItems.remove(myCrossItems.size() - 1);
             }
 
-            clipStorage.write(myCrossItems);
+            try {
+                clipStorage.write(myCrossItems);
+            } catch (IOException e) {
+                log.info("Error occurred while saving clipboard", e);
+            }
             myWorldItems.clear();
             renewMappings = true;
         }
+
+        ModItemGroups.CLIPBOARD.get().getDisplayItems().clear();
+        ModItemGroups.CLIPBOARD.get().getDisplayItems().addAll(getClipboard());
     }
 
     public List<ItemStack> getClipboard() {
