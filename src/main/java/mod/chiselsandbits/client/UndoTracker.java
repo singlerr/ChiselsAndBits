@@ -165,7 +165,7 @@ public class UndoTracker implements ICacheClearable {
         try {
             recording = false;
             final PacketUndo packet = new PacketUndo(pos, before, after);
-            if (packet.preformAction(player, spawnItemsAndCommitWorldChanges)) {
+            if (packet.performAction(player, spawnItemsAndCommitWorldChanges)) {
                 ChiselsAndBits.getNetworkChannel().sendToServer(packet);
                 return true;
             }

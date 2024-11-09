@@ -383,12 +383,13 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
         return true;
     }
 
-    @Override
-    public void onRemove(BlockState blockState, Level level, BlockPos blockPos, BlockState blockState2, boolean bl) {
-        if (blockState.getBlock() instanceof BlockChiseled) return;
-
-        super.onRemove(blockState, level, blockPos, blockState2, bl);
-    }
+    //    @Override
+    //    public void onRemove(BlockState blockState, Level level, BlockPos blockPos, BlockState blockState2, boolean
+    // bl) {
+    //        if (blockState.getBlock() instanceof BlockChiseled) return;
+    //
+    //        super.onRemove(blockState, level, blockPos, blockState2, bl);
+    //    }
 
     @Deprecated
     public VoxelShape getCollisionShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {

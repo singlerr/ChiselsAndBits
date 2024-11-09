@@ -41,7 +41,7 @@ public class ClientConfiguration extends AbstractConfiguration {
         chatModeNotification = defineBoolean(builder, "chat-mode-notification", true);
         itemNameModeDisplay = defineBoolean(builder, "item-name-mode-display", true);
         addBrokenBlocksToCreativeClipboard = defineBoolean(builder, "clipboard.add-broken-blocks", false);
-        maxUndoLevel = defineInteger(builder, "undo.max-count", 10);
+        maxUndoLevel = defineInteger(builder, "undo.max-count", 32);
         maxTapeMeasures = defineInteger(builder, "tape-measure.max-count", 10);
         displayMeasuringTapeInChat = defineBoolean(builder, "tape-measure.display-in-chat", true);
         radialMenuVolume = defineDouble(builder, "radial.menu.volume", 0.1f);

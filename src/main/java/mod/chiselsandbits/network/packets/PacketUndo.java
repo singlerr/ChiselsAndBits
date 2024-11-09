@@ -53,7 +53,7 @@ public class PacketUndo extends ModPacket {
 
     @Override
     public void server(final ServerPlayer player) {
-        preformAction(ActingPlayer.actingAs(player, InteractionHand.MAIN_HAND), true);
+        performAction(ActingPlayer.actingAs(player, InteractionHand.MAIN_HAND), true);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class PacketUndo extends ModPacket {
         after = new VoxelBlobStateReference(tb, 0);
     }
 
-    public boolean preformAction(final ActingPlayer player, final boolean spawnItemsAndCommitWorldChanges) {
+    public boolean performAction(final ActingPlayer player, final boolean spawnItemsAndCommitWorldChanges) {
         if (inRange(player, pos)) {
             return apply(player, spawnItemsAndCommitWorldChanges);
         }
