@@ -166,11 +166,6 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
     }
 
     @Override
-    public void destroy(LevelAccessor levelAccessor, BlockPos blockPos, BlockState blockState) {
-        super.destroy(levelAccessor, blockPos, blockState);
-    }
-
-    @Override
     public BlockState playerWillDestroy(Level level, BlockPos blockPos, BlockState blockState, Player player) {
         BlockState newState = super.playerWillDestroy(level, blockPos, blockState, player);
         try {
@@ -225,7 +220,7 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
     @Override
     public float getExplosionResistance(
             BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, Explosion explosion) {
-        return 5;
+        return 0;
     }
 
     @Override
@@ -278,12 +273,12 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
             final BlockState state,
             final BlockEntity te,
             final ItemStack stack) {
-        //        try {
-        //            popResource(worldIn, pos, getTileEntity(te).getItemStack(player));
-        //        } catch (final ExceptionNoTileEntity e) {
-        //            Log.noTileError(e);
-        //            super.playerDestroy(worldIn, player, pos, state, null, stack);
-        //        }
+        try {
+            popResource(worldIn, pos, getTileEntity(te).getItemStack(player));
+        } catch (final ExceptionNoTileEntity e) {
+            Log.noTileError(e);
+            super.playerDestroy(worldIn, player, pos, state, null, stack);
+        }
     }
 
     @Override
@@ -377,10 +372,22 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
             if (blob == null) {
                 return super.getShape(state, reader, pos, context);
             }
-            return VoxelShapeCache.getInstance().get(blob, BoxType.COLLISION);
+            return VoxelShapeCache.getInstance().get(blob, BoxType.OCCLUSION);
         } catch (ExceptionNoTileEntity exceptionNoTileEntity) {
             return super.getShape(state, reader, pos, context);
         }
+    }
+
+    @Override
+    public boolean useShapeForLightOcclusion(BlockState blockState) {
+        return true;
+    }
+
+    @Override
+    public void onRemove(BlockState blockState, Level level, BlockPos blockPos, BlockState blockState2, boolean bl) {
+        if (blockState.getBlock() instanceof BlockChiseled) return;
+
+        super.onRemove(blockState, level, blockPos, blockState2, bl);
     }
 
     @Deprecated
@@ -390,7 +397,7 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
             if (blob == null) {
                 return super.getShape(state, worldIn, pos, context);
             }
-            return VoxelShapeCache.getInstance().get(blob, BoxType.COLLISION);
+            return VoxelShapeCache.getInstance().get(blob, BoxType.OCCLUSION);
         } catch (ExceptionNoTileEntity exceptionNoTileEntity) {
             return super.getShape(state, worldIn, pos, context);
         }
@@ -474,7 +481,7 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
             return canHarvestBlockInternal(new SingleBlockBlockReader(activeState), pos, player);
         }
 
-        return false;
+        return true;
     }
 
     private boolean canHarvestBlockInternal(BlockGetter world, BlockPos pos, Player player) {
@@ -545,6 +552,11 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
                         false);
             }
         }
+    }
+
+    @Override
+    public boolean hasDynamicShape() {
+        return true;
     }
 
     public boolean basicHarvestBlockTest(Level world, BlockPos pos, Player player) {

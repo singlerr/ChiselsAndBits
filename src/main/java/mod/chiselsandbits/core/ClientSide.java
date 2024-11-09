@@ -951,7 +951,15 @@ public class ClientSide {
                                         ChiselMode.castMode(chMode),
                                         rayTraceResult.getDirection(),
                                         !isChisel);
-                                final AABB bb = i.getBoundingBox(vb, isChisel);
+                                final AABB bb = i.getBoundingBox(
+                                        getLastBitOperation(
+                                                                player,
+                                                                lastHand,
+                                                                getPlayer().getItemInHand(lastHand))
+                                                        != BitOperation.REPLACE
+                                                ? vb
+                                                : new VoxelBlob(),
+                                        isChisel);
                                 RenderHelper.drawSelectionBoundingBoxIfExists(
                                         stack, buffers, bb, location.blockPos, player, partialTicks, false);
                                 showBox = false;
