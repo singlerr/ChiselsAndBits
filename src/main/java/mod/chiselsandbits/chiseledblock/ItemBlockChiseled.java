@@ -54,9 +54,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ItemBlockChiseled extends BlockItem implements IVoxelBlobItem, IItemScrollWheel, IItemBlockAccurate {
 
+    private static final Logger log = LoggerFactory.getLogger(ItemBlockChiseled.class);
     SimpleInstanceCache<ItemStack, List<Component>> tooltipCache =
             new SimpleInstanceCache<ItemStack, List<Component>>(null, new ArrayList<Component>());
 
@@ -90,7 +93,6 @@ public class ItemBlockChiseled extends BlockItem implements IVoxelBlobItem, IIte
         BlockPos offset = partial == null || modelBounds == null
                 ? new BlockPos(0, 0, 0)
                 : ModUtil.getPartialOffset(side, partial, modelBounds);
-
         if (offset.getX() < 0) {
             pos = pos.offset(-1, 0, 0);
             offset = offset.offset(VoxelBlob.dim, 0, 0);
@@ -116,10 +118,10 @@ public class ItemBlockChiseled extends BlockItem implements IVoxelBlobItem, IIte
                     final int solids = blobs[x][y][z].filled();
                     if (solids > 0) {
                         final BlockPos bp = pos.offset(x, y, z);
+
                         final EventBlockBitModification bmm =
                                 new EventBlockBitModification(world, bp, player, hand, stack, true);
                         ChiselsAndBitsEvents.BLOCK_BIT_MODIFICATION.invoker().handle(bmm);
-
                         // test permissions.
                         if (!world.mayInteract(player, bp) || bmm.isCancelled()) {
                             return false;

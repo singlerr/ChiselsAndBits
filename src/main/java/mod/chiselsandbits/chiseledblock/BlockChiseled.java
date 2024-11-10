@@ -251,7 +251,7 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
         try {
             BlockPos target = useContext.getClickedPos();
             if (!(useContext instanceof DirectionalPlaceContext) && !useContext.replacingClickedOnBlock()) {
-                target = target.relative(useContext.getClickedFace());
+                target = target.relative(useContext.getClickedFace().getOpposite());
             }
 
             return getTileEntity(useContext.getLevel(), target).getBlob().filled() == 0;

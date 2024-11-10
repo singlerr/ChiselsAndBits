@@ -186,7 +186,8 @@ public final class VoxelBlob implements IVoxelSrc {
         final int[] sv = second.values;
 
         for (int x = 0; x < values.length; ++x) {
-            if (values[x] != 0 && sv[x] != 0 && values[x] != sv[x]) {
+            // Commented code should be removed idk it is from 0.3.4 but not 14.29
+            if (values[x] != 0 && sv[x] != 0 /* && values[x] != sv[x]*/) {
                 return false;
             }
         }
