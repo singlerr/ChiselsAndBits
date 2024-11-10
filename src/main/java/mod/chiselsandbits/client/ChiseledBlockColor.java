@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockColorChisled implements BlockColor {
+public class ChiseledBlockColor implements BlockColor {
 
     public static final int TINT_MASK = 0xff;
     public static final int TINT_BITS = 8;

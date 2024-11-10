@@ -33,7 +33,7 @@ import mod.chiselsandbits.chiseledblock.data.VoxelBlob;
 import mod.chiselsandbits.chiseledblock.data.VoxelBlobStateReference;
 import mod.chiselsandbits.chiseledblock.iterators.ChiselIterator;
 import mod.chiselsandbits.chiseledblock.iterators.ChiselTypeIterator;
-import mod.chiselsandbits.client.BlockColorChisled;
+import mod.chiselsandbits.client.ChiseledBlockColor;
 import mod.chiselsandbits.client.CreativeClipboardTab;
 import mod.chiselsandbits.client.ItemColorBitBag;
 import mod.chiselsandbits.client.ItemColorBits;
@@ -349,7 +349,7 @@ public class ClientSide {
         itemColorRegistry.register(new ItemColorPatterns(), ModItems.ITEM_MIRROR_PRINT.get());
         itemColorRegistry.register(new ItemColorPatterns(), ModItems.ITEM_MIRROR_PRINT_WRITTEN.get());
 
-        blockColorRegistry.register(new BlockColorChisled(), ModBlocks.CHISELED_BLOCK.get());
+        blockColorRegistry.register(new ChiseledBlockColor(), ModBlocks.CHISELED_BLOCK.get());
         itemColorRegistry.register(new ItemColorChiseled(), ModItems.ITEM_CHISELED_BLOCK.get());
     }
 

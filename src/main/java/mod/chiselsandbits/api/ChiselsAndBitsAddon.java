@@ -4,7 +4,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Triggers C&B to create an instance of the class and call its callback method
+ * Triggers&B to create an instance of the class and call its callback method
  * on load.
  */
 @Retention(RetentionPolicy.RUNTIME)

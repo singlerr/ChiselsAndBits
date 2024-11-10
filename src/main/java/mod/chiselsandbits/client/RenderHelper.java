@@ -148,14 +148,14 @@ public class RenderHelper {
             float cb = (color & 0xFF) / 255f;
             float cg = ((color >>> 8) & 0xFF) / 255f;
             float cr = ((color >>> 16) & 0xFF) / 255f;
-            float ca = ((color >>> 24) & 0xFF) / 255f;
+            float ca = ((alpha >>> 24) & 0xFF) / 255f;
             renderer.putBulkData(
                     matrixStack.last(),
                     bakedquad,
                     new float[] {ca, ca, ca, ca},
-                    cb,
-                    cg,
                     cr,
+                    cg,
+                    cb,
                     new int[] {combinedLightIn, combinedLightIn, combinedLightIn, combinedLightIn},
                     combinedOverlayIn,
                     false);
