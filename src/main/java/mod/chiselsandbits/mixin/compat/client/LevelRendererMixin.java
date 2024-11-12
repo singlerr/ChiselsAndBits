@@ -1,9 +1,13 @@
 package mod.chiselsandbits.mixin.compat.client;
 
 import com.llamalad7.mixinextras.injector.WrapWithCondition;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import mod.chiselsandbits.chiseledblock.BlockChiseled;
 import mod.chiselsandbits.compat.client.DrawSelectionEvents;
+import mod.chiselsandbits.items.ItemChisel;
+import mod.chiselsandbits.items.ItemChiseledBit;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -12,14 +16,19 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderBuffers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LevelRenderer.class)
@@ -31,6 +40,27 @@ public abstract class LevelRendererMixin {
     @Shadow
     @Final
     private RenderBuffers renderBuffers;
+
+    @ModifyArg(
+            method = "renderHitOutline",
+            at =
+                    @At(
+                            value = "INVOKE",
+                            target =
+                                    "Lnet/minecraft/client/renderer/LevelRenderer;renderShape(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/world/phys/shapes/VoxelShape;DDDFFFF)V"),
+            index = 2)
+    private VoxelShape chiselsandbits$renderHitOutline(
+            VoxelShape voxelShape, @Local(argsOnly = true) BlockState state, @Local(argsOnly = true) Entity entity) {
+        if (state.getBlock() instanceof BlockChiseled) {
+            ItemStack mainHeldItem =
+                    entity instanceof LivingEntity livingEntity ? livingEntity.getMainHandItem() : ItemStack.EMPTY;
+            if (mainHeldItem.getItem() instanceof ItemChiseledBit || mainHeldItem.getItem() instanceof ItemChisel) {
+                return Shapes.empty();
+            }
+        }
+
+        return voxelShape;
+    }
 
     @WrapWithCondition(
             method = "renderLevel",
