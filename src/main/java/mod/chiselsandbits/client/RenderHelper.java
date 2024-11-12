@@ -8,6 +8,7 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import java.util.List;
+import java.util.OptionalDouble;
 import mod.chiselsandbits.registry.ModBlocks;
 import mod.chiselsandbits.utils.Constants;
 import net.minecraft.client.Minecraft;
@@ -26,14 +27,25 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class RenderHelper {
 
     private static final RenderType CHISEL_PREVIEW = previewRender();
-    private static final Logger log = LoggerFactory.getLogger(RenderHelper.class);
     public static RandomSource RENDER_RANDOM = RandomSource.create();
+    private static final RenderType.CompositeRenderType BOUNDING_BOX_LINES = RenderType.create(
+            "lines",
+            DefaultVertexFormat.POSITION_COLOR_NORMAL,
+            VertexFormat.Mode.LINES,
+            1536,
+            RenderType.CompositeState.builder()
+                    .setShaderState(RenderType.RENDERTYPE_LINES_SHADER)
+                    .setLineState(new RenderStateShard.LineStateShard(OptionalDouble.of(1.1)))
+                    .setLayeringState(RenderType.VIEW_OFFSET_Z_LAYERING)
+                    .setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
+                    .setOutputState(RenderType.ITEM_ENTITY_TARGET)
+                    .setWriteMaskState(RenderType.COLOR_DEPTH_WRITE)
+                    .setCullState(RenderType.NO_CULL)
+                    .createCompositeState(false));
 
     private static RenderType previewRender() {
         RenderType.CompositeState compositeState = RenderType.CompositeState.builder()
@@ -172,7 +184,7 @@ public class RenderHelper {
             final int alpha) {
         LevelRenderer.renderVoxelShape(
                 matrixStack,
-                buffers.getBuffer(RenderType.lines()),
+                buffers.getBuffer(BOUNDING_BOX_LINES),
                 Shapes.create(boundingBox),
                 0,
                 0,
