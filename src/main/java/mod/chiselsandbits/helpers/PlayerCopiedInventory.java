@@ -8,10 +8,10 @@ import net.minecraft.world.item.ItemStack;
 
 public class PlayerCopiedInventory implements Container {
 
-    Inventory logicBase;
-    ItemStack[] slots;
+    private Inventory logicBase;
+    private ItemStack[] slots;
 
-    public PlayerCopiedInventory(final Inventory original) {
+    public PlayerCopiedInventory(Inventory original) {
         logicBase = original;
         slots = new ItemStack[original.getContainerSize()];
 
@@ -67,11 +67,6 @@ public class PlayerCopiedInventory implements Container {
     @Override
     public void setItem(final int index, final ItemStack stack) {
         slots[index] = stack;
-    }
-
-    @Override
-    public int getMaxStackSize() {
-        return logicBase.getMaxStackSize();
     }
 
     @Override

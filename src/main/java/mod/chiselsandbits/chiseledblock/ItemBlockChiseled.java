@@ -529,7 +529,6 @@ public class ItemBlockChiseled extends BlockItem implements IVoxelBlobItem, IIte
                         context.getClickLocation().y,
                         context.getClickLocation().z,
                         offgrid)) {
-            final int i = context.getItemInHand().getDamageValue();
             final BlockState BlockState1 = getPlacementState((BlockPlaceContext) context);
 
             if (placeBitBlock(

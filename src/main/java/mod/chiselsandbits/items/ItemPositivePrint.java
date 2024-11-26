@@ -142,6 +142,8 @@ public class ItemPositivePrint extends ItemNegativePrint implements IChiselModeI
                     false);
 
             ChiselsAndBits.getNetworkChannel().sendToServer(pasp);
+
+            return placeItem(new BlockPlaceContext(context), offgrid);
         }
 
         return placeItem(context, offgrid);
@@ -162,7 +164,6 @@ public class ItemPositivePrint extends ItemNegativePrint implements IChiselModeI
                 if (consumeEntirePattern(pattern, stats, pos, ActingPlayer.testingAs(player, hand))
                         && output.getItem() instanceof ItemBlockChiseled ibc) {
                     final InteractionResult res = ibc.tryPlace(context, offgrid);
-
                     if (res == InteractionResult.SUCCESS) {
                         consumeEntirePattern(pattern, stats, pos, ActingPlayer.actingAs(player, hand));
                     }

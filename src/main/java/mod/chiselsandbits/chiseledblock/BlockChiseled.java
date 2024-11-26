@@ -413,7 +413,7 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
                 return super.getVisualShape(state, reader, pos, context);
             }
 
-            return VoxelShapeCache.getInstance().get(blob, BoxType.COLLISION);
+            return VoxelShapeCache.getInstance().get(blob, BoxType.OCCLUSION);
         } catch (ExceptionNoTileEntity exceptionNoTileEntity) {
             return super.getVisualShape(state, reader, pos, context);
         }

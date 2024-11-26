@@ -28,7 +28,7 @@ public class ActingPlayer {
         innerPlayer = player;
         this.hand = hand;
         this.realPlayer = realPlayer;
-        storage = realPlayer ? player.inventory : new PlayerCopiedInventory(player.inventory);
+        storage = realPlayer ? player.getInventory() : new PlayerCopiedInventory(player.inventory);
     }
 
     @Nonnull
@@ -46,7 +46,7 @@ public class ActingPlayer {
     }
 
     public int getCurrentItem() {
-        return innerPlayer.inventory.selected;
+        return innerPlayer.getInventory().selected;
     }
 
     public boolean isCreative() {

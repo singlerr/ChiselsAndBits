@@ -1,17 +1,21 @@
 package mod.chiselsandbits.chiseledblock.data;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import java.util.BitSet;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 import mod.chiselsandbits.api.BoxType;
 import mod.chiselsandbits.core.ChiselsAndBits;
-import mod.chiselsandbits.utils.SimpleMaxSizedCache;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public final class VoxelShapeCache {
 
     private static final VoxelShapeCache INSTANCE = new VoxelShapeCache();
-    private final SimpleMaxSizedCache<VoxelShapeCache.CacheKey, VoxelShape> cache = new SimpleMaxSizedCache<>(
-            ChiselsAndBits.getConfig().getCommon().collisionBoxCacheSize.get());
+    private final Cache<CacheKey, VoxelShape> cache = CacheBuilder.newBuilder()
+            .maximumSize(
+                    ChiselsAndBits.getConfig().getCommon().collisionBoxCacheSize.get())
+            .build();
 
     private VoxelShapeCache() {}
 
@@ -21,14 +25,11 @@ public final class VoxelShapeCache {
 
     public VoxelShape get(VoxelBlob blob, BoxType type) {
         final CacheKey key = new CacheKey(type, (BitSet) blob.getNoneAir().clone());
-
-        VoxelShape shape = cache.get(key);
-        if (shape == null) {
-            shape = calculateNewVoxelShape(blob, type);
-            cache.put(key, shape);
+        try {
+            return cache.get(key, () -> calculateNewVoxelShape(blob, type));
+        } catch (ExecutionException e) {
+            return null;
         }
-
-        return shape;
     }
 
     private VoxelShape calculateNewVoxelShape(final VoxelBlob data, final BoxType type) {
