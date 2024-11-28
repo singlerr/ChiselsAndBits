@@ -326,14 +326,13 @@ public class ChiseledBlockBakedModel extends BaseBakedBlockModel {
 
             for (final FaceRegion region : src) {
                 final Direction myFace = region.face;
-
+                int stateId = region.blockStateID;
                 // keep integers up until the last moment... ( note I tested
                 // snapping the floats after this stage, it made no
                 // difference. )
                 offsetVec(to, region.getMaxX(), region.getMaxY(), region.getMaxZ(), myFace, 1);
                 offsetVec(from, region.getMinX(), region.getMinY(), region.getMinZ(), myFace, -1);
-                final ModelQuadLayer[] mpc =
-                        ModelUtil.getCachedFace(region.blockStateID, weight, myFace, myLayer.layer);
+                final ModelQuadLayer[] mpc = ModelUtil.getCachedFace(stateId, weight, myFace, myLayer.layer);
                 final float maxLightmap = 32.0f / 0xffff;
                 if (mpc != null) {
                     for (final ModelQuadLayer pc : mpc) {
