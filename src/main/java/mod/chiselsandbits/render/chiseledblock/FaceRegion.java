@@ -2,7 +2,7 @@ package mod.chiselsandbits.render.chiseledblock;
 
 import net.minecraft.core.Direction;
 
-class FaceRegion {
+public class FaceRegion {
     public final Direction face;
     final int blockStateID;
     final boolean isEdge;
@@ -53,6 +53,10 @@ class FaceRegion {
 
     public int getMaxZ() {
         return maxZ;
+    }
+
+    public int getStateId() {
+        return blockStateID;
     }
 
     public boolean extend(final FaceRegion currentFace) {
