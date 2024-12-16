@@ -31,7 +31,6 @@ import net.minecraft.world.phys.shapes.Shapes;
 public class RenderHelper {
 
     private static final RenderType CHISEL_PREVIEW = previewRender();
-    public static RandomSource RENDER_RANDOM = RandomSource.create();
     private static final RenderType.CompositeRenderType BOUNDING_BOX_LINES = RenderType.create(
             "lines",
             DefaultVertexFormat.POSITION_COLOR_NORMAL,
@@ -46,6 +45,7 @@ public class RenderHelper {
                     .setWriteMaskState(RenderType.COLOR_DEPTH_WRITE)
                     .setCullState(RenderType.NO_CULL)
                     .createCompositeState(false));
+    public static RandomSource RENDER_RANDOM = RandomSource.create();
 
     private static RenderType previewRender() {
         RenderType.CompositeState compositeState = RenderType.CompositeState.builder()

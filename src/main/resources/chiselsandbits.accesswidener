@@ -38,3 +38,5 @@ extendable method net/minecraft/client/gui/Font renderText (Ljava/lang/String;FF
 extendable method net/minecraft/client/gui/Font renderText (Lnet/minecraft/util/FormattedCharSequence;FFIZLorg/joml/Matrix4f;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/client/gui/Font$DisplayMode;II)F
 extendable method net/minecraft/world/item/Item getCraftingRemainingItem ()Lnet/minecraft/world/item/Item;
 accessible class net/minecraft/client/renderer/RenderStateShard$LineStateShard
+accessible class net/minecraft/util/datafix/fixes/ChunkPalettedStorageFix$DataLayer
+accessible class net/minecraft/util/datafix/fixes/ChunkPalettedStorageFix$Section

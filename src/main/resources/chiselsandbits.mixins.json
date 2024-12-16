@@ -8,11 +8,15 @@
     "StructureTemplateMixin"
   ],
   "client": [
-    "compat.client.KeyBindsScreenMixin",
+    "ChunkPalettedStorageFix$SectionMixin",
+    "ChunkPalettedStorageFix$UpgradeMixin",
     "ItemRendererMixin",
+    "LevelStorageAccessMixin",
+    "LevelStorageSourceMixin",
     "PaintingTextureManagerMixin",
     "SectionRenderDispatcherMixin",
     "compat.client.GuiMixin",
+    "compat.client.KeyBindsScreenMixin",
     "compat.client.LevelRendererMixin",
     "compat.client.MouseHandlerMixin",
     "compat.client.TextureAtlasMixin"

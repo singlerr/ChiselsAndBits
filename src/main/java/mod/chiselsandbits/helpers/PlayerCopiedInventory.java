@@ -8,8 +8,8 @@ import net.minecraft.world.item.ItemStack;
 
 public class PlayerCopiedInventory implements Container {
 
-    private Inventory logicBase;
-    private ItemStack[] slots;
+    private final Inventory logicBase;
+    private final ItemStack[] slots;
 
     public PlayerCopiedInventory(Inventory original) {
         logicBase = original;

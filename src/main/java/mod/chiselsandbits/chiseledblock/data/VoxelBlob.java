@@ -54,21 +54,21 @@ import net.minecraft.world.level.material.FluidState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class VoxelBlob implements IVoxelSrc {
+public class VoxelBlob implements IVoxelSrc {
 
     public static final int dim = 16;
     public static final int dim2 = dim * dim;
     public static final int full_size = dim2 * dim;
-    private static final int array_size = full_size;
+    protected static final int array_size = full_size;
     public static final int dim_minus_one = dim - 1;
     public static final int VERSION_ANY = -1;
     public static final int VERSION_CROSSWORLD = 2;
     public static final int VERSION_COMPACT_PALLETED = 3;
+    protected static final int VERSION_COMPACT = 0; // stored meta.
+    protected static final int VERSION_CROSSWORLD_LEGACY = 1; // stored meta.
     static final int SHORT_BYTES = Short.SIZE / 8;
     private static final BitSet fluidFilterState;
     private static final Map<Object, BitSet> layerFilters = new HashMap<>();
-    private static final int VERSION_COMPACT = 0; // stored meta.
-    private static final int VERSION_CROSSWORLD_LEGACY = 1; // stored meta.
     private static final Logger log = LoggerFactory.getLogger(VoxelBlob.class);
     public static VoxelBlob NULL_BLOB = new VoxelBlob();
     static int bestBufferSize = 26;
@@ -78,8 +78,8 @@ public final class VoxelBlob implements IVoxelSrc {
         clearCache();
     }
 
-    final int[] values = new int[array_size];
-    final BitSet noneAir;
+    protected final int[] values = new int[array_size];
+    protected final BitSet noneAir;
     public int detail = dim;
 
     public VoxelBlob() {
@@ -858,7 +858,7 @@ public final class VoxelBlob implements IVoxelSrc {
 
         final FriendlyByteBuf header = new FriendlyByteBuf(Unpooled.wrappedBuffer(bb));
 
-        final int version = header.readInt();
+        int version = header.getInt(header.readerIndex());
 
         BlobSerializer bs = null;
 
