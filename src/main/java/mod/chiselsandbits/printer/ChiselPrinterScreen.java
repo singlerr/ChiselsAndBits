@@ -30,7 +30,6 @@ public class ChiselPrinterScreen extends AbstractContainerScreen<ChiselPrinterCo
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float f, int i, int j) {
-        renderBackground(guiGraphics, i, j, f);
         guiGraphics.setColor(1, 1, 1, 1);
         guiGraphics.blit(GUI_TEXTURES, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 

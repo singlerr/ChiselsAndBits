@@ -75,7 +75,7 @@ public final class VoxelBlob implements IVoxelSrc {
 
     static {
         fluidFilterState = new BitSet(4096);
-        clearCache();
+        //        clearCache();
     }
 
     final int[] values = new int[array_size];

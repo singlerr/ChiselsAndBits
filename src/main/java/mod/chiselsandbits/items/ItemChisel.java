@@ -132,7 +132,7 @@ public class ItemChisel extends DiggerItem implements IItemScrollWheel, IChiselM
                 final Vec3 ray_from = PlayerRay.getLeft();
                 final Vec3 ray_to = PlayerRay.getRight();
                 final ClipContext context =
-                        new ClipContext(ray_from, ray_to, ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, player);
+                        new ClipContext(ray_from, ray_to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player);
 
                 BlockHitResult mop = player.level.clip(context);
                 if (mop.getType() != HitResult.Type.MISS) {

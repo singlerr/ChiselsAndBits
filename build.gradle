@@ -1,7 +1,7 @@
 plugins {
-	id 'fabric-loom' version '1.7.3'
+	id 'fabric-loom' version "${loom_version}"
 	id 'maven-publish'
-	id 'com.diffplug.spotless' version '6.25.0'
+	id 'com.diffplug.spotless' version "${spotless_version}"
 }
 
 version = "${project.mod_version}+${project.minecraft_version}"
@@ -96,12 +96,12 @@ dependencies {
 	include(modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${reach_distance_api_version}"))
 	include(modImplementation("com.communi-suggestu.saecularia-caudices:saecularia-caudices-fabric:${saeculariaCaudicesVersion}"))
 	include(modImplementation("io.github.feltmc:fabricated-forge-caps:${forge_caps_version}"))
-	modImplementation("maven.modrinth:modernkeybinding:1.20.4-1.3.0") {
+	modImplementation("maven.modrinth:modernkeybinding:${modern_key_binding_version}") {
 		transitive = false
 	}
-	implementation 'javax.annotation:javax.annotation-api:1.3.2'
-	implementation 'com.google.code.findbugs:jsr305:3.0.2'
-	modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:1.2.1")
+	implementation "javax.annotation:javax.annotation-api:${annotation_api_version}"
+	implementation "com.google.code.findbugs:jsr305:${jsr305_version}"
+	//	modRuntimeOnly "me.djtheredstoner:DevAuth-fabric:${devauth_version}"
 }
 
 processResources {
