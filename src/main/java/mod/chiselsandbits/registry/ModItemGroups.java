@@ -49,6 +49,7 @@ public final class ModItemGroups {
                         output.accept(new ItemStack(ModItems.ITEM_MIRROR_PRINT_WRITTEN.get()));
                         output.accept(new ItemStack(ModBlocks.CHISEL_PRINTER_ITEM.get()));
                         output.accept(new ItemStack(ModBlocks.BIT_STORAGE_BLOCK_ITEM.get()));
+                        output.accept(new ItemStack(ModItems.ITEM_WRENCH.get()));
                     })
                     .build());
     public static final Supplier<CreativeModeTab> BLOCK_BITS = Suppliers.memoize(() -> CreativeModeTab.builder(

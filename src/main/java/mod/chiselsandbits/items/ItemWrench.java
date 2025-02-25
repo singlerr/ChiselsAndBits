@@ -1,9 +1,9 @@
 package mod.chiselsandbits.items;
 
-import com.communi.suggestu.saecularia.caudices.core.block.IBlockWithWorldlyProperties;
 import java.util.List;
 import mod.chiselsandbits.core.ChiselsAndBits;
 import mod.chiselsandbits.core.ClientSide;
+import mod.chiselsandbits.extensions.BlockExtension;
 import mod.chiselsandbits.helpers.LocalStrings;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -58,8 +58,8 @@ public class ItemWrench extends Item {
         if (b != null && !player.isShiftKeyDown()) {
             BlockState nb;
 
-            if (b.getBlock() instanceof IBlockWithWorldlyProperties prop) {
-                nb = prop.rotate(b, world, pos, Rotation.CLOCKWISE_90);
+            if (b.getBlock() instanceof BlockExtension ext) {
+                nb = ext.rotate(b, world, pos, side, Rotation.CLOCKWISE_90);
             } else {
                 nb = b.rotate(Rotation.CLOCKWISE_90);
             }

@@ -283,6 +283,13 @@ public class TileEntityBlockChiseled extends BlockEntity
         return blockState;
     }
 
+    public void rotate(@NotNull final Direction axis, @NotNull final Rotation rotationIn) {
+        VoxelBlob blob = ModUtil.rotate(getBlob(), axis.getAxis(), rotationIn);
+        if (blob != null) {
+            setBlob(blob, true);
+        }
+    }
+
     public void rotate(@NotNull final Rotation rotationIn) {
         VoxelBlob blob = ModUtil.rotate(getBlob(), Axis.Y, rotationIn);
         if (blob != null) {

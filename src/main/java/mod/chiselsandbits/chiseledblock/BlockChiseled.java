@@ -13,6 +13,7 @@ import mod.chiselsandbits.client.UndoTracker;
 import mod.chiselsandbits.core.ChiselsAndBits;
 import mod.chiselsandbits.core.ClientSide;
 import mod.chiselsandbits.core.Log;
+import mod.chiselsandbits.extensions.BlockExtension;
 import mod.chiselsandbits.helpers.BitOperation;
 import mod.chiselsandbits.helpers.ChiselToolType;
 import mod.chiselsandbits.helpers.ExceptionNoTileEntity;
@@ -59,7 +60,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockChiseled extends Block implements EntityBlock, IMultiStateBlock, IBlockWithWorldlyProperties {
+public class BlockChiseled extends Block
+        implements EntityBlock, IMultiStateBlock, IBlockWithWorldlyProperties, BlockExtension {
 
     public static final BlockPos ZERO = BlockPos.ZERO;
     public static final BooleanProperty FULL_BLOCK = BooleanProperty.create("full_block");
@@ -562,6 +564,17 @@ public class BlockChiseled extends Block implements EntityBlock, IMultiStateBloc
 
     public boolean basicHarvestBlockTest(Level world, BlockPos pos, Player player) {
         return canHarvestBlock(world.getBlockState(pos), world, pos, player);
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, LevelAccessor world, BlockPos pos, Direction axis, Rotation rotation) {
+        try {
+            getTileEntity(world, pos).rotate(axis, rotation);
+            return state;
+        } catch (final ExceptionNoTileEntity e) {
+            Log.noTileError(e);
+            return state;
+        }
     }
 
     public static class ReplaceWithChiseledValue {
