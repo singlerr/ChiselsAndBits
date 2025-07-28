@@ -12,7 +12,7 @@
     "sources": "https://github.com/singlerr"
   },
   "accessWidener": "chiselsandbits.accesswidener",
-  "license": "All rights reserved",
+  "license": "LGPLv3",
   "icon": "assets/chiselsandbits/icon.png",
   "environment": "*",
   "entrypoints": {
